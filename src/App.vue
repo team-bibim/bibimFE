@@ -28,13 +28,15 @@
         <v-row>
           <v-col v-for="card in cards" :key="card" cols="12">
             <v-card class="right-panel">
-
+              <div class="routine-write-top">루틴작성</div>
+              <div class="routine-write-title">제목</div>
               <v-list lines="two" style="background-color: #181B21;">
-                <v-list-subheader class="right-panel-title">
+                <!-- <v-list-subheader class="right-panel-title">
                   <b>{{ card }}</b>
-                </v-list-subheader>
+                </v-list-subheader> -->
+                <!-- <div class="routine-write-title">제목</div> -->
 
-                <template v-for="n in 6" :key="n">
+                <template v-for="n in 5" :key="n">
                   <!-- ↓ margin:5px에서 10px로 변경 ↓ -->
                   <v-list-item style="background-color: #834B4B; color: #FFFFFF; margin: 10px; border-radius: 20px;">
 
@@ -64,7 +66,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const cards = ['이번주 HOT 게시글 🔥', '최신 게시글']
+const cards = ['루틴 작성', '최신 게시글']
 const links = [
   ['mdi-inbox-arrow-down', 'HOME'],
   ['mdi-send', '루틴 공유'],
