@@ -3,15 +3,15 @@
 
     <v-navigation-drawer v-model="drawer" class="left-panel">
 
-      <div style="height: 100px;"></div>
+      <div style="height: 50px;"></div>
 
       <v-list>
-        <v-list-item v-for="[icon, text] in links" :key="icon" link>
-
-          <v-list-item-title class="left-panel-text">
-            {{ text }}
-          </v-list-item-title>
-
+        <v-list-item v-for="(link, index) in links" :key="index">
+          <router-link :to="link[2]" class="left-panel-box">
+            <v-list-item-content>
+              <v-list-item-title class="left-panel-text">{{ link[1] }}</v-list-item-title>
+            </v-list-item-content>
+          </router-link>
         </v-list-item>
       </v-list>
 
@@ -25,19 +25,17 @@
 
     <v-main style="background-color: #3B4048;">
       <v-container class="px-5" fluid>
-        <v-row>
+
+        <router-view></router-view> <!-- 각 페이지를 보여주는 곳 -->
+
+        <!-- <v-row>
           <v-col v-for="card in cards" :key="card" cols="12">
             <v-card class="right-panel">
               <div class="routine-write-top">루틴작성</div>
               <div class="routine-write-title">제목</div>
               <v-list lines="two" style="background-color: #181B21;">
-                <!-- <v-list-subheader class="right-panel-title">
-                  <b>{{ card }}</b>
-                </v-list-subheader> -->
-                <!-- <div class="routine-write-title">제목</div> -->
 
                 <template v-for="n in 5" :key="n">
-                  <!-- ↓ margin:5px에서 10px로 변경 ↓ -->
                   <v-list-item style="background-color: #834B4B; color: #FFFFFF; margin: 10px; border-radius: 20px;">
 
                     <template v-slot:prepend>
@@ -57,7 +55,7 @@
               </v-list>
             </v-card>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-container>
     </v-main>
   </v-app>
@@ -68,11 +66,11 @@ import { ref } from 'vue'
 
 const cards = ['루틴 작성', '최신 게시글']
 const links = [
-  ['mdi-inbox-arrow-down', 'HOME'],
-  ['mdi-send', '루틴 공유'],
-  ['mdi-delete', '루틴 작성'],
-  ['mdi-alert-octagon', '내 루틴 보관함'],
-  ['mdi-alert-octagon', '설정'],
+  ['mdi-inbox-arrow-down', 'HOME', '/main'],    /* 3번째 변수(route) 추가 */
+  ['mdi-send', '루틴 공유', '/share'],
+  ['mdi-delete', '루틴 작성', '/write'],
+  ['mdi-alert-octagon', '내 루틴 보관함', '/'],
+  ['mdi-alert-octagon', '설정', '/'],
 ]
 
 const drawer = ref(null)
@@ -90,7 +88,7 @@ export default {
       ['mdi-alert-octagon', '내 루틴 보관함'],
       ['mdi-alert-octagon', '설정']
     ],
-  }),
+  })
 }
 </script>
 
@@ -110,16 +108,21 @@ export default {
   margin-bottom: 30px;
 }
 
-/* 좌측 영역의 메뉴 마우스 올려놓았을때 색상 변경*/
-.v-list-item.v-list-item--link.v-theme--light.v-list-item--density-default.v-list-item--one-line.v-list-item--variant-text:hover {
+.v-list-item-title.left-panel-text {
+  color: white;
+}
+
+.v-list-item-title.left-panel-text:hover {
   color: #77C3EE;
 }
 
-/* 좌측 영역의 메뉴 마우스 올려놓았을때 색상 변경*/
-.v-navigation-drawer__content {
-  color: white;
-  /* 글씨 기본 값 설정*/
+.left-panel-box {
+  text-decoration: none;
+
 }
+
+/* 좌측 영역의 메뉴 마우스 올려놓았을때 색상 변경*/
+
 
 /* -----------------------------------우측 영역 ------------------------------------- */
 
