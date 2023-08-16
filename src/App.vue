@@ -112,17 +112,15 @@ export default {
   color: white;
 }
 
-.v-list-item-title.left-panel-text:hover {
-  color: #77C3EE;
-}
-
 .left-panel-box {
   text-decoration: none;
 
 }
 
 /* 좌측 영역의 메뉴 마우스 올려놓았을때 색상 변경*/
-
+.v-list-item-title.left-panel-text:hover {
+  color: #77C3EE;
+}
 
 /* -----------------------------------우측 영역 ------------------------------------- */
 
