@@ -120,21 +120,15 @@ export default {
 /* 좌측 영역의 메뉴 마우스 올려놓았을때 색상 변경*/
 .v-list-item-title.left-panel-text:hover {
   color: #77C3EE;
+  transition: color 0.5s ease;
+}
+
+.v-list-item-title.left-panel-text:not(:hover) {
+  color: #FFFFFF;
+  transition: color 0.5s ease;
 }
 
 /* -----------------------------------우측 영역 ------------------------------------- */
-
-.right-panel {
-  background-color: #181B21;
-  border-radius: 30px;
-}
-
-.right-panel-title {
-  background-color: #181B21;
-  color: #FFFFFF;
-  font-size: 30px;
-  line-height: 30px;
-}
 
 .v-card.v-theme--light.v-card--density-default.v-card--variant-elevated {
   /* 박스 스타일 조정 */
