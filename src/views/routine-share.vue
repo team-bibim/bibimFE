@@ -70,7 +70,7 @@
               <div style="height: 20px;"></div>
   
               <template v-for="n in 6" :key="n">
-                <v-list-item style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px;">
+                <v-list-item style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%">
   
                   <div style="display: flex;">
                     <v-list-item-title class="right-panel-new-title">
