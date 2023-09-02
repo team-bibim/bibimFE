@@ -1,16 +1,13 @@
 <template>
     <v-app id="inspire">
         <!-- 추가 기능 구현 목록 -->
-        <!-- 작성된 내용이 있을때 작성완료 버튼을 누르지 않은채 페이지를 이동할려하면 경고문 띄우기 필요 -->
-        <!-- 미작성된 빈칸이 있는 채로 제출하려할때 경고문 띄우기 필요 -->
-
+        <!-- 작성된 내용이 있을 때 작성완료 버튼을 누르지 않은 채 페이지를 이동할 때 경고문 띄우기 필요 -->
+        <!-- 미작성된 빈칸이 있는 채로 제출하려 할 때 경고문 띄우기 필요 -->
         <!-- 문제점 -->
-        <!-- 화면을 확대했을때, 5개의 day루틴이 짤리는 경우 발생, 하단에 스크롤바 활성은 되지만 여전히 짤림 -->
-
+        <!-- 화면을 확대했을 때, 5개의 day 루틴이 짤리는 경우 발생, 하단에 스크롤바 활성은 되지만 여전히 짤림 -->
         <v-main style="background-color: #3B4048;">
             <v-container class="px-2 py-2" fluid>
                 <v-card class="right-panel-hot">
-
                     <v-list lines="two" style="background-color: #181B21;">
                         <v-list-subheader class="right-panel-hot-classify-text" style="margin: 35px;">
                             <b>루틴 작성</b>
@@ -22,14 +19,12 @@
                         <div class="routine-add-container">
                             <div class="day-routine-box" v-for="(box, dayindex) in boxes" :key="dayindex">
                                 <div class="day-routine-box-title">Day {{ dayindex + 1 }}</div>
-
                                 <div v-for="(exercise, index) in box.exercises" :key="index" class="day-routine-subbox">
-                                    <!-- <div class="exercise-title" contenteditable="true" @input="exercise.title = $event.target.innerText" placeholder="운동 이름"></div> -->
                                     <input v-model="exercise.title" class="exercise-title" placeholder="운동 이름" readonly>
                                     <input v-model="exercise.time" class="exercise-time" placeholder="시간" readonly>
                                 </div>
-                                <button v-if="box.exercises.length < 8" class="day-routine-subbox"
-                                    @click="addExercise(box)"> <!-- 8개까지 수정 가능 -->
+                                <button v-if="box.exercises.length < 5" class="day-routine-subbox"
+                                    @click="addExercise(box)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"
                                         fill="none">
                                         <path
@@ -37,7 +32,6 @@
                                             fill="#CCCCCC" />
                                     </svg>
                                 </button>
-                                <!-- Add the modal component -->
                                 <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
                                     @close-modal="showModal = false" />
                             </div>
@@ -50,159 +44,97 @@
                                         fill="#CCCCCC" />
                                 </svg>
                             </button>
-
                         </div>
                         <div class="routine-end-container">
-                            <!-- enter가 가능하도록 input태그 대신 다른 태그 사용 필요 -->
                             <textarea class="explanation-bar" v-model="expInput" placeholder="설명"
-                                @keyup.enter="ExplanationInput"></textarea>
-
-                            <!-- <v-btn class="r-submit-button" color="#CD4444" @click="submitData" :disabled="showModal">작성 -->
-                            <!-- 완료</v-btn> -->
-
-                            <!-- 모달창 활성화될때 버튼 명도(brightness) 조절 -->
+                                @keyup.enter="submitData"></textarea>
                             <v-btn class="r-submit-button" :style="{ filter: showModal ? 'brightness(30%)' : 'none' }"
                                 color="#CD4444" @click="submitData" :disabled="showModal">작성 완료</v-btn>
-
                         </div>
-
                     </v-list>
-
-
-
-
                 </v-card>
-
                 <div style="height: 8px;"></div>
-
-                <!--<v-card class="right-panel-new"> -->
-                <!--  -->
-                <!-- </v-card> -->
             </v-container>
         </v-main>
     </v-app>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import WritePage from '@/views/routine-write.vue'
-import ModalComponent from '@/components/Write-Modal.vue'
-
-const cards = ['루틴 작성', '최신 게시글']
-const links = [
-    ['mdi-inbox-arrow-down', 'HOME'],
-    ['mdi-send', '루틴 공유'],
-    ['mdi-delete', '루틴 작성'],
-    ['mdi-alert-octagon', '내 루틴 보관함'],
-    ['mdi-alert-octagon', '설정'],
-]
-
-// ----------------------------- 루틴 별 운동 추가하기 구현 시작 -----------------------------------
-
-const exercises = ref([
-    { title: '바벨 숄더 프레스', time: '30m' }
-]);
-/*
-const addExercise = () => {
-    if (exercises.value.length < 5) {
-        exercises.value.push({ title: '', time: '' });      // 지금은 빈칸으로 가져와지지만 api 작업 필요
-    }
-};
-*/
-
-const addExercise = (box) => {
-    if (box.exercises.length < 8) { // 8개 까지 추가 가능
-        // box.exercises.push({ title: '', time: '' });
-        activeBox.value = box;
-        showModal.value = true;
-    }
-};
-// ----------------------------- 루틴 별 운동 추가하기 구현 끝 -----------------------------------
-
-// ----------------------------- day 별 박스 추가 구현 시작 -----------------------------------
-
-const boxes = ref([]);  // day 1~5 관리
-
-const showModal = ref(false);
-const activeBox = ref(null);
-
-const addDayBox = () => {
-    if (boxes.value.length < 5) {
-
-        boxes.value.push({ exercises: [] });
-    }
-};
-
-// ----------------------------- day 별 박스 추가 구현 끝 -----------------------------------
-
-const drawer = ref(null)
-
-const submitData = () => {
-    const postData = {
-        title: titleInput,
-        explanation: expInput,
-        // ... other properties ...
-    };
-
-    // Assuming you have an API endpoint for data submission
-    // Replace 'your_api_endpoint' with the actual URL
-    fetch('your_api_endpoint', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
-    })
-        .then(response => response.json())
-        .then(data => {
-            // Handle success response from the server if needed
-            console.log('Data successfully submitted:', data);
-        })
-        .catch(error => {
-            // Handle error if data submission fails
-            console.error('Error submitting data:', error);
-        });
-}
-
-
-</script>
+  
 
 <script>
+//import { ref } from 'vue';
+import WritePage from '@/views/routine-write.vue';
+import ModalComponent from '@/components/Write-Modal.vue';
+
 export default {
-    data: () => ({
-        cards: ['Today', 'Yesterday'],
-        drawer: null,
-        links: [
-            ['mdi-inbox-arrow-down', 'HOME'],
-            ['mdi-send', '루틴 공유'],
-            ['mdi-delete', '루틴 작성'],
-            ['mdi-alert-octagon', '내 루틴 보관함'],
-            ['mdi-alert-octagon', '설정']
-        ],
-        // textInput: "",
-        titleInput: "",
-        expInput: "",
-        // boxes: [{}],
-    }),
+    data() {
+        return {
+            cards: ['루틴 작성', '최신 게시글'],
+            links: [
+                ['mdi-inbox-arrow-down', 'HOME'],
+                ['mdi-send', '루틴 공유'],
+                ['mdi-delete', '루틴 작성'],
+                ['mdi-alert-octagon', '내 루틴 보관함'],
+                ['mdi-alert-octagon', '설정'],
+            ],
+            exercises: [
+                { title: '바벨 숄더 프레스', time: '30m' },
+            ],
+            boxes: [],
+            showModal: false,
+            activeBox: null,
+            drawer: null,
+            titleInput: '',
+            expInput: '',
+        };
+    },
     components: {
-        'WritePage': WritePage,
-        'Modal': ModalComponent
+        WritePage,
+        ModalComponent,
     },
     methods: {
         searchBarInput() {
-            console.log(this.titleInput); // Log the entered text to the console
+            console.log(this.titleInput);
         },
         ExplanationInput() {
             console.log(this.expInput);
         },
-        // addDayBox() {
-        //     if (this.boxes.length < 5) {
-        //         this.boxes.push({});
-        //     }
-        // }
-        // addDayBox,
-    }
-}
+        addExercise(box) {
+            if (box.exercises.length < 5) {
+                this.activeBox = box;
+                this.showModal = true;
+            }
+        },
+        addDayBox() {
+            if (this.boxes.length < 5) {
+                this.boxes.push({ exercises: [] });
+            }
+        },
+        submitData() {
+            const postData = {
+                title: this.titleInput,
+                explanation: this.expInput,
+                // ... other properties ...
+            };
+
+            // Assuming you have an API endpoint for data submission
+            // Replace 'your_api_endpoint' with the actual URL
+            fetch('your_api_endpoint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(postData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Data successfully submitted:', data);
+                })
+                .catch(error => {
+                    console.error('Error submitting data:', error);
+                });
+        },
+    },
+};
 </script>
 
 <style scoped>
