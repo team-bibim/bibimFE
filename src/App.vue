@@ -69,8 +69,8 @@ const links = [
   ['mdi-inbox-arrow-down', 'HOME', '/main'],    /* 3번째 변수(route) 추가 */
   ['mdi-send', '루틴 공유', '/share'],
   ['mdi-delete', '루틴 작성', '/write'],
-  ['mdi-alert-octagon', '내 루틴 보관함', '/'],
-  ['mdi-alert-octagon', '설정', '/'],
+  ['mdi-alert-octagon', '내 루틴 보관함', '/routine'],
+  ['mdi-alert-octagon', '설정', '/settings'],
 ]
 
 const drawer = ref(null)
