@@ -13,7 +13,11 @@
                             <b>루틴 작성</b>
                         </v-list-subheader>
                         <div style="display:flex; justify-content: center;">
-                            <input class="search-bar" v-model="titleInput" placeholder="제목" @keyup.enter="searchBarInput">
+                            <input class="search-bar" v-model="titleInput" placeholder="제목" @keyup.enter="searchBarInput"
+                                ref="warningMessage">
+                        </div>
+                        <div v-if="showWarning" class="warning-message">
+                            제목을 작성해주세요.
                         </div>
 
                         <div class="routine-add-container">
@@ -85,6 +89,7 @@ export default {
             drawer: null,
             titleInput: '',
             expInput: '',
+            showWarning: false,
         };
     },
     components: {
@@ -110,28 +115,58 @@ export default {
             }
         },
         submitData() {
-            const postData = {
-                title: this.titleInput,
-                explanation: this.expInput,
-                // ... other properties ...
-            };
+            if (this.titleInput.trim() === '') {
+                // The title input is empty, display a warning message
+                this.showWarning = true;
 
-            // Assuming you have an API endpoint for data submission
-            // Replace 'your_api_endpoint' with the actual URL
-            fetch('your_api_endpoint', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(postData),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Data successfully submitted:', data);
-                })
-                .catch(error => {
-                    console.error('Error submitting data:', error);
+                // Scroll to the warning message
+                // Ensure that the Vue component is fully mounted before accessing refs
+                this.$nextTick(() => {
+                    // Scroll to the warning message
+                    if (this.$refs.warningMessage) {
+                        this.$refs.warningMessage.scrollIntoView({
+                            behavior: 'smooth', // You can use 'auto' or 'smooth' for scroll behavior
+                            block: 'start',     // Scroll to the top of the element
+                        });
+                    }
                 });
+
+            } else {
+                // The title input is not empty, proceed with data submission
+                this.showWarning = false; // Hide the warning if it was displayed previously
+
+                const postData = {
+                    title: this.titleInput,
+                    explanation: this.expInput,
+                    // ... other properties ...
+                };
+
+                // Assuming you have an API endpoint for data submission
+                // Replace 'your_api_endpoint' with the actual URL
+                fetch('your_api_endpoint', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(postData),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Data successfully submitted:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error submitting data:', error);
+                    });
+            }
+        },
+    },
+    watch: {
+        // Watch for changes to titleInput
+        titleInput(newTitleInput) {     // ()안은 변경된 새로운 값
+            if (newTitleInput.trim() !== '') {
+                // Title input is no longer empty, hide the warning message
+                this.showWarning = false;
+            }
         },
     },
 };
@@ -389,5 +424,13 @@ svg {
 
 .v-list-item.v-theme--light.v-list-item--density-default.v-list-item--two-line.v-list-item--variant-text {
     width: 200px;
+}
+
+.warning-message {
+    color: #CD4444;
+    /* Set the color of the warning message */
+    font-size: 16px;
+    margin: 0 35px;
+    padding-left: 10px;
 }
 </style>
