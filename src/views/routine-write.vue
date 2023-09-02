@@ -2,7 +2,8 @@
     <v-app id="inspire">
         <!-- 추가 기능 구현 목록 -->
         <!-- 작성된 내용이 있을 때 작성완료 버튼을 누르지 않은 채 페이지를 이동할 때 경고문 띄우기 필요 -->
-        <!-- 미작성된 빈칸이 있는 채로 제출하려 할 때 경고문 띄우기 필요 -->
+        <!-- 각 루틴안의 운동 및 루틴(day)의 삭제 기능 구현 -->
+
         <!-- 문제점 -->
         <!-- 화면을 확대했을 때, 5개의 day 루틴이 짤리는 경우 발생, 하단에 스크롤바 활성은 되지만 여전히 짤림 -->
         <v-main style="background-color: #3B4048;">
@@ -81,7 +82,7 @@ export default {
                 ['mdi-alert-octagon', '설정'],
             ],
             exercises: [
-                { title: '바벨 숄더 프레스', time: '30m' },
+                //{ title: '바벨 숄더 프레스', time: '30m' },
             ],
             boxes: [],
             showModal: false,
@@ -115,25 +116,34 @@ export default {
             }
         },
         submitData() {
-            if (this.titleInput.trim() === '') {
-                // The title input is empty, display a warning message
+            // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
+            const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
+
+            if (emptyBoxes.length > 0) {
+                // 비어있는 day-routine-box가 하나 이상 있다면 경고 메시지를 표시합니다.
+                const emptyBoxNumbers = emptyBoxes.map((box, index) => `Day ${this.boxes.indexOf(box) + 1}`).join(', ');
+                alert(`${emptyBoxNumbers}의 루틴 작성을 완료해주세요.`);  //비어 있는 상자의 번호를 가져와 쉼표로 구분된 문자열로 변환
+            }
+            else if (this.titleInput.trim() === '') {
+                // 제목 입력란이 비어있을 때 경고 메시지를 표시합니다.
                 this.showWarning = true;
 
                 // Scroll to the warning message
-                // Ensure that the Vue component is fully mounted before accessing refs
+                // Vue 컴포넌트가 완전히 마운트된 후에 refs를 사용하여 경고 메시지로 스크롤합니다.
                 this.$nextTick(() => {
                     // Scroll to the warning message
                     if (this.$refs.warningMessage) {
                         this.$refs.warningMessage.scrollIntoView({
-                            behavior: 'smooth', // You can use 'auto' or 'smooth' for scroll behavior
-                            block: 'start',     // Scroll to the top of the element
+                            behavior: 'smooth', // 스크롤 동작을 "auto" 또는 "smooth"로 설정할 수 있습니다.
+                            block: 'start',     // 요소의 맨 위로 스크롤합니다.
                         });
                     }
                 });
 
-            } else {
-                // The title input is not empty, proceed with data submission
-                this.showWarning = false; // Hide the warning if it was displayed previously
+            }
+            else {
+                // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
+                this.showWarning = false; // 경고 메시지를 숨깁니다.
 
                 const postData = {
                     title: this.titleInput,
@@ -142,7 +152,10 @@ export default {
                 };
 
                 // Assuming you have an API endpoint for data submission
+                // 데이터 제출을 위한 POST 요청을 보냅니다. (API 엔드포인트를 사용해야 합니다.)
+
                 // Replace 'your_api_endpoint' with the actual URL
+                // 데이터 제출을 위해 fetch() 또는 axios를 사용하여 API 엔드포인트로 요청을 보냅니다.
                 fetch('your_api_endpoint', {
                     method: 'POST',
                     headers: {
@@ -159,12 +172,13 @@ export default {
                     });
             }
         },
+
     },
     watch: {
-        // Watch for changes to titleInput
+        // titleInput의 변경을 감시합니다.
         titleInput(newTitleInput) {     // ()안은 변경된 새로운 값
             if (newTitleInput.trim() !== '') {
-                // Title input is no longer empty, hide the warning message
+                // 제목 입력란이 더 이상 비어 있지 않으면 경고 메시지를 숨깁니다.
                 this.showWarning = false;
             }
         },
