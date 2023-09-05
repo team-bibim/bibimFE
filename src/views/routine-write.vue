@@ -24,12 +24,9 @@
                             <div class="day-routine-box" v-for="(box, dayindex) in boxes" :key="dayindex">
                                 <div class="day-routine-box-title">Day {{ dayindex + 1 }}
                                     <button class="delete-button" @click="deleteDayBox(dayindex)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none">
-                                            <path
-                                                d="M3 5C3 4.44772 3.44772 4 4 4H6.25C6.66421 4 7 4.33579 7 4.75C7 5.16421 6.66421 5.5 6.25 5.5H5.81L6.94 18.75C6.98769 18.9975 7.23523 19.1779 7.48279 19.1302C7.73036 19.0826 7.91172 18.835 7.86402 18.5875L6.73402 5.3375H17.266L16.136 18.5875C16.0883 18.835 16.2696 19.0826 16.5172 19.1302C16.7648 19.1779 17.0123 18.9975 17.06 18.75L18.19 5.5H17.75C17.3358 5.5 17 5.16421 17 4.75C17 4.33579 17.3358 4 17.75 4H20C20.5523 4 21 4.44772 21 5C21 5.55228 20.5523 6 20 6H4C3.44772 6 3 5.55228 3 5ZM8 20C8 20.5523 8.44772 21 9 21H15C15.5523 21 16 20.5523 16 20C16 19.4477 15.5523 19 15 19H9C8.44772 19 8 19.4477 8 20ZM11 8.5C11 8.22386 11.2239 8 11.5 8C11.7761 8 12 8.22386 12 8.5V15.5C12 15.7761 11.7761 16 11.5 16C11.2239 16 11 15.7761 11 15.5V8.5ZM13 8.5C13 8.22386 13.2239 8 13.5 8C13.7761 8 14 8.22386 14 8.5V15.5C14 15.7761 13.7761 16 13.5 16C13.2239 16 13 15.7761 13 15.5V8.5Z"
-                                                fill="#CCCCCC" />
-                                        </svg>
+                                        <img width="24" height="24"
+                                            src="https://img.icons8.com/ios-glyphs/24/FFFFFF/filled-trash.png"
+                                            alt="filled-trash" />
                                     </button>
                                 </div>
 
@@ -39,16 +36,13 @@
                                     <div class="icon-box">
                                         <button class="edit-button" @click="editExercise(exercise)">
                                             <img width="24" height="24"
-                                                src="https://img.icons8.com/material/24/FFFFFF/pencil--v2.png"
-                                                alt="pencil--v2" />
+                                                src="https://img.icons8.com/fluency-systems-filled/24/FFFFFF/pencil-tip.png"
+                                                alt="pencil-tip" />
                                         </button>
                                         <button class="delete-button" @click="deleteExercise(box, index)">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <path
-                                                    d="M3 5C3 4.44772 3.44772 4 4 4H6.25C6.66421 4 7 4.33579 7 4.75C7 5.16421 6.66421 5.5 6.25 5.5H5.81L6.94 18.75C6.98769 18.9975 7.23523 19.1779 7.48279 19.1302C7.73036 19.0826 7.91172 18.835 7.86402 18.5875L6.73402 5.3375H17.266L16.136 18.5875C16.0883 18.835 16.2696 19.0826 16.5172 19.1302C16.7648 19.1779 17.0123 18.9975 17.06 18.75L18.19 5.5H17.75C17.3358 5.5 17 5.16421 17 4.75C17 4.33579 17.3358 4 17.75 4H20C20.5523 4 21 4.44772 21 5C21 5.55228 20.5523 6 20 6H4C3.44772 6 3 5.55228 3 5ZM8 20C8 20.5523 8.44772 21 9 21H15C15.5523 21 16 20.5523 16 20C16 19.4477 15.5523 19 15 19H9C8.44772 19 8 19.4477 8 20ZM11 8.5C11 8.22386 11.2239 8 11.5 8C11.7761 8 12 8.22386 12 8.5V15.5C12 15.7761 11.7761 16 11.5 16C11.2239 16 11 15.7761 11 15.5V8.5ZM13 8.5C13 8.22386 13.2239 8 13.5 8C13.7761 8 14 8.22386 14 8.5V15.5C14 15.7761 13.7761 16 13.5 16C13.2239 16 13 15.7761 13 15.5V8.5Z"
-                                                    fill="#CCCCCC" />
-                                            </svg>
+                                            <img width="24" height="24"
+                                                src="https://img.icons8.com/ios-glyphs/24/FFFFFF/filled-trash.png"
+                                                alt="filled-trash" />
                                         </button>
                                     </div>
 
