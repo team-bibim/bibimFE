@@ -28,34 +28,6 @@
 
         <router-view></router-view> <!-- 각 페이지를 보여주는 곳 -->
 
-        <!-- <v-row>
-          <v-col v-for="card in cards" :key="card" cols="12">
-            <v-card class="right-panel">
-              <div class="routine-write-top">루틴작성</div>
-              <div class="routine-write-title">제목</div>
-              <v-list lines="two" style="background-color: #181B21;">
-
-                <template v-for="n in 5" :key="n">
-                  <v-list-item style="background-color: #834B4B; color: #FFFFFF; margin: 10px; border-radius: 20px;">
-
-                    <template v-slot:prepend>
-                      <v-avatar color="#CC8484"></v-avatar>
-                    </template>
-
-                    <v-list-item-title>
-                      안뇽 {{ n }}
-                    </v-list-item-title>
-
-                    <v-list-item-subtitle>
-                      <br>~ 루틴 보여주는 곳 ~<br>
-                    </v-list-item-subtitle>
-                  </v-list-item>
-
-                </template>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row> -->
       </v-container>
     </v-main>
   </v-app>

@@ -5,6 +5,9 @@
 
         <!-- 문제점 -->
         <!-- 화면을 확대했을 때, 5개의 day 루틴이 짤리는 경우 발생, 하단에 스크롤바 활성은 되지만 여전히 짤림 -->
+        <!-- 해결책 -->
+        <!-- 미디어쿼리 이용하여, 화면이 확대될 때(크롬 80% 이상) routine-add-container의 padding-left:30% 지정하기 -->
+        <!-- 또는 routine-add-container의 max-width:100%; 지정 -> center 정렬 깨짐 -->
         <v-main style="background-color: #3B4048;">
             <v-container class="px-2 py-2" fluid>
                 <v-card class="right-panel-hot">
@@ -364,15 +367,25 @@ export default {
     align-items: flex-start;
     gap: 12px;
     margin: 35px 0;
+
+    overflow-x: auto;
+    /* 스크롤바를 추가합니다. */
+    white-space: nowrap;
+    /* 텍스트가 넘칠 때 줄 바꿈을 방지합니다. */
+
 }
 
 .day-routine-box {
-    width: 208px;
+    /* width: 208px; */
+    min-width: 208px;
+    /* 최소 너비를 설정합니다. */
     height: 670px;
     flex-shrink: 0;
     border-radius: 20px;
     background: #4C6672;
     margin: 0px 10px;
+
+
 }
 
 .day-routine-box-title {
