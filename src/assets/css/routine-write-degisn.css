@@ -1,0 +1,29 @@
+.routine-write-top {
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: bolder;
+    margin: 20px;
+}
+
+.routine-write-title {
+    /* 제목 작성부분 디자인 */
+    background-color: #24272B;
+    border: 2px solid #3A4148;
+    height: 60px;
+    margin: 20px;
+    border-radius: 20px;
+
+    /* 글씨 색깔 변경*/
+    color: #919BA9;
+    font-weight: bolder;
+    font-size: larger;
+    /* 텍스트 좌측 정렬 */
+    text-align: left;
+    line-height: 60px;
+    padding-left: 20px;
+}
+
+.v-list-item.v-theme--light.v-list-item--density-default.v-list-item--two-line.v-list-item--variant-text {
+    width: 200px;
+}
