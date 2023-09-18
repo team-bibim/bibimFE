@@ -135,27 +135,6 @@ import Modal from '@/components/modal.vue'
     margin-bottom: 10px;
 }
 
-/* .ex2_center_text {
-    position: relative;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    font-size: 40px;
-    padding-top: 20px;
-} */
-
-/* .page-left {
-    color: white;
-    font-size: 80px;
-    text-align: center;
-}
-
-.page-right {
-    color: white;
-    font-size: 80px;
-    text-align: center;
-} */
-
 #pagenation {
     color: white;
     font-size: 20px;
@@ -168,50 +147,6 @@ import Modal from '@/components/modal.vue'
     height: 650px;
     margin-bottom: 10px;
 }
-/* ----------------------박스 1 ------------------------------------*/
-/* .list_box1 {
-    position: relative;
-    background-color: #3D5143;
-    border-radius: 20px;
-    width: 270px;
-    height: 315px;
-    margin-top: 10px;
-    margin-left: 8px;
-    float: left;
-} */
-
-/* .body_list1 {
-    position: relative;
-    background-color: #55B570;
-    width: 140px;
-    height: 40px;
-    border-radius: 20px;
-    margin-top: 10px;
-    margin-left: 10px;
-}
-
-.check_box1 {
-    position: relative;
-    background-color: #55B570;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    float: right;
-    margin-right: 10px;
-} */
-/* 박스 1 */
-
-/* .pluslist {
-    position: relative;
-    background-color: #55B570;
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    margin-left: 90px;
-
-    text-align: center;
-    font-size: 85px;
-    color: white;
-} */
+/* ----------------------pagenation ------------------------------------*/
 
 </style>

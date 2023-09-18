@@ -14,8 +14,29 @@
       <v-card id="full-box">
         <v-card-text>
           <div id="my-rutin">내 루틴 보관함</div>
-          <div id="line"></div>
+          <v-divider :thickness="3" color="white"></v-divider>
         </v-card-text>
+        <v-table id="lists">
+    <thead>
+      <tr>
+        <th class="text-left">
+          루틴 이름
+        </th>
+        <th class="text-left">
+          칼로리
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="item in rutinbox"
+        :key="item.name"
+      >
+        <td>{{ item.name }}</td>
+        <td>{{ item.calories }}</td>
+      </tr>
+    </tbody>
+  </v-table>
         <v-card-actions>
           <v-btn color="" @click="dialog = false" id="close-btn">닫기</v-btn>
         </v-card-actions>
@@ -24,11 +45,19 @@
   </div>
 </template>
 
+
+
 <script>
   export default {
     data () {
       return {
         dialog: false,
+        rutinbox: [
+          {
+            name: '이렇게 운동하면 좋습니다',
+            calories: 300,
+          }
+        ]
       }
     },
   }
@@ -59,16 +88,14 @@
   padding-top: 25px;
 }
 
-#line {
-  width: 1050px;
-  height: 2px;
-  background-color: white;
-  margin-top: 25px;
-}
-
 #close-btn {
   color: white;
   font-size: 20px;
   margin: 0 auto;
 }
+
+/* #lists {
+  
+  
+} */
 </style>
