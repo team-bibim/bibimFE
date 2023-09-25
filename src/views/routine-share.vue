@@ -27,7 +27,7 @@
                     style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                     <div style="display: flex;">
                       <v-list-item-title class="right-panel-hot-writer-id">
-                        <v-avatar class="right-panel-hot-avatar"></v-avatar>
+                        <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         {{ post.writer }}
                         <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
                           <v-img
@@ -87,7 +87,7 @@
                   style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                   <div style="display: flex;">
                     <v-list-item-title class="right-panel-new-writer-id">
-                      <v-avatar class="right-panel-new-avatar"></v-avatar>
+                      <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
                       {{ post.writer }}
                       <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
                         <v-img
@@ -146,150 +146,104 @@ export default {
   data: () => ({
     hotPostings: [
       {
-        title: '강아지는 귀엽다',
-        content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '고양이도 귀엽다',
-        content: '고양이도 만만찮게 귀엽던데',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '안녕안녕안녕',
-        content: '안뇽안뇽안뇽',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: 'Or, there could be a English title',
-        content: 'and English Content like this.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: '강아지는 귀엽다',
         content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: '고양이도 귀엽다',
         content: '고양이도 만만찮게 귀엽던데',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: '안녕안녕안녕',
         content: '안뇽안뇽안뇽',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: 'Or, there could be a English title',
         content: 'and English Content like this.',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: '뻘글.',
         content: '진짜 뻘글.',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: '니하오',
         content: '곤니치와',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
     ],
     newPostings: [
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27'
-      },
-      {
+    {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
+      },
+      {
+        title: '강아지는 귀엽다',
+        content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27',
+        likes: 0
+      },
+      {
+        title: '고양이도 귀엽다',
+        content: '고양이도 만만찮게 귀엽던데',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27',
+        likes: 0
+      },
+      {
+        title: '안녕안녕안녕',
+        content: '안뇽안뇽안뇽',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27',
+        likes: 0
+      },
+      {
+        title: 'Or, there could be a English title',
+        content: 'and English Content like this.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27',
+        likes: 0
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27',
+        likes: 0
       },
       {
         title: '니하오',
         content: '곤니치와',
         writer: '@exampleID',
-        date: '2023/09/25 19:27'
+        date: '2023/09/25 19:27',
+        likes: 0
       },
     ],
     drawer: null,
