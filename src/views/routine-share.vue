@@ -7,9 +7,8 @@
             <div style="height: 10px;"></div>
             <div style="display: flex;">
               <v-list-subheader class="right-panel-hot-classify-text">
-                <b style="margin-right: 30px;">전체</b>
-                <b style="margin-right: 30px;">팔로잉</b>
-                <b style="margin-right: 30px;">인기</b>
+                <button><b style="margin-right: 90px;">전체</b></button>
+                <button><b style="margin-right: 45px;">팔로잉</b></button>
               </v-list-subheader>
               <input class="search-bar" v-model="textInput" placeholder="검색" @keyup.enter="searchBarInput">
             </div>
@@ -18,26 +17,54 @@
               <b>이번 주 HOT 게시글 🔥</b>
             </v-list-subheader>
             <div style="height: 20px;"></div>
-            <template v-if="filteredAndSortedHotPostings.length === 0">
-              <div class="no-search-results">검색 결과가 없습니다</div>
-            </template>
-            <template v-else>
-              <template v-for="(post, index) in filteredAndSortedHotPostings" :key="index">
-                <v-list-item
-                  style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
-                  <div style="display: flex;">
-                    <v-list-item-title class="right-panel-hot-title">
-                      <v-avatar class="right-panel-hot-avatar"></v-avatar>
-                      <b style="margin-left:8px; color:#F4D3D3">{{ post.title }}</b>
-                    </v-list-item-title>
-                  </div>
-                  <div style="height: 10px;"></div>
-                  <v-list-item-title class="right-panel-hot-content">
-                    {{ post.content }}
-                  </v-list-item-title>
-                </v-list-item>
+            <v-data-iterator>
+              <template v-if="filteredAndSortedHotPostings.length === 0">
+                <div class="no-search-results">검색 결과가 없습니다</div>
               </template>
-            </template>
+              <template v-else>
+                <template v-for="(post, index) in filteredAndSortedHotPostingsPerPage" :key="index">
+                  <v-list-item
+                    style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
+                    <div style="display: flex;">
+                      <v-list-item-title class="right-panel-hot-writer-id">
+                        <v-avatar class="right-panel-hot-avatar"></v-avatar>
+                        {{ post.writer }}
+                        <button class="follow-button" @click="exampleFunction()">
+                          <img
+                            width="40"
+                            height="40"
+                            src="https://img.icons8.com/ios-glyphs/30/FFFFFF/user--v1.png"
+                            alt="user--v1"
+                          />
+                        </button>
+                      </v-list-item-title>
+                    </div>
+                    <div style="height: 10px;"></div>
+                    <v-list-item-title class="right-panel-hot-content">
+                      <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
+                      <br>
+                      <br>
+                      {{ post.content }}
+                      <br>
+                      <br>
+                      <div style="align-items: right;">
+                        {{ post.date }}
+                        <button class="like-button" @click="exampleFunction()">
+                        <img
+                          width="24"
+                          height="24"
+                          src="https://img.icons8.com/material/24/FFFFFF/facebook-like--v1.png"
+                          alt="facebook-like--v1"
+                        />
+                      </button>
+                      </div>
+                    </v-list-item-title>
+                  </v-list-item>
+                </template>
+              </template>
+            </v-data-iterator>
+            <div style="height: 10px;"></div>
+            <v-pagination v-model="hotPage" :length="Math.ceil(filteredAndSortedHotPostings.length / 4)" style="color:white"></v-pagination>
           </v-list>
         </v-card>
 
@@ -54,24 +81,48 @@
               <div class="no-search-results">검색 결과가 없습니다</div>
             </template>
             <template v-else>
-              <template v-for="(post, index) in filteredAndSortedNewPostings" :key="index">
+              <template v-for="(post, index) in filteredAndSortedNewPostingsPerPage" :key="index">
                 <v-list-item
                   style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                   <div style="display: flex;">
-                    <v-list-item-title class="right-panel-new-title">
+                    <v-list-item-title class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar"></v-avatar>
-                      <b style="margin-left:8px; color:#F4D3D3">{{ post.title }}</b>
+                      {{ post.writer }}
+                      <button class="follow-button" @click="exampleFunction()">
+                        <img
+                          width="40"
+                          height="40"
+                          src="https://img.icons8.com/ios-glyphs/30/FFFFFF/user--v1.png"
+                          alt="user--v1"
+                        />
+                      </button>
                     </v-list-item-title>
                   </div>
                   <div style="height: 10px;"></div>
-                  <div class="right-panel-new-content">
-                    <v-list-item-title>
-                      {{ post.content }}
-                    </v-list-item-title>
-                  </div>
+                  <v-list-item-title class="right-panel-new-content">
+                    <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
+                    <br>
+                    <br>
+                    {{ post.content }}
+                    <br>
+                    <br>  
+                    <div style="align-items: right;">
+                      {{ post.date }}
+                      <button class="like-button" @click="exampleFunction()">
+                        <img
+                          width="24"
+                          height="24"
+                          src="https://img.icons8.com/material/24/FFFFFF/facebook-like--v1.png"
+                          alt="facebook-like--v1"
+                        />
+                      </button>
+                    </div>
+                  </v-list-item-title>
                 </v-list-item>
               </template>
             </template>
+            <div style="height: 10px;"></div>
+            <v-pagination v-model="newPage" :length="Math.ceil(filteredAndSortedNewPostings.length / 4)" style="color:white"></v-pagination>
           </v-list>
         </v-card>
       </v-container>
@@ -92,14 +143,152 @@ Content : Guys.
 export default {
   data: () => ({
     hotPostings: [
-      { title: '강아지는 귀엽다', content: '강아지는 진짜 너무 귀여운 것 같아.' },
-      { title: '고양이도 귀엽다', content: '고양이도 만만찮게 귀엽던데' },
-      { title: '안녕', content: '하세요'}
+      {
+        title: '강아지는 귀엽다',
+        content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '고양이도 귀엽다',
+        content: '고양이도 만만찮게 귀엽던데',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '안녕안녕안녕',
+        content: '안뇽안뇽안뇽',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: 'ㄱ. 로렘 입숨.',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: 'Or, there could be a English title',
+        content: 'and English Content like this.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '강아지는 귀엽다',
+        content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '고양이도 귀엽다',
+        content: '고양이도 만만찮게 귀엽던데',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '안녕안녕안녕',
+        content: '안뇽안뇽안뇽',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: 'Or, there could be a English title',
+        content: 'and English Content like this.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
     ],
     newPostings: [
-      { title: '뻘글입니다.', content: '뻘글입니다.' },
-      { title: '가나다라마바사아', content: 'ABCDEFG' },
-      { title: '니하오', content: '곤니치와'},
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '뻘글.',
+        content: '진짜 뻘글.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: 'ㄱ. 로렘 입숨.',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
+      {
+        title: '니하오',
+        content: '곤니치와',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27'
+      },
     ],
     drawer: null,
     links: [
@@ -109,9 +298,12 @@ export default {
       ['mdi-alert-octagon', '내 루틴 보관함'],
       ['mdi-alert-octagon', '설정']
     ],
-    textInput: ""
+    textInput: "",
+    hotPage: 1,
+    newPage: 1,
   }),
   computed: {
+    // 두 개 함수는 일부로 분리해둠 => filteredAndSortedHotPostings()만 따로 사용할 수 있도록
     filteredAndSortedHotPostings() {
       return this.hotPostings
         .filter(post => {
@@ -122,6 +314,11 @@ export default {
         })
         .sort((a, b) => a.title.localeCompare(b.title));
     },
+    filteredAndSortedHotPostingsPerPage() {
+      const startIndex = (this.hotPage - 1) * 4;
+      const endIndex = startIndex + 4;
+      return this.filteredAndSortedHotPostings.slice(startIndex, endIndex);
+    },
     filteredAndSortedNewPostings() {
       return this.newPostings
         .filter(post => {
@@ -131,6 +328,11 @@ export default {
           return title.includes(searchText) || content.includes(searchText);
         })
         .sort((a, b) => a.title.localeCompare(b.title));
+    },
+    filteredAndSortedNewPostingsPerPage() {
+      const startIndex = (this.newPage - 1) * 4;
+      const endIndex = startIndex + 4;
+      return this.filteredAndSortedNewPostings.slice(startIndex, endIndex);
     },
   },
   methods: {
@@ -143,6 +345,9 @@ export default {
     },
     searchBarInput() {
       console.log(this.textInput); // Log the entered text to the console
+    },
+    exampleFunction() {
+      console.log("팔로우 눌림");
     }
   }
 }
@@ -173,6 +378,9 @@ export default {
   text-align: center;
 }
 
+.follow-button {
+  height: auto;
+}
 .right-panel-hot-classify-text {
   background-color: #181B21;
   color: #FFFFFF;
@@ -192,7 +400,7 @@ export default {
   border-radius: 30px;
 }
 
-.right-panel-hot-title {
+.right-panel-hot-writer-id {
   background-color: #CC8484;
   border-radius: 20px;
   align-items: center;
@@ -203,7 +411,9 @@ export default {
 .right-panel-hot-content {
   background-color: #CC8484;
   border-radius: 20px;
+  white-space: pre-line;
   height: auto;
+  width: auto;
   text-align: left;
   padding: 1%;
 }
@@ -220,7 +430,7 @@ export default {
   border-radius: 30px;
 }
 
-.right-panel-new-title {
+.right-panel-new-writer-id {
   background-color: #344054;
   border-radius: 20px;
   align-items: center;
@@ -231,7 +441,9 @@ export default {
 .right-panel-new-content {
   background-color: #344054;
   border-radius: 20px;
+  white-space: pre-line;
   height: auto;
+  width: auto;
   text-align: left;
   padding: 1%;
 }
