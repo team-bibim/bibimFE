@@ -7,8 +7,8 @@
             <div style="height: 10px;"></div>
             <div style="display: flex;">
               <v-list-subheader class="right-panel-hot-classify-text">
-                <v-btn variant="text" density="compact" size="x-large"><b>전체</b></v-btn>
-                <v-btn variant="text" density="compact" size="x-large"><b>팔로잉</b></v-btn>
+                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"><b>전체</b></v-btn>
+                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"><b>팔로잉</b></v-btn>
               </v-list-subheader>
               <input class="search-bar" v-model="textInput" placeholder="검색" @keyup.enter="searchBarInput">
             </div>
