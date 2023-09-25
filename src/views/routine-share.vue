@@ -7,8 +7,8 @@
             <div style="height: 10px;"></div>
             <div style="display: flex;">
               <v-list-subheader class="right-panel-hot-classify-text">
-                <button><b style="margin-right: 90px;">전체</b></button>
-                <button><b style="margin-right: 45px;">팔로잉</b></button>
+                <v-btn variant="text" density="compact" size="x-large"><b style="margin-right: 90px;">전체</b></v-btn>
+                <v-btn variant="text" density="compact" size="x-large"><b style="margin-right: 45px;">팔로잉</b></v-btn>
               </v-list-subheader>
               <input class="search-bar" v-model="textInput" placeholder="검색" @keyup.enter="searchBarInput">
             </div>
@@ -29,14 +29,14 @@
                       <v-list-item-title class="right-panel-hot-writer-id">
                         <v-avatar class="right-panel-hot-avatar"></v-avatar>
                         {{ post.writer }}
-                        <button class="follow-button" @click="exampleFunction()">
-                          <img
-                            width="40"
-                            height="40"
-                            src="https://img.icons8.com/ios-glyphs/30/FFFFFF/user--v1.png"
-                            alt="user--v1"
-                          />
-                        </button>
+                        <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                          <v-img
+                            :width="30"
+                            aspect-ratio="1/1"
+                            cover
+                            src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
+                          ></v-img>
+                        </v-btn>
                       </v-list-item-title>
                     </div>
                     <div style="height: 10px;"></div>
@@ -49,14 +49,15 @@
                       <br>
                       <div style="align-items: right;">
                         {{ post.date }}
-                        <button class="like-button" @click="exampleFunction()">
-                        <img
-                          width="24"
-                          height="24"
-                          src="https://img.icons8.com/material/24/FFFFFF/facebook-like--v1.png"
-                          alt="facebook-like--v1"
-                        />
-                      </button>
+                        <v-btn variant="plain" rounded="xl" @click="exampleLikeFunction()">
+                          <v-img
+                            :width="30"
+                            aspect-ratio="1/1"
+                            cover
+                            src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
+                          ></v-img>
+                        </v-btn>
+                        {{ number }}
                       </div>
                     </v-list-item-title>
                   </v-list-item>
@@ -88,14 +89,14 @@
                     <v-list-item-title class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar"></v-avatar>
                       {{ post.writer }}
-                      <button class="follow-button" @click="exampleFunction()">
-                        <img
-                          width="40"
-                          height="40"
-                          src="https://img.icons8.com/ios-glyphs/30/FFFFFF/user--v1.png"
-                          alt="user--v1"
-                        />
-                      </button>
+                      <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                        <v-img
+                          :width="30"
+                          aspect-ratio="1/1"
+                          cover
+                          src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
+                        ></v-img>
+                      </v-btn>
                     </v-list-item-title>
                   </div>
                   <div style="height: 10px;"></div>
@@ -108,14 +109,15 @@
                     <br>  
                     <div style="align-items: right;">
                       {{ post.date }}
-                      <button class="like-button" @click="exampleFunction()">
-                        <img
-                          width="24"
-                          height="24"
-                          src="https://img.icons8.com/material/24/FFFFFF/facebook-like--v1.png"
-                          alt="facebook-like--v1"
-                        />
-                      </button>
+                      <v-btn variant="plain" rounded="xl" @click="exampleLikeFunction()">
+                        <v-img
+                          :width="30"
+                          aspect-ratio="1/1"
+                          cover
+                          src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
+                        ></v-img>
+                      </v-btn>
+                      {{ number }}
                     </div>
                   </v-list-item-title>
                 </v-list-item>
@@ -301,6 +303,7 @@ export default {
     textInput: "",
     hotPage: 1,
     newPage: 1,
+    number: 0,
   }),
   computed: {
     // 두 개 함수는 일부로 분리해둠 => filteredAndSortedHotPostings()만 따로 사용할 수 있도록
@@ -346,8 +349,12 @@ export default {
     searchBarInput() {
       console.log(this.textInput); // Log the entered text to the console
     },
-    exampleFunction() {
+    exampleFollowFunction() {
       console.log("팔로우 눌림");
+    },
+    exampleLikeFunction() {
+      console.log("좋아요 눌림");
+      this.number += 1;
     }
   }
 }
@@ -378,9 +385,6 @@ export default {
   text-align: center;
 }
 
-.follow-button {
-  height: auto;
-}
 .right-panel-hot-classify-text {
   background-color: #181B21;
   color: #FFFFFF;
