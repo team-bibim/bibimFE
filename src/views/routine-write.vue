@@ -17,6 +17,7 @@
                     <v-list lines="two" style="background-color: #181B21;">
                         <v-list-subheader class="right-panel-classify-text" style="margin: 35px;">
                             <b>루틴 작성</b>
+                            <!-- {{ getMessage }} // 상태관리 연습 -->
                         </v-list-subheader>
 
                         <v-row>
@@ -126,11 +127,12 @@
 import WritePage from '@/views/routine-write.vue';
 import ModalComponent from '@/components/Write-Modal.vue';
 import Modal from '@/components/Write-Modal02.vue';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
     data() {
         return {
-            cards: ['루틴 작성', '최신 게시글'],
+            // cards: ['루틴 작성', '최신 게시글'],
             links: [
                 ['mdi-inbox-arrow-down', 'HOME'],
                 ['mdi-send', '루틴 공유'],
@@ -139,15 +141,12 @@ export default {
                 ['mdi-alert-octagon', '설정'],
             ],
             exercises: [
-                //{ title: '바벨 숄더 프레스', time: '30m' },
+                //{ title: '바벨 숄더 프레스', time: '30m' },   time대신 equip 사용
             ],
             boxes: [],
-            selectedExerciseArea: '', // 선택한 운동 부위를 저장할 데이터 속성 추가
-            selectedExerciseName: '', // 선택한 운동 이름을 저장할 데이터 속성 추가
             // showModal: false,
 
             // activeBox: null,
-            drawer: null,
             titleInput: '',
             expInput: '',
 
@@ -162,7 +161,13 @@ export default {
         ModalComponent,
         Modal,
     },
+    computed: {
+        // ...mapState(),
+        ...mapGetters(['getMessage']),
+    },
     methods: {
+        // ...mapMutations(),
+        // ...mapActions(),
         searchBarInput() {
             console.log(this.titleInput);
         },
