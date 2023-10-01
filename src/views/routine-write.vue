@@ -24,7 +24,7 @@
                             <v-col cols="12">
                                 <v-text-field outline class="search-bar" v-model="titleInput" label="제목"
                                     @keyup.enter="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
-                                    rounded="xl" :style="{ 'border-radius': '20px !important' }"></v-text-field>
+                                    rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
                                 <v-alert v-if="showWarning" type="error" class="warning-message" outlined>
                                     제목을 작성해주세요.
                                 </v-alert>
@@ -147,7 +147,8 @@ export default {
             // showModal: false,
 
             // activeBox: null,
-            titleInput: '',
+            // titleInput: '',
+            titleInput: '', // computed 속성에서 data 속성으로 변경
             expInput: '',
 
             showWarning: false,
@@ -166,9 +167,10 @@ export default {
         ...mapGetters(['getMessage']),
     },
     methods: {
-        // ...mapMutations(),
+        ...mapMutations(['setTitleInput']),
         // ...mapActions(),
         searchBarInput() {
+            this.setTitleInput(this.titleInput);    // 상태관리
             console.log(this.titleInput);
         },
         ExplanationInput() {
