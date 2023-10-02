@@ -18,12 +18,14 @@
                         <v-list-subheader class="right-panel-classify-text" style="margin: 35px;">
                             <b>루틴 작성</b>
                             <!-- {{ getMessage }} // 상태관리 연습 -->
+                            <!-- {{ getTitleInput }} -->
+                            <!-- {{ getExpInput }} -->
                         </v-list-subheader>
 
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field outline class="search-bar" v-model="titleInput" label="제목"
-                                    @keyup.enter="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
+                                    @input="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
                                     rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
                                 <v-alert v-if="showWarning" type="error" class="warning-message" outlined>
                                     제목을 작성해주세요.
@@ -105,9 +107,9 @@
 
                         <v-row>
                             <v-col cols="12" class="routine-end-container">
-                                <v-textarea class="explanation-bar" v-model="expInput" label="설명" bg-color="#24272B"
-                                    color="#3A4148" clearable no-resize rows="6" row-height="25" variant="outlined"
-                                    rounded="xl"></v-textarea>
+                                <v-textarea class="explanation-bar" v-model="expInput" label="설명" @input="ExplanationInput"
+                                    bg-color="#24272B" color="#3A4148" clearable no-resize rows="6" row-height="25"
+                                    variant="outlined" rounded="xl"></v-textarea>
                                 <!-- <v-btn class="r-submit-button" :style="{ filter: showModal ? 'brightness(30%)' : 'none' }"
                                     color="#CD4444" @click="submitData" :disabled="showModal">작성 완료</v-btn> -->
                                 <v-btn class="r-submit-button" color="#CD4444" @click="submitData">작성 완료</v-btn>
@@ -125,7 +127,7 @@
 <script>
 //import { ref } from 'vue';
 import WritePage from '@/views/routine-write.vue';
-import ModalComponent from '@/components/Write-Modal.vue';
+// import ModalComponent from '@/components/Write-Modal.vue';
 import Modal from '@/components/Write-Modal02.vue';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
@@ -159,21 +161,23 @@ export default {
     },
     components: {
         WritePage,
-        ModalComponent,
+        // ModalComponent,
         Modal,
     },
     computed: {
         // ...mapState(),
-        ...mapGetters(['getMessage']),
+        // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
     },
     methods: {
-        ...mapMutations(['setTitleInput']),
+        ...mapMutations(['setTitleInput', 'setExpInput']),
         // ...mapActions(),
         searchBarInput() {
             this.setTitleInput(this.titleInput);    // 상태관리
             console.log(this.titleInput);
         },
         ExplanationInput() {
+            // expInput 상태를 업데이트 (data의 expInput과 state 의 expInput 동기화 역할)
+            this.setExpInput(this.expInput);
             console.log(this.expInput);
         },
         addExercise(box) {
@@ -497,9 +501,9 @@ svg {
     padding-left: 20px;
 }
 
-.v-list-item.v-theme--light.v-list-item--density-default.v-list-item--two-line.v-list-item--variant-text {
+/* .v-list-item.v-theme--light.v-list-item--density-default.v-list-item--two-line.v-list-item--variant-text {
     width: 200px;
-}
+} */
 
 .warning-message {
     /* color: #CD4444; */
