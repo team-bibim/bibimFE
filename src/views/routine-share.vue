@@ -49,7 +49,7 @@
                       <br>
                       <div style="align-items: right;">
                         {{ post.date }}
-                        <v-btn variant="plain" rounded="xl" @click="exampleLikeFunction()">
+                        <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -57,7 +57,7 @@
                             src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
                           ></v-img>
                         </v-btn>
-                        {{ number }}
+                        {{ post.like }}
                       </div>
                     </v-list-item-title>
                   </v-list-item>
@@ -109,7 +109,7 @@
                     <br>  
                     <div style="align-items: right;">
                       {{ post.date }}
-                      <v-btn variant="plain" rounded="xl" @click="exampleLikeFunction()">
+                      <v-btn variant="plain" rounded="xl" @click="increaseNewLike(index)">
                         <v-img
                           :width="30"
                           aspect-ratio="1/1"
@@ -117,7 +117,7 @@
                           src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
                         ></v-img>
                       </v-btn>
-                      {{ number }}
+                      {{ post.like }}
                     </div>
                   </v-list-item-title>
                 </v-list-item>
@@ -142,109 +142,87 @@ Content : Guys.
 -->
 
 <script>
+import axios from 'axios';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+
+// 좋아요
+/*submitBtn.addEventListener('click', () => {
+  let titleValue = diaryTitle.value;
+  let contentValue = diaryContent.value;
+
+  if (contentValue === "") {
+    alert("텍스트 입력란이 공란입니다.");
+  } else {
+    axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
+    .then(res => {
+      console.log(res.data);
+      alert("저장되었습니다!!");
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+});*/
+
 export default {
+  created() {
+    axios.get('http://52.78.77.1:8000/routine/recommend/pop/')
+    .then(response => {
+      console.log("Routine Day: " + response.data[0].routine_day);
+      this.getHotPostings(response.data[0])
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  },
   data: () => ({
+    // 백엔드단의 Post 데이터는 어떻게 구성되어있는지 확인하고, 양식을 맞추어 axios를 도입할 것
+    post: {
+      title: '',
+      content: '',
+      writer: '',
+      date: '',
+      like: 0
+    },
     hotPostings: [
       {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: '@exampleID',
         date: '2023/09/25 19:27',
-        likes: 0
+        like: 0
       },
       {
-        title: '강아지는 귀엽다',
-        content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '고양이도 귀엽다',
-        content: '고양이도 만만찮게 귀엽던데',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '안녕안녕안녕',
-        content: '안뇽안뇽안뇽',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: 'Or, there could be a English title',
-        content: 'and English Content like this.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-    ],
-    newPostings: [
-    {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: '@exampleID',
         date: '2023/09/25 19:27',
-        likes: 0
-      },
+        like: 0
+      }
+      /*
       {
-        title: '강아지는 귀엽다',
-        content: '강아지 진짜 대졸귀 ㅎㅎㅎㅎ.',
+        title,
+        writer,
+        date,
+        like
+      }
+      {
+        title: routine_name,
+        content: routine_comment,
+        writer: owner_id,
+        date: created_at,
+        like: 좋아요 수는 별도로 작동함
+      }
+      */
+    ],
+    newPostings: [
+      {
+        title: 'ㄱ. 로렘 입숨.',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: '@exampleID',
         date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '고양이도 귀엽다',
-        content: '고양이도 만만찮게 귀엽던데',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '안녕안녕안녕',
-        content: '안뇽안뇽안뇽',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: 'Or, there could be a English title',
-        content: 'and English Content like this.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '뻘글.',
-        content: '진짜 뻘글.',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
-      {
-        title: '니하오',
-        content: '곤니치와',
-        writer: '@exampleID',
-        date: '2023/09/25 19:27',
-        likes: 0
-      },
+        like: 0
+      }
     ],
     drawer: null,
     links: [
@@ -305,10 +283,50 @@ export default {
     },
     exampleFollowFunction() {
       console.log("팔로우 눌림");
+      /*axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
+      .then(res => {
+        console.log(res.data);
+        alert("저장되었습니다!!");
+      })
+      .catch(error => {
+        console.error(error);
+      });*/
     },
-    exampleLikeFunction() {
+    increaseHotLike(index) {
       console.log("좋아요 눌림");
-      this.number += 1;
+      /*axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
+      .then(res => {
+        console.log(res.data);
+        alert("저장되었습니다!!");
+      })
+      .catch(error => {
+        console.error(error);
+      });*/
+      this.hotPostings[index].like++;
+    },
+    increaseNewLike(index) {
+      console.log("좋아요 눌림");
+      /*axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
+      .then(res => {
+        console.log(res.data);
+        alert("저장되었습니다!!");
+      })
+      .catch(error => {
+        console.error(error);
+      });*/
+      this.newPostings[index].like++;
+    },
+    getHotPostings(data) {
+      // for(let i = 0; i < 5; i++) { // i < 5라고 해놨는데, 예를 들어, i < dataLength 등으로 변경하는 작업이 필요함.
+        let post = {
+          title: data.routine_name,
+          content: data.routine_comment,
+          writer: data.owner_id,
+          like: data.recommend_count
+        };
+
+        this.hotPostings.push(post);
+      // }
     }
   }
 }
