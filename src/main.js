@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
-import axios from "axios";
+import axios from "axios"
 
 loadFonts()
 
@@ -14,7 +14,8 @@ createApp(App)
   .use(vuetify)
   .mount('#app')
 
-let url = "http://192.168.8.196:8000/exercise/1/"
+// let url = "http://15.164.228.112:8080/exercise/1/"
+let url = "http://52.78.77.1:8000/exercise/body/2/"
 
 axios.get(url)
   .then(function(response) {

@@ -55,10 +55,13 @@
 
                                             <!-- <textarea v-model="exercise.title" class="exercise-title" placeholder="운동 이름"
                                                 readonly></textarea> -->
-                                            <input v-model="exercise.ExerciseArea" class="exercise-title"
+                                            <!-- <input v-model="exercise.ExerciseArea" class="exercise-title"
                                                 placeholder="운동 부위" readonly>
                                             <input v-model="exercise.ExerciseName" class="exercise-time" placeholder="운동 이름"
-                                                readonly>
+                                                readonly> -->
+                                            <!-- 이 부분에 Modal.vue에서 전달된 운동 정보를 표시합니다. -->
+                                            {{ exercise.ExerciseArea }} {{ exercise.ExerciseName }}
+                                            <!-- 다른 필요한 데이터도 표시할 수 있습니다. -->
                                             <div class="icon-box">
                                                 <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
                                                     <img width="24" height="24"
@@ -83,7 +86,7 @@
                                         <!-- <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
                                             :exerciseData="editExerciseData" :isEditModal="isEditModal"
                                             @close-modal="showModal = false; isEditModal = false" /> -->
-                                        <Modal v-if="box.exercises.length < 5" @exercise-selected="updateExerciseData">
+                                        <Modal v-if="box.exercises.length < 5">
                                         </Modal>
                                     </div>
                                     <!-- <v-btn v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
@@ -167,9 +170,17 @@ export default {
     computed: {
         // ...mapState(),
         // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
+        ...mapState(['dayExercises']),
+        // 상태 관리에서 운동 정보를 가져와서 표시하는 계산된 속성을 추가합니다.
+        box() {
+            // 예를 들어, 상태 관리에서 현재 선택된 루틴의 운동 정보를 가져오려면 다음과 같이 할 수 있습니다.
+            // 이 코드는 예시이며, 실제로 사용하는 상태 관리의 구조에 따라서 변경할 수 있습니다.
+            // 'dayExercises'는 상태 관리에서 사용하는 상태 이름이며, 필요에 따라 변경해야 할 수 있습니다.
+            return this.$store.state.dayExercises;
+        },
     },
     methods: {
-        ...mapMutations(['setTitleInput', 'setExpInput']),
+        ...mapMutations(['setTitleInput', 'setExpInput', 'updateDayExercises']),
         // ...mapActions(),
         searchBarInput() {
             this.setTitleInput(this.titleInput);    // 상태관리
@@ -199,6 +210,9 @@ export default {
         addDayBox() {
             if (this.boxes.length < 5) {
                 this.boxes.push({ exercises: [] });
+
+                // dayExercises를 업데이트하기 위해 mutations 호출
+                this.updateDayExercises({ day: this.boxes.length, exercises: [] });
             }
         },
         deleteDayBox(dayindex) {
@@ -229,11 +243,11 @@ export default {
         //         this.boxes.push({ exercises: [] });
         //     }
         // },
-        updateExerciseData(data) {
-            // Modal에서 emit한 이벤트를 처리하는 메서드
-            this.selectedExerciseArea = data.ExerciseArea;
-            this.selectedExerciseName = data.ExerciseName;
-        },
+        // updateExerciseData(data) {
+        //     // Modal에서 emit한 이벤트를 처리하는 메서드
+        //     this.selectedExerciseArea = data.ExerciseArea;
+        //     this.selectedExerciseName = data.ExerciseName;
+        // },
 
         submitData() {
             // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
