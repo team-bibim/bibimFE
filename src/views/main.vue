@@ -2,8 +2,6 @@
 <!------------------------ 오늘의 운동 진행률 --------------------------------->
 <div class="ex1">
     <div class="ex1_center_text">오늘의 운동 진행률</div>
-    <!-- <img src="percent.png" alt="percent" width="100" height="100"> -->
-    <!-- <div class="percent">80%</div> -->
 
     <div class="container">
         <v-btn @click="$router.push('/write')" div class="box1">
@@ -18,14 +16,14 @@
     </div>
 </div>
 <!------------------------ 날짜 -------------------------------------------->
-<div class="ex2">
+<!-- <div class="ex2"> -->
         <!-- <div class="page-left" style="float: left;">&lt;</div> -->
         <!-- <div class="ex2_center_text">첫 번째 날짜</div> -->
         <!-- <div class="page-right" style="float: right;">&gt;</div> -->
 
-        <v-pagination :length="3" id="pagenation"></v-pagination>
+        <!-- <v-pagination :length="3" id="pagenation"></v-pagination> -->
 
-</div>
+<!-- </div> -->
 <!------------------------ 운동 리스트  -------------------------------------->
 <div class="ex3">
     <div class="listbox1">
@@ -128,18 +126,18 @@ import Modal from '@/components/modal.vue'
 }
 /* ------------------------------위에 박스 세개 ---------------------------*/
 
-.ex2 {
+/* .ex2 {
     background-color: #181B21;
     border-radius: 20px;
     height: 120px;
     margin-bottom: 10px;
-}
+} */
 
-#pagenation {
+/* #pagenation {
     color: white;
     font-size: 20px;
     padding-top: 30px;
-}
+} */
 /* ------------------------맨 아래 박스 리스트들 -----------------------*/
 .ex3 {
     background-color: #181B21;
