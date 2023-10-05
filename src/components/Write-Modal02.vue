@@ -15,12 +15,18 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
+                            <!-- <div>
+                                <p>usebodyData: {{ $store.state.usebodyData }}</p>
+                                <p>exerciseData: {{ $store.state.exerciseData }}</p>
+                            </div> -->
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="exerciseData.ExerciseArea" :items="['0', '1', '2', '3']" label="운동 부위"
+                                <!-- 이 부분에서 운동 부위를 선택합니다. -->
+                                <v-select v-model="exerciseList.ExerciseArea" :items="exerciseAreaItems" label="운동 부위"
                                     required></v-select>
+
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="exerciseData.ExerciseEquipment" :items="['0', '1', '2', '3']"
+                                <v-select v-model="exerciseList.ExerciseEquipment" :items="['0', '1', '2', '3']"
                                     label="사용 기구" required></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
@@ -31,8 +37,11 @@
 
                             <v-col cols="12">
                                 <p>검색 결과: {{ searchQuery }}</p>
-                                <v-select v-model="exerciseData.ExerciseName" :items="['0', '1', '2', '3']" label="운동"
+                                <!-- 선택한 운동 부위에 따른 운동을 표시합니다. -->
+                                <v-select v-model="exerciseList.ExerciseName"
+                                    :items="getExerciseNamesByArea(exerciseList.ExerciseArea)" label="운동"
                                     required></v-select>
+
                                 <!-- 검색 결과를 여기에 표시 -->
                             </v-col>
 
@@ -56,27 +65,46 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
+    created() { this.fetchData(); },
     data() {
         return {
             dialog: false,
             searchQuery: '', // 검색어를 저장할 데이터 속성
-            exerciseData: {
-                ExerciseArea: '',
-                ExerciseEquipment: '',
-                ExerciseName: '',
+            // usebodyData와 exerciseData 추가
+            usebodyList: [],
+            exerciseList: {
+                ExerciseArea: '', // 선택한 운동 부위
+                ExerciseName: '', // 선택한 운동
+                ExerciseEquipment: '',  // 선택한 운동의 운동 기구
             },
         }
     },
+    computed: {
+        ...mapState(['usebodyData']),
+        // 'usebodyData'를 사용하여 `<v-select>`를 렌더링하는 computed 속성 추가
+        exerciseAreaItems() {
+            return this.usebodyData;
+        },
+    },
     methods: {
         ...mapMutations(['updateDayExercises']),
-        ...mapActions(['fetchExerciseData']),
+        ...mapActions(['fetchExerciseData', 'fetchUsebodyData']),
         performSearch() {
             // 검색어를 이용하여 검색을 수행하는 로직을 여기에 추가
             console.log('검색어:', this.searchQuery);
             // 검색 결과를 업데이트하거나 검색 로직을 수행할 수 있음
+        },
+        fetchData() {
+            // fetchUsebodyData와 fetchExerciseData를 호출하여 서버에서 데이터 가져오기
+            this.fetchExerciseData();
+            this.fetchUsebodyData();
+        },
+        getExerciseNamesByArea(area) {
+            // 선택한 운동 부위에 따라 운동 목록을 반환합니다.
+            return this.exerciseList[area] || [];
         },
         closeDialogAndSave() {
             // 저장 버튼을 눌렀을 때 실행되는 함수
@@ -85,9 +113,6 @@ export default {
                 exercises: this.exerciseData,
             });
             this.dialog = false;
-        },
-        fetchData() {
-            this.fetchExerciseData();
         },
     },
 }
