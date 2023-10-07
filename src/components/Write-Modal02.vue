@@ -25,11 +25,11 @@
                                     required></v-select>
 
                             </v-col>
-                            <v-col cols="12" sm="6" md="4">
+                            <!-- <v-col cols="12" sm="6" md="4">
                                 <v-select v-model="exerciseList.ExerciseEquipment" :items="['0', '1', '2', '3']"
                                     label="사용 기구" required></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
+                            </v-col> -->
+                            <v-col cols="12" sm="6" md="8">
                                 <v-text-field v-model="searchQuery" label="검색어" placeholder="검색어를 입력하세요"
                                     append-icon="mdi-magnify" @keydown.enter="performSearch"></v-text-field>
                             </v-col>
@@ -68,7 +68,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
-    created() { this.fetchData(); },
+    // created() { this.fetchData(); },
     data() {
         return {
             dialog: false,
@@ -78,16 +78,17 @@ export default {
             exerciseList: {
                 ExerciseArea: '', // 선택한 운동 부위
                 ExerciseName: '', // 선택한 운동
-                ExerciseEquipment: '',  // 선택한 운동의 운동 기구
+                //ExerciseEquipment: '',  // 선택한 운동의 운동 기구
             },
         }
     },
     computed: {
-        ...mapState(['usebodyData']),
+        ...mapState(['usebodyData', 'exerciseData']),
         // 'usebodyData'를 사용하여 `<v-select>`를 렌더링하는 computed 속성 추가
         exerciseAreaItems() {
             return this.usebodyData;
         },
+
     },
     methods: {
         ...mapMutations(['updateDayExercises']),
@@ -103,9 +104,14 @@ export default {
             this.fetchUsebodyData();
         },
         getExerciseNamesByArea(area) {
-            // 선택한 운동 부위에 따라 운동 목록을 반환합니다.
-            return this.exerciseList[area] || [];
+            console.log('exerciseData:', this.exerciseData);
+            console.log('area:', area);
+            console.log('area의 데이터 유형:', typeof area);
+            //선택한 운동 부위에 따라 운동 목록을 반환합니다.
+            const exerciseAreaData = this.exerciseData[area];
+            return exerciseAreaData ? exerciseAreaData : [];
         },
+
         closeDialogAndSave() {
             // 저장 버튼을 눌렀을 때 실행되는 함수
             this.updateDayExercises({

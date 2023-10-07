@@ -11,7 +11,7 @@ export default createStore({
     dayExercises: {},
 
     usebodyData: [], // 'usebody_name' 데이터를 저장
-    exerciseData: [], // 부위에 따른 데이터 저장
+    exerciseData: {}, // 부위에 따른 데이터 저장
   },
   getters: {
     // --------------------- routine-write.vue -------------------------------
@@ -42,8 +42,8 @@ export default createStore({
       state.usebodyData = data;
     },
     // 부위에 따른 운동 데이터 설정
-    SET_EXERCISE_DATA(state, { index, data }) {
-      state.exerciseData[index] = data;
+    SET_EXERCISE_DATA(state, { usebodyName, data }) {
+      state.exerciseData[usebodyName] = data.map(item => item.exerciseName_Korean);
     },
   },
   actions: {
@@ -51,7 +51,7 @@ export default createStore({
     async fetchUsebodyData({ commit }) {
       try {
         const response = await axios.get('http://52.78.77.1:8000/usebody/');
-        const usebodyNames = response.data.map(item => item.usebody_name); // usebody_name만 추출
+        const usebodyNames = response.data.map(item => item.usebody_name); // usebody_name만 추출(1차원 배열 형태)
         commit('SET_USEBODY_DATA', usebodyNames); // 추출한 데이터를 저장
         console.log('Usebody Data:', usebodyNames);
       } catch (error) {
@@ -62,10 +62,17 @@ export default createStore({
     async fetchExerciseData({ commit }) {
       try {
         // 1부터 9까지 반복하여 /exercise/body/01/부터 /exercise/body/09/까지 데이터 가져오기
+        const fetchedUsebodyNames = []; // 이미 가져온 usebodyName을 기록할 배열
         for (let i = 1; i <= 9; i++) {
           const response = await axios.get(`http://52.78.77.1:8000/exercise/body/0${i}/`);
-          commit('SET_EXERCISE_DATA', { index: i - 1, data: response.data });
-          console.log(`Exercise Data for 0${i}:`, response.data);
+          const usebodyName = response.data[0].usebody_name;  // usebody_name을 가져옴
+
+          // 이미 가져온 usebodyName이 아니라면 데이터를 저장
+          if (!fetchedUsebodyNames.includes(usebodyName)) {
+            fetchedUsebodyNames.push(usebodyName);
+            commit('SET_EXERCISE_DATA', { usebodyName, data: response.data });
+            console.log(`Exercise Data for ${usebodyName}:`, response.data);
+          }
         }
       } catch (error) {
         // 여기서 오류 처리하기
