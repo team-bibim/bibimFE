@@ -1,94 +1,24 @@
-<template>
-    <v-row justify="center">
-        <v-dialog v-model="dialog" persistent width="1024">
-            <template v-slot:activator="{ props }">
-                <v-btn color="#27373E" v-bind="props" class="day-routine-subbox" @click="fetchData">
-                    <v-icon color="white">
-                        mdi-plus
-                    </v-icon>
-                </v-btn>
-            </template>
-            <v-card color="white">
-                <v-card-title>
-                    <span class="text-h5">운동 추가하기</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" sm="6" md="6">
-                                <!-- 운동 부위 선택-->
-                                <v-select v-model="exerciseList.ExerciseArea" :items="exerciseAreaItems" label="운동 부위"
-                                    required></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="6">
-                                <v-text-field v-model="exerciseList.ExerciseEquipment" label="운동 기구"
-                                    readonly></v-text-field>
-                            </v-col>
-                            <!-- <v-col cols="8" sm="8" md="8"> -->
-                            <!-- 선택한 운동 부위에 따른 운동을 표시 -->
-                            <!-- <v-select v-model="exerciseList.ExerciseName"
-                                    :items="getExerciseNamesByArea(exerciseList.ExerciseArea)" label="운동"
-                                    required></v-select> -->
-                            <!-- </v-col> -->
-                            <v-col cols="12">
-                                <div class="search-wrapper">
-                                    <v-combobox label="운동 검색" v-model="searchData" placeholder="검색어를 입력하세요"
-                                        @keydown.enter="onEnterKeyPress" @update:modelValue="updateExerciseAndUsebody"
-                                        :items="searchResults" clearable></v-combobox>
-                                    <v-icon @click="performSearch">mdi-magnify</v-icon>
-                                </div>
-                                <v-alert v-if=this.errorflag text="검색 결과가 없습니다." type="warning" variant="tonal"></v-alert>
+import { mapState, mapMutations, mapActions } from 'vuex';
+import axios from 'axios';
 
-                            </v-col>
-
-
-
-                            <!-- <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="exerciseList.ExerciseEquipment" :items="['0', '1', '2', '3']"
-                                    label="사용 기구" required></v-select>
-                            </v-col> -->
-
-
-
-                        </v-row>
-                    </v-container>
-                    <!-- <small>*indicates required field</small> -->
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
-                        닫기
-                    </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="closeDialogAndSave">
-                        저장
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-    </v-row>
-</template>
-
-<script>
-import { mapState, mapMutations, mapActions } from 'vuex'
-import axios from 'axios'
-
-export default {
+export default (await import('vue')).defineComponent({
     // created() { this.fetchData(); },
     data() {
         return {
             dialog: false,
             errorflag: false,
-            searchData: '', // 검색어를 저장할 데이터 속성
-            searchResults: [], // 검색 결과를 저장할 데이터 속성
-            searchAllResults: [], // 검색 결과를 저장할 데이터 속성 (전체 결과)
+            searchData: '',
+            searchResults: [],
+            searchAllResults: [],
+
             // usebodyData와 exerciseData 추가
             usebodyList: [],
             exerciseList: {
-                ExerciseArea: '', // 선택한 운동 부위
-                ExerciseName: '', // 선택한 운동
-                ExerciseEquipment: '',  // 선택한 운동의 운동 기구
+                ExerciseArea: '',
+                ExerciseName: '',
+                ExerciseEquipment: '', // 선택한 운동의 운동 기구
             },
-        }
+        };
     },
     computed: {
         ...mapState(['usebodyData', 'exerciseData']),
@@ -105,9 +35,7 @@ export default {
                 this.searchData = ''; // searchData 초기화
                 this.searchResults = []; // 검색 결과를 빈 배열로 초기화
             }
-            this.performSearch();
-            this.searchData = '';
-        }
+        },
     },
 
     methods: {
@@ -131,9 +59,15 @@ export default {
             const exerciseAreaData = this.exerciseData[area];
             return exerciseAreaData ? exerciseAreaData : [];
         },
+        handleInput() {
+            console.log("searchData 감지 : ", this.searchData);
+            if (this.searchData === null) {
+                this.exerciseList.ExerciseEquipment = '';
+            }//;
+        },
         onEnterKeyPress() {
             // 검색어를 빈 문자열로 설정
-            if (this.searchData === null)       // 다음 검색어가 없이(공란) enter를 누를때
+            if (this.searchData === null) // 다음 검색어가 없이(공란) enter를 누를때
                 this.searchData = '';
             this.exerciseList.ExerciseEquipment = '';
             // 검색 로직을 실행할 수 있습니다.
@@ -218,45 +152,14 @@ export default {
             this.updateUsebody(selectedExercise);
             // 다음으로 운동 기구 업데이트
             await this.updateExerciseEquipment(selectedExercise);
-
-            // 선택된 아이템이 없을 때, 즉 아무것도 선택되지 않았을 때 초기화
-            if (!selectedExercise) {
-                this.exerciseList.ExerciseEquipment = '';
-            }
         },
         closeDialogAndSave() {
             // 저장 버튼을 눌렀을 때 실행되는 함수
             this.updateDayExercises({
-                day: this.$props.day, // day는 상위 컴포넌트에서 props로 전달되어야 합니다.
+                day: this.$props.day,
                 exercises: this.exerciseData,
             });
             this.dialog = false;
         },
     },
-}
-</script>
-
-<style scoped>
-.day-routine-subbox {
-    display: flex;
-    padding: 10px 25px;
-    flex-direction: column;
-    align-items: inherit;
-    /* inherit으로 수정 */
-    gap: 7px;
-    border-radius: 20px;
-    /* background-color: #27373E !important; */
-
-    width: 189px;
-    height: 104px;
-    min-height: 100px;
-    /* 104px로 수정 */
-    margin: 10px auto;
-}
-
-.search-wrapper {
-    display: flex;
-    align-items: center;
-    /* 아이콘을 세로 중앙에 배치합니다. */
-}
-</style>
+});
