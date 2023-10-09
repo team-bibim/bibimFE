@@ -43,7 +43,7 @@ export default createStore({
     },
     // 부위에 따른 운동 데이터 설정
     SET_EXERCISE_DATA(state, { usebodyName, data }) {
-      state.exerciseData[usebodyName] = data.map(item => item.exerciseName_Korean);
+      state.exerciseData[usebodyName] = data.map(item => item.exerciseName_English);
     },
   },
   actions: {
