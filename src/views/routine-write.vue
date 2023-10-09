@@ -1,5 +1,8 @@
 <template>
     <v-app id="inspire">
+        <!-- 당장 해야할 일 -->
+        <!-- 상태관리 추가 -->
+
         <!-- 추가 기능 구현 목록 -->
         <!-- 작성된 내용이 있을 때 작성완료 버튼을 누르지 않은 채 페이지를 이동할 때 경고문 띄우기 필요 -->
 
@@ -10,79 +13,111 @@
         <!-- 또는 routine-add-container의 max-width:100%; 지정 -> center 정렬 깨짐 -->
         <v-main style="background-color: #3B4048;">
             <v-container class="px-2 py-2" fluid>
-                <v-card class="right-panel-hot">
+                <v-card class="right-panel">
                     <v-list lines="two" style="background-color: #181B21;">
-                        <v-list-subheader class="right-panel-hot-classify-text" style="margin: 35px;">
+                        <v-list-subheader class="right-panel-classify-text" style="margin: 35px;">
                             <b>루틴 작성</b>
+                            <!-- {{ getMessage }} // 상태관리 연습 -->
+                            <!-- {{ getTitleInput }} -->
+                            <!-- {{ getExpInput }} -->
                         </v-list-subheader>
-                        <div style="display:flex; justify-content: center;">
-                            <input class="search-bar" v-model="titleInput" placeholder="제목" @keyup.enter="searchBarInput"
-                                ref="warningMessage">
-                        </div>
-                        <div v-if="showWarning" class="warning-message">
-                            제목을 작성해주세요.
-                        </div>
 
-                        <div class="routine-add-container">
-                            <div class="day-routine-box" v-for="(box, dayindex) in boxes" :key="dayindex">
-                                <div class="day-routine-box-title">Day {{ dayindex + 1 }}
-                                    <button class="delete-button" @click="deleteDayBox(dayindex)">
-                                        <img width="24" height="24"
-                                            src="https://img.icons8.com/ios-glyphs/24/FFFFFF/filled-trash.png"
-                                            alt="filled-trash" />
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field outline class="search-bar" v-model="titleInput" label="제목"
+                                    @input="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
+                                    rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
+                                <v-alert v-if="showWarning" type="error" class="warning-message" outlined>
+                                    제목을 작성해주세요.
+                                </v-alert>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="12">
+                                <div class="routine-add-container">
+                                    <div class="day-routine-box" v-for="(box, dayindex) in boxes" :key="dayindex">
+                                        <div class="day-routine-box-title">Day {{ dayindex + 1 }}
+                                            <v-btn class="delete-button" @click="deleteDayBox(dayindex)" elevation="0">
+                                                <!--  elevation="0" 을 사용하여 배경 그림자 제거 -->
+                                                <v-icon size="24">
+                                                    mdi-delete
+                                                </v-icon>
+                                            </v-btn>
+                                        </div>
+
+                                        <div v-for="(exercise, index) in box.exercises" :key="index"
+                                            class="day-routine-subbox">
+                                            <!-- <v-text-field v-model="exercise.title" class="exercise-title" label="운동 이름"
+                                                readonly></v-text-field>
+                                            <v-text-field v-model="exercise.time" class="exercise-time" label="시간"
+                                                readonly></v-text-field> -->
+
+                                            <!-- <textarea v-model="exercise.title" class="exercise-title" placeholder="운동 이름"
+                                                readonly></textarea> -->
+                                            <!-- <input v-model="exercise.ExerciseArea" class="exercise-title"
+                                                placeholder="운동 부위" readonly>
+                                            <input v-model="exercise.ExerciseName" class="exercise-time" placeholder="운동 이름"
+                                                readonly> -->
+                                            <!-- 이 부분에 Modal.vue에서 전달된 운동 정보를 표시합니다. -->
+                                            {{ exercise.ExerciseArea }} {{ exercise.ExerciseName }}
+                                            <!-- 다른 필요한 데이터도 표시할 수 있습니다. -->
+                                            <div class="icon-box">
+                                                <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
+                                                    <img width="24" height="24"
+                                                        src="https://img.icons8.com/fluency-systems-filled/24/FFFFFF/pencil-tip.png"
+                                                        alt="pencil-tip" />
+                                                </v-btn>
+                                                <v-btn class="delete-button" @click="deleteExercise(box, index)"
+                                                    elevation="0">
+                                                    <img width="24" height="24"
+                                                        src="https://img.icons8.com/ios-glyphs/24/FFFFFF/filled-trash.png"
+                                                        alt="filled-trash" />
+                                                </v-btn>
+                                            </div>
+                                        </div>
+
+                                        <!-- <v-btn v-if="box.exercises.length < 5" class="day-routine-subbox"
+                                            @click="addExercise(box)">
+                                            <v-icon color="white">
+                                                mdi-plus
+                                            </v-icon>
+                                        </v-btn> -->
+                                        <!-- <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
+                                            :exerciseData="editExerciseData" :isEditModal="isEditModal"
+                                            @close-modal="showModal = false; isEditModal = false" /> -->
+                                        <Modal v-if="box.exercises.length < 5">
+                                        </Modal>
+                                    </div>
+                                    <!-- <v-btn v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
+                                        @click="addDayBox">
+                                        <v-icon color="white">
+                                            mdi-plus
+                                        </v-icon>
+                                    </v-btn> -->
+                                    <button v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
+                                        @click="addDayBox">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"
+                                            fill="none">
+                                            <path
+                                                d="M23 13.1429H13.1429V23H9.85714V13.1429H0V9.85714H9.85714V0H13.1429V9.85714H23V13.1429Z"
+                                                fill="#CCCCCC" />
+                                        </svg>
                                     </button>
                                 </div>
+                            </v-col>
+                        </v-row>
 
-                                <div v-for="(exercise, index) in box.exercises" :key="index" class="day-routine-subbox">
-                                    <input v-model="exercise.title" class="exercise-title" placeholder="운동 이름" readonly>
-                                    <input v-model="exercise.time" class="exercise-time" placeholder="시간" readonly>
-                                    <div class="icon-box">
-                                        <button class="edit-button" @click="editExercise(exercise)">
-                                            <img width="24" height="24"
-                                                src="https://img.icons8.com/fluency-systems-filled/24/FFFFFF/pencil-tip.png"
-                                                alt="pencil-tip" />
-                                        </button>
-                                        <button class="delete-button" @click="deleteExercise(box, index)">
-                                            <img width="24" height="24"
-                                                src="https://img.icons8.com/ios-glyphs/24/FFFFFF/filled-trash.png"
-                                                alt="filled-trash" />
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <button v-if="box.exercises.length < 5" class="day-routine-subbox"
-                                    @click="addExercise(box)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"
-                                        fill="none">
-                                        <path
-                                            d="M23 13.1429H13.1429V23H9.85714V13.1429H0V9.85714H9.85714V0H13.1429V9.85714H23V13.1429Z"
-                                            fill="#CCCCCC" />
-                                    </svg>
-                                </button>
-                                <!-- <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
-                                    :exerciseData="isEditModal ? editExerciseData : null" :isEditModal="isEditModal"
-                                    @close-modal="onModalClose" @exercise-updated="updateExercise" /> -->
-                                <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
-                                    :exerciseData="editExerciseData" :isEditModal="isEditModal"
-                                    @close-modal="showModal = false; isEditModal = false" />
-
-                            </div>
-                            <button v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
-                                @click="addDayBox">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"
-                                    fill="none">
-                                    <path
-                                        d="M23 13.1429H13.1429V23H9.85714V13.1429H0V9.85714H9.85714V0H13.1429V9.85714H23V13.1429Z"
-                                        fill="#CCCCCC" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="routine-end-container">
-                            <textarea class="explanation-bar" v-model="expInput" placeholder="설명"
-                                @keyup.enter="submitData"></textarea>
-                            <v-btn class="r-submit-button" :style="{ filter: showModal ? 'brightness(30%)' : 'none' }"
-                                color="#CD4444" @click="submitData" :disabled="showModal">작성 완료</v-btn>
-                        </div>
+                        <v-row>
+                            <v-col cols="12" class="routine-end-container">
+                                <v-textarea class="explanation-bar" v-model="expInput" label="설명" @input="ExplanationInput"
+                                    bg-color="#24272B" color="#3A4148" clearable no-resize rows="6" row-height="25"
+                                    variant="outlined" rounded="xl"></v-textarea>
+                                <!-- <v-btn class="r-submit-button" :style="{ filter: showModal ? 'brightness(30%)' : 'none' }"
+                                    color="#CD4444" @click="submitData" :disabled="showModal">작성 완료</v-btn> -->
+                                <v-btn class="r-submit-button" color="#CD4444" @click="submitData">작성 완료</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-list>
                 </v-card>
                 <div style="height: 8px;"></div>
@@ -95,12 +130,14 @@
 <script>
 //import { ref } from 'vue';
 import WritePage from '@/views/routine-write.vue';
-import ModalComponent from '@/components/Write-Modal.vue';
+// import ModalComponent from '@/components/Write-Modal.vue';
+import Modal from '@/components/Write-Modal02.vue';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
     data() {
         return {
-            cards: ['루틴 작성', '최신 게시글'],
+            // cards: ['루틴 작성', '최신 게시글'],
             links: [
                 ['mdi-inbox-arrow-down', 'HOME'],
                 ['mdi-send', '루틴 공유'],
@@ -109,76 +146,109 @@ export default {
                 ['mdi-alert-octagon', '설정'],
             ],
             exercises: [
-                //{ title: '바벨 숄더 프레스', time: '30m' },
+                //{ title: '바벨 숄더 프레스', time: '30m' },   time대신 equip 사용
             ],
             boxes: [],
-            showModal: false,
+            // showModal: false,
 
-            activeBox: null,
-            drawer: null,
-            titleInput: '',
+            // activeBox: null,
+            // titleInput: '',
+            titleInput: '', // computed 속성에서 data 속성으로 변경
             expInput: '',
 
             showWarning: false,
 
-            editExerciseData: null, // Exercise data to edit
-            isEditModal: false,    // Flag to control whether the modal is in edit mode
+            // editExerciseData: null, // Exercise data to edit
+            // isEditModal: false,    // Flag to control whether the modal is in edit mode
         };
     },
     components: {
         WritePage,
-        ModalComponent,
+        // ModalComponent,
+        Modal,
+    },
+    computed: {
+        // ...mapState(),
+        // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
+        ...mapState(['dayExercises']),
+        // 상태 관리에서 운동 정보를 가져와서 표시하는 계산된 속성을 추가합니다.
+        box() {
+            // 예를 들어, 상태 관리에서 현재 선택된 루틴의 운동 정보를 가져오려면 다음과 같이 할 수 있습니다.
+            // 이 코드는 예시이며, 실제로 사용하는 상태 관리의 구조에 따라서 변경할 수 있습니다.
+            // 'dayExercises'는 상태 관리에서 사용하는 상태 이름이며, 필요에 따라 변경해야 할 수 있습니다.
+            return this.$store.state.dayExercises;
+        },
     },
     methods: {
+        ...mapMutations(['setTitleInput', 'setExpInput', 'updateDayExercises']),
+        // ...mapActions(),
         searchBarInput() {
+            this.setTitleInput(this.titleInput);    // 상태관리
             console.log(this.titleInput);
         },
         ExplanationInput() {
+            // expInput 상태를 업데이트 (data의 expInput과 state 의 expInput 동기화 역할)
+            this.setExpInput(this.expInput);
             console.log(this.expInput);
         },
         addExercise(box) {
             if (box.exercises.length < 5) {
-                this.activeBox = box;
-                this.showModal = true;
+                // this.activeBox = box;
+                // this.showModal = true;
             }
         },
+
         deleteExercise(box, index) {
             box.exercises.splice(index, 1);
         },
-        editExercise(exercise) {
-            // Set the exercise data to edit
-            this.editExerciseData = exercise;
-            this.isEditModal = true; // Show the modal in edit mode
-            this.showModal = true; // Ensure the modal is displayed
+        // editExercise(exercise) {
+        //     // Set the exercise data to edit
+        //     // this.editExerciseData = exercise;
+        //     // this.isEditModal = true; // Show the modal in edit mode
+        //     // this.showModal = true; // Ensure the modal is displayed
+        // },
+        addDayBox() {
+            if (this.boxes.length < 5) {
+                this.boxes.push({ exercises: [] });
+
+                // dayExercises를 업데이트하기 위해 mutations 호출
+                this.updateDayExercises({ day: this.boxes.length, exercises: [] });
+            }
         },
         deleteDayBox(dayindex) {
             // 해당 인덱스의 day-routine-box를 삭제합니다.
             this.boxes.splice(dayindex, 1);
         },
-        onModalClose(updatedExercise) {
-            if (updatedExercise) {
-                // Update the exercise data in the main component
-                if (this.isEditModal) {
-                    // Find and update the existing exercise data
-                    const exerciseIndex = this.activeBox.exercises.findIndex(
-                        exercise => exercise === this.editExerciseData
-                    );
-                    if (exerciseIndex !== -1) {
-                        this.activeBox.exercises[exerciseIndex] = updatedExercise;
-                    }
-                } else {
-                    // Add the new exercise data
-                    this.activeBox.exercises.push(updatedExercise);
-                }
-            }
-            this.showModal = false;
-            this.isEditModal = false;
-        },
-        addDayBox() {
-            if (this.boxes.length < 5) {
-                this.boxes.push({ exercises: [] });
-            }
-        },
+        // onModalClose(updatedExercise) {
+        //     if (updatedExercise) {
+        //         // Update the exercise data in the main component
+        //         if (this.isEditModal) {
+        //             // Find and update the existing exercise data
+        //             const exerciseIndex = this.activeBox.exercises.findIndex(
+        //                 exercise => exercise === this.editExerciseData
+        //             );
+        //             if (exerciseIndex !== -1) {
+        //                 this.activeBox.exercises[exerciseIndex] = updatedExercise;
+        //             }
+        //         } else {
+        //             // Add the new exercise data
+        //             this.activeBox.exercises.push(updatedExercise);
+        //         }
+        //     }
+        //     // this.showModal = false;
+        //     this.isEditModal = false;
+        // },
+        // addDayBox() {
+        //     if (this.boxes.length < 5) {
+        //         this.boxes.push({ exercises: [] });
+        //     }
+        // },
+        // updateExerciseData(data) {
+        //     // Modal에서 emit한 이벤트를 처리하는 메서드
+        //     this.selectedExerciseArea = data.ExerciseArea;
+        //     this.selectedExerciseName = data.ExerciseName;
+        // },
+
         submitData() {
             // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
             const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
@@ -195,9 +265,9 @@ export default {
                 // Scroll to the warning message
                 // Vue 컴포넌트가 완전히 마운트된 후에 refs를 사용하여 경고 메시지로 스크롤합니다.
                 this.$nextTick(() => {
-                    // Scroll to the warning message
-                    if (this.$refs.warningMessage) {
-                        this.$refs.warningMessage.scrollIntoView({
+                    const warningMessage = this.$el.querySelector('.warning-message');
+                    if (warningMessage) {
+                        warningMessage.scrollIntoView({
                             behavior: 'smooth', // 스크롤 동작을 "auto" 또는 "smooth"로 설정할 수 있습니다.
                             block: 'start',     // 요소의 맨 위로 스크롤합니다.
                         });
@@ -251,32 +321,16 @@ export default {
 </script>
 
 <style scoped>
+.v-row {
+    /* 스크롤바 보이는 현상 해결*/
+    margin: 0;
+}
+
 .search-bar {
     color: #FFFFFF;
-    border: 2px solid #3A4148;
-    background-color: #24272B;
-    border-radius: 20px;
-    width: 100%;
-    /* width: 1150px; */
     height: 60px;
     text-indent: 10px;
     margin: 10px 35px;
-}
-
-.explanation-bar {
-    color: #FFFFFF;
-    border: 2px solid #3A4148;
-    background-color: #24272B;
-    border-radius: 20px;
-    width: 900px;
-    height: 178px;
-    text-indent: 10px;
-    margin: 10px 35px;
-    padding-top: 20px;
-
-    /* Prevent users from resizing the textarea */
-    resize: none;
-
 }
 
 .search-bar::placeholder {
@@ -287,75 +341,13 @@ export default {
     padding-top: 10px;
 }
 
-.explanation-bar::placeholder {
-    font-size: 26px;
-    font-weight: bold;
-    text-align: left;
-    margin-right: 12px;
-    /* padding-top: 10px; */
-}
 
-.right-panel-hot-classify-text {
+
+.right-panel-classify-text {
     background-color: #181B21;
     color: #FFFFFF;
     font-size: 30px;
     line-height: 30px;
-}
-
-.right-panel-hot {
-    background-color: #CC8484;
-    border-radius: 30px;
-}
-
-.right-panel-hot-title {
-    background-color: #CC8484;
-    border-radius: 20px;
-    align-items: center;
-    width: 12%;
-}
-
-.right-panel-hot-content {
-    background-color: #CC8484;
-    border-radius: 20px;
-    margin: auto;
-    height: 100px;
-    align-items: center;
-    text-align: center;
-}
-
-.right-panel-hot-avatar {
-    background-color: #FFFFFF;
-    margin: auto;
-    align-items: center;
-    text-align: center;
-}
-
-.right-panel-new {
-    background-color: #1D2128;
-    border-radius: 30px;
-}
-
-.right-panel-new-title {
-    background-color: #344054;
-    border-radius: 20px;
-    align-items: center;
-    width: 12%;
-}
-
-.right-panel-new-content {
-    background-color: #344054;
-    border-radius: 20px;
-    margin: auto;
-    height: 100px;
-    align-items: center;
-    text-align: center;
-}
-
-.right-panel-new-avatar {
-    background-color: #FFFFFF;
-    margin: auto;
-    align-items: center;
-    text-align: center;
 }
 
 /* ---------------------------------------------------------------- */
@@ -367,25 +359,17 @@ export default {
     align-items: flex-start;
     gap: 12px;
     margin: 35px 0;
-
-    overflow-x: auto;
-    /* 스크롤바를 추가합니다. */
-    white-space: nowrap;
-    /* 텍스트가 넘칠 때 줄 바꿈을 방지합니다. */
-
 }
 
 .day-routine-box {
-    /* width: 208px; */
     min-width: 208px;
-    /* 최소 너비를 설정합니다. */
-    height: 670px;
+    height: max-content;
+    min-height: 450px;
     flex-shrink: 0;
     border-radius: 20px;
     background: #4C6672;
     margin: 0px 10px;
-
-
+    overflow: hidden;
 }
 
 .day-routine-box-title {
@@ -393,7 +377,7 @@ export default {
     font-family: Inter;
     font-size: 25px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
     line-height: normal;
     margin: 25px;
 
@@ -408,8 +392,14 @@ export default {
     font-family: Inter;
     font-size: 17px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
     line-height: normal;
+    margin: 0;
+
+    white-space: normal !important;
+    /* 기본 줄바꿈 설정을 적용합니다 */
+    overflow: visible !important;
+    /* 내용이 넘치더라도 숨기지 않도록 설정합니다 */
 }
 
 .day-routine-subbox {
@@ -423,7 +413,8 @@ export default {
     background: #27373E;
 
     width: 189px;
-    height: 104px;
+    /* height: 104px; */
+    min-height: 100px;
     /* 104px로 수정 */
     margin: 10px auto;
 }
@@ -456,9 +447,24 @@ svg {
 
 .routine-end-container {
     display: flex;
-    /* align-items: flex-start; */
     justify-content: center;
     gap: 13px;
+}
+
+
+.explanation-bar {
+    color: #FFFFFF;
+    text-indent: 10px;
+    margin: 0px 35px;
+    padding-top: 20px;
+}
+
+.explanation-bar::placeholder {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: left;
+    margin-right: 12px;
+    /* padding-top: 10px; */
 }
 
 .r-submit-button {
@@ -466,7 +472,7 @@ svg {
     width: 200px;
     height: 178px;
     padding: 68px;
-    margin: 10px;
+    margin: 20px 10px;
     margin-right: 35px;
     /* ↓설명칸과 제출버튼간의 간격 조정 */
     margin-left: -10px;
@@ -480,10 +486,6 @@ svg {
     font-size: 25px;
     line-height: 25px;
     font-weight: bolder;
-}
-
-.explanation-bar {
-    width: 100%;
 }
 
 /* ----------------routine-write.design.css 파일 옮겨옴---------------- */
@@ -513,16 +515,15 @@ svg {
     padding-left: 20px;
 }
 
-.v-list-item.v-theme--light.v-list-item--density-default.v-list-item--two-line.v-list-item--variant-text {
+/* .v-list-item.v-theme--light.v-list-item--density-default.v-list-item--two-line.v-list-item--variant-text {
     width: 200px;
-}
+} */
 
 .warning-message {
-    color: #CD4444;
+    /* color: #CD4444; */
     /* Set the color of the warning message */
-    font-size: 16px;
+    /* font-size: 16px; */
     margin: 0 35px;
-    padding-left: 10px;
 }
 
 .icon-box {
@@ -532,6 +533,7 @@ svg {
 
 /* 삭제 버튼 스타일 */
 .delete-button {
+    color: #FFF;
     background: none;
     border: none;
     cursor: pointer;
@@ -541,6 +543,10 @@ svg {
 }
 
 .edit-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
     width: fit-content;
 }
 </style>

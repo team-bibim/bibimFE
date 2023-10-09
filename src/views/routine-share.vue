@@ -10,7 +10,9 @@
                 <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"><b>전체</b></v-btn>
                 <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"><b>팔로잉</b></v-btn>
               </v-list-subheader>
-              <input class="search-bar" v-model="textInput" placeholder="검색" @keyup.enter="searchBarInput">
+              <v-text-field outline class="search-bar" v-model="titleInput" label="검색"
+                            @input="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
+                            rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
             </div>
             <div style="height: 20px;"></div>
             <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 20px;">
@@ -23,6 +25,7 @@
               </template>
               <template v-else>
                 <template v-for="(post, index) in filteredAndSortedHotPostingsPerPage" :key="index">
+                  <!--여기가 v-btn 추가할 자리-->
                   <v-list-item
                     style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                     <div style="display: flex;">
@@ -42,11 +45,9 @@
                     <div style="height: 10px;"></div>
                     <v-list-item-title class="right-panel-hot-content">
                       <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
-                      <br>
-                      <br>
+                      <br><br>
                       {{ post.content }}
-                      <br>
-                      <br>
+                      <br><br>
                       <div style="align-items: right;">
                         {{ post.date }}
                         <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
@@ -86,6 +87,7 @@
                 <v-list-item
                   style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                   <div style="display: flex;">
+                    <!--여기가 v-btn 추가할 자리-->
                     <v-list-item-title class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
                       {{ post.writer }}
@@ -147,7 +149,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 // 좋아요
 /*submitBtn.addEventListener('click', () => {
-  let titleValue = diaryTitle.value;
+  let titleValue   = diaryTitle.value;
   let contentValue = diaryContent.value;
 
   if (contentValue === "") {
@@ -168,8 +170,7 @@ export default {
   created() {
     axios.get('http://52.78.77.1:8000/routine/recommend/pop/')
     .then(response => {
-      console.log("Routine Day: " + response.data[0].routine_day);
-      this.getHotPostings(response.data[0])
+      this.getHotPostings(response.data)
     })
     .catch(error => {
       console.log(error);
@@ -317,16 +318,15 @@ export default {
       this.newPostings[index].like++;
     },
     getHotPostings(data) {
-      // for(let i = 0; i < 5; i++) { // i < 5라고 해놨는데, 예를 들어, i < dataLength 등으로 변경하는 작업이 필요함.
+      for (let i = 0; i < data.length; i++) {
         let post = {
-          title: data.routine_name,
-          content: data.routine_comment,
-          writer: data.owner_id,
-          like: data.recommend_count
+          title: data[i].routine_name,
+          content: data[i].routine_comment,
+          writer: data[i].nickname,
+          like: data[i].recommend_count
         };
-
         this.hotPostings.push(post);
-      // }
+      }
     }
   }
 }
@@ -335,13 +335,9 @@ export default {
 <style scoped>
 .search-bar {
   color: #FFFFFF;
-  border: 2px solid #3A4148;
-  background-color: #24272B;
-  border-radius: 20px;
-  width: 850px;
-  height: 60px;
-  text-indent: 10px;
-  margin-right: 20px;
+    height: 60px;
+    text-indent: 10px;
+    margin: 10px 35px;
 }
 
 .search-bar::placeholder {
