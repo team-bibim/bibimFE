@@ -56,8 +56,7 @@
                                                 placeholder="운동 부위" readonly>
                                             <input v-model="exercise.ExerciseName" class="exercise-time" placeholder="운동 이름"
                                                 readonly> -->
-                                            <!-- 이 부분에 Modal.vue에서 전달된 운동 정보를 표시합니다. -->
-                                            {{ exercise.ExerciseArea }} {{ exercise.ExerciseName }}
+
                                             <!-- 다른 필요한 데이터도 표시할 수 있습니다. -->
                                             <div class="icon-box">
                                                 <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">

@@ -24,12 +24,6 @@
                                 <v-text-field v-model="exerciseList.ExerciseEquipment" label="운동 기구"
                                     readonly></v-text-field>
                             </v-col>
-                            <!-- <v-col cols="8" sm="8" md="8"> -->
-                            <!-- 선택한 운동 부위에 따른 운동을 표시 -->
-                            <!-- <v-select v-model="exerciseList.ExerciseName"
-                                    :items="getExerciseNamesByArea(exerciseList.ExerciseArea)" label="운동"
-                                    required></v-select> -->
-                            <!-- </v-col> -->
                             <v-col cols="12">
                                 <div class="search-wrapper">
                                     <v-combobox label="운동 검색" v-model="searchData" placeholder="검색어를 입력하세요"
@@ -38,18 +32,7 @@
                                     <v-icon @click="performSearch">mdi-magnify</v-icon>
                                 </div>
                                 <v-alert v-if=this.errorflag text="검색 결과가 없습니다." type="warning" variant="tonal"></v-alert>
-
                             </v-col>
-
-
-
-                            <!-- <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="exerciseList.ExerciseEquipment" :items="['0', '1', '2', '3']"
-                                    label="사용 기구" required></v-select>
-                            </v-col> -->
-
-
-
                         </v-row>
                     </v-container>
                     <!-- <small>*indicates required field</small> -->
@@ -92,15 +75,14 @@ export default {
     },
     computed: {
         ...mapState(['usebodyData', 'exerciseData']),
-        // 'usebodyData'를 사용하여 `<v-select>`를 렌더링하는 computed 속성 추가
-        exerciseAreaItems() {
+
+        exerciseAreaItems() {   // 'usebodyData'를 사용하여 `<v-select>`를 렌더링하는 computed 속성 추가
             return this.usebodyData;
         },
     },
     watch: {
         'exerciseList.ExerciseArea': function(newExerciseArea, oldExerciseArea) {
-            // exerciseList.ExerciseArea가 변경될 때 실행됩니다.
-            if (newExerciseArea !== oldExerciseArea) {
+            if (newExerciseArea !== oldExerciseArea) {  // exerciseList.ExerciseArea가 변경될 때 실행됨.
                 this.exerciseList.ExerciseEquipment = ''; // ExerciseEquipment 초기화
                 this.searchData = ''; // searchData 초기화
                 this.searchResults = []; // 검색 결과를 빈 배열로 초기화
@@ -136,7 +118,7 @@ export default {
             if (this.searchData === null)       // 다음 검색어가 없이(공란) enter를 누를때
                 this.searchData = '';
             this.exerciseList.ExerciseEquipment = '';
-            // 검색 로직을 실행할 수 있습니다.
+            // 검색 로직 실행
             this.performSearch();
         },
         async performSearch() {
@@ -147,7 +129,6 @@ export default {
                 const response = await axios.post('http://52.78.77.1:8000/exercise/', {
                     searchData: this.searchData,
                     usebodyName: this.exerciseList.ExerciseArea
-                    // exerciseArea: this.exerciseList.ExerciseArea,
                 });
 
                 console.log(response.data.message);
@@ -160,11 +141,10 @@ export default {
 
 
 
-                // 데이터 형식을 확인하고 배열로 변환하십시오.
+                // 데이터 형식을 확인하고 배열로 변환하기
                 if (Array.isArray(response.data)) {
                     this.searchAllResults = response.data;
                     this.searchResults = this.searchAllResults.map(item => item.exerciseName_English);
-                    // 예시: 검색 결과를 콘솔에 출력
                     console.log('검색 결과:', this.searchResults);
                 } else {
                     console.error('검색 결과가 유효한 배열 형식이 아닙니다.');
@@ -181,7 +161,7 @@ export default {
                 const usebodyId = selectedExerciseData.usebody_id;
 
                 try {
-                    // usebody_id를 사용하여 해당 usebody의 데이터를 가져옵니다.
+                    // usebody_id를 사용하여 해당 usebody의 데이터를 가져오기
                     const usebodyResponse = await axios.get(`http://52.78.77.1:8000/usebody/${usebodyId}/`);
                     const usebodyData = usebodyResponse.data;
 
