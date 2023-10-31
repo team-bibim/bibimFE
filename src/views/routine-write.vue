@@ -153,12 +153,12 @@ export default {
     computed: {
         // ...mapState(),
         // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
-        ...mapState(['dayExercises']),
+        ...mapState(['boxes']),
 
     },
     methods: {
         ...mapMutations(['setTitle', 'setExp']),
-        // ...mapActions(),
+        ...mapActions(['addDayBox', 'deleteDayBox']),
         searchBarInput() {
             this.setTitle(this.titleInput);    // 상태관리
             console.log(this.titleInput);
@@ -184,18 +184,6 @@ export default {
         // //     // this.isEditModal = true; // Show the modal in edit mode
         // //     // this.showModal = true; // Ensure the modal is displayed
         // // },
-        // addDayBox() {
-        //     if (this.boxes.length < 5) {
-        //         this.boxes.push({ exercises: [] });
-
-        //         // dayExercises를 업데이트하기 위해 mutations 호출
-        //         // this.updateDayExercises({ day: this.boxes.length, exercises: [] });
-        //     }
-        // },
-        // deleteDayBox(dayindex) {
-        //     // 해당 인덱스의 day-routine-box를 삭제합니다.
-        //     this.boxes.splice(dayindex, 1);
-        // },
 
         // submitData() {
         //     // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.

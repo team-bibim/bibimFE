@@ -3,15 +3,13 @@ import axios from 'axios';
 
 export default createStore({
   state: {
-    message: 'Hello Vue.js',
     // --------------------- routine-write.vue -------------------------------
     title: '', // 루틴 제목
     exp: '',   // 루틴 설명
-    //dayExercises: {},
     boxes: [],
     exercises: [],
-    exerciseData: {}, // 부위에 따른 데이터 저장
 
+    exerciseData: {}, // 부위에 따른 데이터 저장
     usebodyData: [], // 서버에서 가져온 'usebody_name' 데이터 저장
   },
   getters: {
@@ -34,6 +32,17 @@ export default createStore({
     SET_EXERCISE_DATA(state, { usebodyName, data }) {
       state.exerciseData[usebodyName] = data.map(item => item.exerciseName_English);
     },
+
+    // Day별 박스 추가
+    ADD_DAY_BOX(state) {
+      if (state.boxes.length < 5) {
+        state.boxes.push({ exercises: [] });
+      }
+    },
+    // 해당 인덱스의 day-routine-box를 삭제
+    DELETE_DAY_BOX(state, dayindex) {
+      state.boxes.splice(dayindex, 1);
+    }
   },
   actions: {
     // 'usebody_name' 데이터를 가져오기
@@ -69,6 +78,13 @@ export default createStore({
       }
     },
 
+    // Day별 박스 추가
+    addDayBox({ commit }) {
+      commit('ADD_DAY_BOX');
+    },
+    deleteDayBox({ commit }) {
+      commit('DELETE_DAY_BOX');
+    }
   },
   modules: {
   }
