@@ -17,9 +17,6 @@
                     <v-list lines="two" style="background-color: #181B21;">
                         <v-list-subheader class="right-panel-classify-text" style="margin: 35px;">
                             <b>루틴 작성</b>
-                            <!-- {{ getMessage }} // 상태관리 연습 -->
-                            <!-- {{ getTitleInput }} -->
-                            <!-- {{ getExpInput }} -->
                         </v-list-subheader>
 
                         <v-row>
@@ -113,8 +110,6 @@
                                 <v-textarea class="explanation-bar" v-model="expInput" label="설명" @input="ExplanationInput"
                                     bg-color="#24272B" color="#3A4148" clearable no-resize rows="6" row-height="25"
                                     variant="outlined" rounded="xl"></v-textarea>
-                                <!-- <v-btn class="r-submit-button" :style="{ filter: showModal ? 'brightness(30%)' : 'none' }"
-                                    color="#CD4444" @click="submitData" :disabled="showModal">작성 완료</v-btn> -->
                                 <v-btn class="r-submit-button" color="#CD4444" @click="submitData">작성 완료</v-btn>
                             </v-col>
                         </v-row>
@@ -128,9 +123,7 @@
   
 
 <script>
-//import { ref } from 'vue';
 import WritePage from '@/views/routine-write.vue';
-// import ModalComponent from '@/components/Write-Modal.vue';
 import Modal from '@/components/Write-Modal02.vue';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
@@ -145,167 +138,101 @@ export default {
                 ['mdi-alert-octagon', '내 루틴 보관함'],
                 ['mdi-alert-octagon', '설정'],
             ],
-            exercises: [
-                //{ title: '바벨 숄더 프레스', time: '30m' },   time대신 equip 사용
-            ],
-            boxes: [],
-            // showModal: false,
 
-            // activeBox: null,
-            // titleInput: '',
             titleInput: '', // computed 속성에서 data 속성으로 변경
             expInput: '',
 
             showWarning: false,
 
-            // editExerciseData: null, // Exercise data to edit
-            // isEditModal: false,    // Flag to control whether the modal is in edit mode
         };
     },
     components: {
         WritePage,
-        // ModalComponent,
         Modal,
     },
     computed: {
         // ...mapState(),
         // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
         ...mapState(['dayExercises']),
-        // 상태 관리에서 운동 정보를 가져와서 표시하는 계산된 속성을 추가합니다.
-        box() {
-            // 예를 들어, 상태 관리에서 현재 선택된 루틴의 운동 정보를 가져오려면 다음과 같이 할 수 있습니다.
-            // 이 코드는 예시이며, 실제로 사용하는 상태 관리의 구조에 따라서 변경할 수 있습니다.
-            // 'dayExercises'는 상태 관리에서 사용하는 상태 이름이며, 필요에 따라 변경해야 할 수 있습니다.
-            return this.$store.state.dayExercises;
-        },
+
     },
     methods: {
-        ...mapMutations(['setTitleInput', 'setExpInput', 'updateDayExercises']),
+        ...mapMutations(['setTitle', 'setExp']),
         // ...mapActions(),
         searchBarInput() {
-            this.setTitleInput(this.titleInput);    // 상태관리
+            this.setTitle(this.titleInput);    // 상태관리
             console.log(this.titleInput);
         },
         ExplanationInput() {
             // expInput 상태를 업데이트 (data의 expInput과 state 의 expInput 동기화 역할)
-            this.setExpInput(this.expInput);
+            this.setExp(this.expInput);
             console.log(this.expInput);
         },
-        addExercise(box) {
-            if (box.exercises.length < 5) {
-                // this.activeBox = box;
-                // this.showModal = true;
-            }
-        },
-
-        deleteExercise(box, index) {
-            box.exercises.splice(index, 1);
-        },
-        // editExercise(exercise) {
-        //     // Set the exercise data to edit
-        //     // this.editExerciseData = exercise;
-        //     // this.isEditModal = true; // Show the modal in edit mode
-        //     // this.showModal = true; // Ensure the modal is displayed
-        // },
-        addDayBox() {
-            if (this.boxes.length < 5) {
-                this.boxes.push({ exercises: [] });
-
-                // dayExercises를 업데이트하기 위해 mutations 호출
-                this.updateDayExercises({ day: this.boxes.length, exercises: [] });
-            }
-        },
-        deleteDayBox(dayindex) {
-            // 해당 인덱스의 day-routine-box를 삭제합니다.
-            this.boxes.splice(dayindex, 1);
-        },
-        // onModalClose(updatedExercise) {
-        //     if (updatedExercise) {
-        //         // Update the exercise data in the main component
-        //         if (this.isEditModal) {
-        //             // Find and update the existing exercise data
-        //             const exerciseIndex = this.activeBox.exercises.findIndex(
-        //                 exercise => exercise === this.editExerciseData
-        //             );
-        //             if (exerciseIndex !== -1) {
-        //                 this.activeBox.exercises[exerciseIndex] = updatedExercise;
-        //             }
-        //         } else {
-        //             // Add the new exercise data
-        //             this.activeBox.exercises.push(updatedExercise);
-        //         }
+        // addExercise(box) {
+        //     if (box.exercises.length < 5) {
+        //         // this.activeBox = box;
+        //         // this.showModal = true;
         //     }
-        //     // this.showModal = false;
-        //     this.isEditModal = false;
         // },
+
+        // deleteExercise(box, index) {
+        //     box.exercises.splice(index, 1);
+        // },
+        // // editExercise(exercise) {
+        // //     // Set the exercise data to edit
+        // //     // this.editExerciseData = exercise;
+        // //     // this.isEditModal = true; // Show the modal in edit mode
+        // //     // this.showModal = true; // Ensure the modal is displayed
+        // // },
         // addDayBox() {
         //     if (this.boxes.length < 5) {
         //         this.boxes.push({ exercises: [] });
+
+        //         // dayExercises를 업데이트하기 위해 mutations 호출
+        //         // this.updateDayExercises({ day: this.boxes.length, exercises: [] });
         //     }
         // },
-        // updateExerciseData(data) {
-        //     // Modal에서 emit한 이벤트를 처리하는 메서드
-        //     this.selectedExerciseArea = data.ExerciseArea;
-        //     this.selectedExerciseName = data.ExerciseName;
+        // deleteDayBox(dayindex) {
+        //     // 해당 인덱스의 day-routine-box를 삭제합니다.
+        //     this.boxes.splice(dayindex, 1);
         // },
 
-        submitData() {
-            // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
-            const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
+        // submitData() {
+        //     // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
+        //     const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
 
-            if (emptyBoxes.length > 0) {
-                // 비어있는 day-routine-box가 하나 이상 있다면 경고 메시지를 표시합니다.
-                const emptyBoxNumbers = emptyBoxes.map((box, index) => `Day ${this.boxes.indexOf(box) + 1}`).join(', ');
-                alert(`${emptyBoxNumbers}의 루틴 작성을 완료해주세요.`);  //비어 있는 상자의 번호를 가져와 쉼표로 구분된 문자열로 변환
-            }
-            else if (this.titleInput.trim() === '') {
-                // 제목 입력란이 비어있을 때 경고 메시지를 표시합니다.
-                this.showWarning = true;
+        //     if (emptyBoxes.length > 0) {
+        //         // 비어있는 day-routine-box가 하나 이상 있다면 경고 메시지를 표시합니다.
+        //         const emptyBoxNumbers = emptyBoxes.map((box, index) => `Day ${this.boxes.indexOf(box) + 1}`).join(', ');
+        //         alert(`${emptyBoxNumbers}의 루틴 작성을 완료해주세요.`);  //비어 있는 상자의 번호를 가져와 쉼표로 구분된 문자열로 변환
+        //     }
+        //     else if (this.titleInput.trim() === '') {
+        //         // 제목 입력란이 비어있을 때 경고 메시지를 표시합니다.
+        //         this.showWarning = true;
 
-                // Scroll to the warning message
-                // Vue 컴포넌트가 완전히 마운트된 후에 refs를 사용하여 경고 메시지로 스크롤합니다.
-                this.$nextTick(() => {
-                    const warningMessage = this.$el.querySelector('.warning-message');
-                    if (warningMessage) {
-                        warningMessage.scrollIntoView({
-                            behavior: 'smooth', // 스크롤 동작을 "auto" 또는 "smooth"로 설정할 수 있습니다.
-                            block: 'start',     // 요소의 맨 위로 스크롤합니다.
-                        });
-                    }
-                });
+        //         // Scroll to the warning message
+        //         // Vue 컴포넌트가 완전히 마운트된 후에 refs를 사용하여 경고 메시지로 스크롤합니다.
+        //         this.$nextTick(() => {
+        //             const warningMessage = this.$el.querySelector('.warning-message');
+        //             if (warningMessage) {
+        //                 warningMessage.scrollIntoView({
+        //                     behavior: 'smooth', // 스크롤 동작을 "auto" 또는 "smooth"로 설정할 수 있습니다.
+        //                     block: 'start',     // 요소의 맨 위로 스크롤합니다.
+        //                 });
+        //             }
+        //         });
 
-            }
-            else {
-                // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
-                this.showWarning = false; // 경고 메시지를 숨깁니다.
+        //     }
+        //     else {
+        //         // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
+        //         this.showWarning = false; // 경고 메시지를 숨깁니다.
 
-                const postData = {
-                    title: this.titleInput,
-                    explanation: this.expInput,
-                    // ... other properties ...
-                };
-
-                // Assuming you have an API endpoint for data submission
-                // 데이터 제출을 위한 POST 요청을 보냅니다. (API 엔드포인트를 사용해야 합니다.)
-
-                // Replace 'your_api_endpoint' with the actual URL
-                // 데이터 제출을 위해 fetch() 또는 axios를 사용하여 API 엔드포인트로 요청을 보냅니다.
-                fetch('your_api_endpoint', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(postData),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Data successfully submitted:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error submitting data:', error);
-                    });
-            }
-        },
+        //         const postData = {
+        //             title: this.titleInput,
+        //             explanation: this.expInput,
+        //         };
+        //     }
+        // },
 
     },
     watch: {

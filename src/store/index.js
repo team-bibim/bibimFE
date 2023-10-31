@@ -5,38 +5,27 @@ export default createStore({
   state: {
     message: 'Hello Vue.js',
     // --------------------- routine-write.vue -------------------------------
-    titleInput: '', // 제목 데이터 저장
-    expInput: '',
-    // 동적으로 생성되는 운동 정보를 저장하는 객체
-    dayExercises: {},
-
-    usebodyData: [], // 'usebody_name' 데이터를 저장
+    title: '', // 루틴 제목
+    exp: '',   // 루틴 설명
+    //dayExercises: {},
+    boxes: [],
+    exercises: [],
     exerciseData: {}, // 부위에 따른 데이터 저장
+
+    usebodyData: [], // 서버에서 가져온 'usebody_name' 데이터 저장
   },
   getters: {
     // --------------------- routine-write.vue -------------------------------
-    // getMessage: (state) => {
-    //   return state.message;
-    // },
-    // getTitleInput: (state) => {
-    //   return state.titleInput;
-    // },
-    // getExpInput: (state) => {
-    //   return state.expInput;
-    // },
   },
   mutations: {
     // --------------------- routine-write.vue -------------------------------
-    setTitleInput(state, newValue) {
-      state.titleInput = newValue;
+    setTitle(state, newValue) {
+      state.title = newValue;
     },
-    setExpInput(state, newValue) {
-      state.expInput = newValue;
+    setExp(state, newValue) {
+      state.exp = newValue;
     },
-    // 날짜와 운동 정보를 업데이트
-    updateDayExercises(state, { day, exercises }) {
-      state.dayExercises[day] = exercises;
-    },
+
     // 'usebody_name'(부위 이름) 데이터 설정
     SET_USEBODY_DATA(state, data) {
       state.usebodyData = data;
@@ -79,6 +68,7 @@ export default createStore({
         console.error('운동 데이터 가져오기 오류:', error);
       }
     },
+
   },
   modules: {
   }

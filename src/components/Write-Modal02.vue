@@ -82,7 +82,7 @@ export default {
             searchResults: [], // 검색 결과를 저장할 데이터 속성
             searchAllResults: [], // 검색 결과를 저장할 데이터 속성 (전체 결과)
             // usebodyData와 exerciseData 추가
-            usebodyList: [],
+            // usebodyList: [],
             exerciseList: {
                 ExerciseArea: '', // 선택한 운동 부위
                 ExerciseName: '', // 선택한 운동
@@ -111,7 +111,7 @@ export default {
     },
 
     methods: {
-        ...mapMutations(['updateDayExercises']),
+        // ...mapMutations(['updateDayExercises']),
         ...mapActions(['fetchExerciseData', 'fetchUsebodyData']),
         performSearch() {
             // 검색어를 이용하여 검색을 수행하는 로직을 여기에 추가
@@ -225,11 +225,7 @@ export default {
             }
         },
         closeDialogAndSave() {
-            // 저장 버튼을 눌렀을 때 실행되는 함수
-            this.updateDayExercises({
-                day: this.$props.day, // day는 상위 컴포넌트에서 props로 전달되어야 합니다.
-                exercises: this.exerciseData,
-            });
+
             this.dialog = false;
         },
     },
