@@ -264,9 +264,18 @@ export default {
     .catch(error => {
       console.log(error);
     });
+    /* 로그인 되어있는지 여부 확인
+    axios.get('http://52.78.77.1:8000/routine/recommend/follow')
+    .then(response => {
+      this.getFollowPostings(response.data)
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    */
   },
+
   data: () => ({
-    // 백엔드단의 Post 데이터는 어떻게 구성되어있는지 확인하고, 양식을 맞추어 axios를 도입할 것
     post: {
       title: '',
       content: '',
