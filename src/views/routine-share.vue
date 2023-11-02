@@ -37,7 +37,7 @@
                       <div style="display: flex;">
                         <v-list-item-title class="right-panel-hot-writer-id">
                           <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
-                          {{ post.writer }}
+                          @{{ post.writer }}
                           <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
                             <v-img
                               :width="30"
@@ -99,7 +99,7 @@
                       <div style="display: flex;">
                         <v-list-item-title class="right-panel-hot-writer-id">
                           <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
-                          {{ post.writer }}
+                          @{{ post.writer }}
                           <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
                             <v-img
                               :width="30"
@@ -165,7 +165,7 @@
                     <!--여기가 v-btn 추가할 자리-->
                     <v-list-item-title class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
-                      {{ post.writer }}
+                      @{{ post.writer }}
                       <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
                         <v-img
                           :width="30"
@@ -278,14 +278,14 @@ export default {
       {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer: '@exampleID',
+        writer: 'exampleID',
         date: '2023/09/25 19:27',
         like: 0
       },
       {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer: '@exampleID',
+        writer: 'exampleID',
         date: '2023/09/25 19:27',
         like: 0
       }
@@ -309,7 +309,7 @@ export default {
       {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer: '@exampleID',
+        writer: 'exampleID',
         date: '2023/09/25 19:27',
         like: 0
       }
@@ -318,7 +318,7 @@ export default {
       {
         title: 'ㄱ. 로렘 입숨.',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer: '@exampleID',
+        writer: 'exampleID',
         date: '2023/09/25 19:27',
         like: 0
       }
@@ -398,9 +398,6 @@ export default {
       } else if (card === "최신 게시글") {
         return { backgroundColor: '#1D2128' };
       }
-    },
-    searchBarInput() {
-      console.log(this.textInput);
     },
     exampleFollowFunction() {
       console.log("팔로우 눌림");
