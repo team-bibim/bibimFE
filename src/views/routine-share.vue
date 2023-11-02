@@ -7,83 +7,158 @@
             <div style="height: 10px;"></div>
             <div style="display: flex;">
               <v-list-subheader class="right-panel-hot-classify-text">
-                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"><b>전체</b></v-btn>
-                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"><b>팔로잉</b></v-btn>
+                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;" @click="togglePageStatus('전체')">
+                  <b>전체</b>
+                </v-btn>
+                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;" @click="togglePageStatus('팔로잉')">
+                  <b>팔로잉</b>
+                </v-btn>
               </v-list-subheader>
-              <v-text-field outline class="search-bar" v-model="titleInput" label="검색"
+              <v-text-field outline class="search-bar" v-model="textInput" label="검색할 내용을 입력하세요"
                             @input="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
                             rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
             </div>
             <div style="height: 20px;"></div>
-            <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 20px;">
-              <b>이번 주 HOT 게시글 🔥</b>
-            </v-list-subheader>
-            <div style="height: 20px;"></div>
-            <v-data-iterator>
-              <template v-if="filteredAndSortedHotPostings.length === 0">
-                <div class="no-search-results">검색 결과가 없습니다</div>
-              </template>
-              <template v-else>
-                <template v-for="(post, index) in filteredAndSortedHotPostingsPerPage" :key="index">
-                  <!--여기가 v-btn 추가할 자리-->
-                  <v-list-item
-                    style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
-                    <div style="display: flex;">
-                      <v-list-item-title class="right-panel-hot-writer-id">
-                        <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
-                        {{ post.writer }}
-                        <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
-                          <v-img
-                            :width="30"
-                            aspect-ratio="1/1"
-                            cover
-                            src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
-                          ></v-img>
-                        </v-btn>
-                      </v-list-item-title>
-                    </div>
-                    <div style="height: 10px;"></div>
-                    <v-list-item-title class="right-panel-hot-content">
-                      <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
-                      <br><br>
-                      {{ post.content }}
-                      <br><br>
-                      <div style="align-items: right;">
-                        {{ post.date }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
-                          <v-img
-                            :width="30"
-                            aspect-ratio="1/1"
-                            cover
-                            src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
-                          ></v-img>
-                        </v-btn>
-                        {{ post.like }}
-                      </div>
-                    </v-list-item-title>
-                  </v-list-item>
+            <div v-if="pageStatus === '전체'">
+              <div></div> <!-- ?? div 태그를 없애면 박살남 -->
+              <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 20px;">
+                <b>이번 주 HOT 게시글 🔥</b>
+              </v-list-subheader>
+              <div style="height: 20px;"></div>
+              <v-data-iterator>
+                <template v-if="filteredHotPostings.length === 0">
+                  <div class="no-search-results"><b>검색 결과가 없습니다</b></div>
                 </template>
-              </template>
-            </v-data-iterator>
-            <div style="height: 10px;"></div>
-            <v-pagination v-model="hotPage" :length="Math.ceil(filteredAndSortedHotPostings.length / 4)" style="color:white"></v-pagination>
+                <template v-else>
+                  <template v-for="(post, index) in filteredHotPostingsPerPage" :key="index">
+                    <!--여기가 v-btn 추가할 자리-->
+                    <v-list-item
+                      style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
+                      <div style="display: flex;">
+                        <v-list-item-title class="right-panel-hot-writer-id">
+                          <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
+                          {{ post.writer }}
+                          <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                            <v-img
+                              :width="30"
+                              aspect-ratio="1/1"
+                              cover
+                              src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
+                            ></v-img>
+                          </v-btn>
+                        </v-list-item-title>
+                        <v-row justify-end>
+                          <v-col align-self="start">
+                            <v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <div style="height: 10px;"></div>
+                      <v-list-item-title class="right-panel-hot-content">
+                        <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
+                        <br><br>
+                        {{ post.content }}
+                        <br><br>
+                        <div style="align-items: right;">
+                          {{ post.date }}
+                          <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
+                            <v-img
+                              :width="30"
+                              aspect-ratio="1/1"
+                              cover
+                              src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
+                            ></v-img>
+                          </v-btn>
+                          {{ post.like }}
+                        </div>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                </template>
+              </v-data-iterator>
+              <div style="height: 10px;"></div>
+              <v-pagination v-model="hotPage" :length="Math.ceil(filteredHotPostings.length / 4)" style="color:white"></v-pagination>
+            </div>
+
+            <!-- 팔로우 게시글 -->
+            <div v-if="pageStatus === '팔로잉'">
+              <div></div> <!-- ?? div 태그를 없애면 박살남 -->
+              <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 20px;">
+                <b>팔로잉 게시글 👥</b>
+              </v-list-subheader>
+              <div style="height: 20px;"></div>
+              <v-data-iterator>
+                <template v-if="filteredHotPostings.length === 0">
+                  <div class="no-search-results"><b>검색 결과가 없습니다</b></div>
+                </template>
+                <template v-else>
+                  <template v-for="(post, index) in filteredFollowPostingsPerPage" :key="index">
+                    <!--여기가 v-btn 추가할 자리-->
+                    <v-list-item
+                      style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
+                      <div style="display: flex;">
+                        <v-list-item-title class="right-panel-hot-writer-id">
+                          <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
+                          {{ post.writer }}
+                          <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                            <v-img
+                              :width="30"
+                              aspect-ratio="1/1"
+                              cover
+                              src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
+                            ></v-img>
+                          </v-btn>
+                        </v-list-item-title>
+                        <v-row justify-end>
+                          <v-col align-self="start">
+                            <v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>
+                          </v-col>
+                        </v-row>
+                      </div>
+                      <div style="height: 10px;"></div>
+                      <v-list-item-title class="right-panel-hot-content">
+                        <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
+                        <br><br>
+                        {{ post.content }}
+                        <br><br>
+                        <div style="align-items: right;">
+                          {{ post.date }}
+                          <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
+                            <v-img
+                              :width="30"
+                              aspect-ratio="1/1"
+                              cover
+                              src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
+                            ></v-img>
+                          </v-btn>
+                          {{ post.like }}
+                        </div>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+                </template>
+              </v-data-iterator>
+              <div style="height: 10px;"></div>
+              <v-pagination v-model="followPage" :length="Math.ceil(filteredFollowPostings.length / 4)" style="color:white"></v-pagination>
+            </div>
           </v-list>
         </v-card>
 
         <div style="height: 8px;"></div>
 
-        <v-card class="right-panel-new">
+        <!--최신 게시글-->
+        <v-card class="right-panel-new" v-if="pageStatus === '전체'">
           <v-list lines="two" style="background-color: #181B21;">
             <div style="height: 20px;"></div>
             <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 35px;">
               <b>최신 게시글</b>
             </v-list-subheader>
             <div style="height: 20px;"></div>
-            <template v-if="filteredAndSortedNewPostings.length === 0">
-              <div class="no-search-results">검색 결과가 없습니다</div>
+            <template v-if="filteredNewPostings.length === 0">
+              <div class="no-search-results"><b>검색 결과가 없습니다</b></div>
             </template>
             <template v-else>
-              <template v-for="(post, index) in filteredAndSortedNewPostingsPerPage" :key="index">
+              <template v-for="(post, index) in filteredNewPostingsPerPage" :key="index">
                 <v-list-item
                   style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                   <div style="display: flex;">
@@ -100,6 +175,11 @@
                         ></v-img>
                       </v-btn>
                     </v-list-item-title>
+                    <v-row justify-end>
+                      <v-col align-self="start">
+                        <v-btn variant="flat" rounded="xl" class="save-post-button-new">게시물 담기</v-btn>
+                      </v-col>
+                    </v-row>
                   </div>
                   <div style="height: 10px;"></div>
                   <v-list-item-title class="right-panel-new-content">
@@ -126,7 +206,7 @@
               </template>
             </template>
             <div style="height: 10px;"></div>
-            <v-pagination v-model="newPage" :length="Math.ceil(filteredAndSortedNewPostings.length / 4)" style="color:white"></v-pagination>
+            <v-pagination v-model="newPage" :length="Math.ceil(filteredNewPostings.length / 4)" style="color:white"></v-pagination>
           </v-list>
         </v-card>
       </v-container>
@@ -168,9 +248,18 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   created() {
+    // 핫 포스팅 갖고오기
     axios.get('http://52.78.77.1:8000/routine/recommend/pop/')
     .then(response => {
       this.getHotPostings(response.data)
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    // 팔로우 포스팅 갖고오기
+    axios.get('http://52.78.77.1:8000/routine/recommend/follow')
+    .then(response => {
+      this.getFollowPostings(response.data)
     })
     .catch(error => {
       console.log(error);
@@ -225,6 +314,15 @@ export default {
         like: 0
       }
     ],
+    followPostings: [
+      {
+        title: 'ㄱ. 로렘 입숨.',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        writer: '@exampleID',
+        date: '2023/09/25 19:27',
+        like: 0
+      }
+    ],
     drawer: null,
     links: [
       ['mdi-inbox-arrow-down', 'HOME'],
@@ -236,39 +334,61 @@ export default {
     textInput: "",
     hotPage: 1,
     newPage: 1,
+    followPage: 1,
     number: 0,
+    pageStatus: "전체",
   }),
   computed: {
-    // 두 개 함수는 일부로 분리해둠 => filteredAndSortedHotPostings()만 따로 사용할 수 있도록
-    filteredAndSortedHotPostings() {
+    /*
+    ...mapState({
+      user: state => state.user
+    })
+    */
+    // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
+    filteredHotPostings() {
       return this.hotPostings
         .filter(post => {
           const searchText = this.textInput.toLowerCase();
-          const title = post.title.toLowerCase();
-          const content = post.content.toLowerCase();
+          const title      = post.title.toLowerCase();
+          const content    = post.content.toLowerCase();
           return title.includes(searchText) || content.includes(searchText);
         })
         .sort((a, b) => a.title.localeCompare(b.title));
     },
-    filteredAndSortedHotPostingsPerPage() {
+    filteredHotPostingsPerPage() {
       const startIndex = (this.hotPage - 1) * 4;
-      const endIndex = startIndex + 4;
-      return this.filteredAndSortedHotPostings.slice(startIndex, endIndex);
+      const endIndex   = startIndex + 4;
+      return this.filteredHotPostings.slice(startIndex, endIndex);
     },
-    filteredAndSortedNewPostings() {
+    filteredNewPostings() {
       return this.newPostings
         .filter(post => {
           const searchText = this.textInput.toLowerCase();
-          const title = post.title.toLowerCase();
-          const content = post.content.toLowerCase();
+          const title      = post.title.toLowerCase();
+          const content    = post.content.toLowerCase();
           return title.includes(searchText) || content.includes(searchText);
         })
         .sort((a, b) => a.title.localeCompare(b.title));
     },
-    filteredAndSortedNewPostingsPerPage() {
+    filteredNewPostingsPerPage() {
       const startIndex = (this.newPage - 1) * 4;
-      const endIndex = startIndex + 4;
-      return this.filteredAndSortedNewPostings.slice(startIndex, endIndex);
+      const endIndex   = startIndex + 4;
+      return this.filteredNewPostings.slice(startIndex, endIndex);
+    },
+    filteredFollowPostings() {
+      return this.followPostings
+        .filter(post => {
+          const searchText = this.textInput.toLowerCase();
+          const title      = post.title.toLowerCase();
+          const content    = post.content.toLowerCase();
+          return title.includes(searchText) || content.includes(searchText);
+        })
+        .sort((a, b) => a.title.localeCompare(b.title));
+    },
+    filteredFollowPostingsPerPage() {
+      const startIndex = (this.followPage - 1) * 4;
+      const endIndex   = startIndex + 4;
+      return this.filteredFollowPostings.slice(startIndex, endIndex);
     },
   },
   methods: {
@@ -280,7 +400,7 @@ export default {
       }
     },
     searchBarInput() {
-      console.log(this.textInput); // Log the entered text to the console
+      console.log(this.textInput);
     },
     exampleFollowFunction() {
       console.log("팔로우 눌림");
@@ -317,17 +437,42 @@ export default {
       });*/
       this.newPostings[index].like++;
     },
+    togglePageStatus(status) {
+      this.pageStatus = status;
+    },
     getHotPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          title: data[i].routine_name,
+          title:   data[i].routine_name,
           content: data[i].routine_comment,
-          writer: data[i].nickname,
-          like: data[i].recommend_count
+          writer:  data[i].nickname,
+          like:    data[i].recommend_count
         };
         this.hotPostings.push(post);
       }
-    }
+    },
+    getNewPostings(data) {
+      for (let i = 0; i < data.length; i++) {
+        let post = {
+          title:   data[i].routine_name,
+          content: data[i].routine_comment,
+          writer:  data[i].nickname,
+          like:    data[i].recommend_count
+        };
+        this.newPostings.push(post);
+      }
+    },
+    getFollowPostings(data) {
+      for (let i = 0; i < data.length; i++) {
+        let post = {
+          title:   data[i].routine_name,
+          content: data[i].routine_comment,
+          writer:  data[i].nickname,
+          like:    data[i].recommend_count
+        };
+        this.followPostings.push(post);
+      }
+    },
   }
 }
 </script>
@@ -426,4 +571,21 @@ export default {
   align-items: center;
   text-align: center;
 }
+
+.save-post-button-hot {
+  align-items: center;
+  height: 62px;
+  background-color: #CC8484;
+  font-size: auto;
+  float: right;
+}
+
+.save-post-button-new {
+  align-items: center;
+  height: 62px;
+  background-color: #344054;
+  font-size: auto;
+  float: right;
+}
+
 </style>
