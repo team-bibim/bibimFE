@@ -57,6 +57,9 @@ import axios from 'axios'
 
 export default {
     // created() { this.fetchData(); },
+    props: {
+        boxIndex: Number  // 상위 컴포넌트에서 전달될 박스 인덱스를 받는 props
+    },
     data() {
         return {
             dialog: false,
@@ -69,12 +72,13 @@ export default {
             exerciseList: {
                 ExerciseArea: '', // 선택한 운동 부위
                 ExerciseName: '', // 선택한 운동
+                ExerciseID: '',
                 ExerciseEquipment: '',  // 선택한 운동의 운동 기구
             },
         }
     },
     computed: {
-        ...mapState(['usebodyData', 'exerciseData']),
+        ...mapState(['usebodyData', 'exerciseData', 'exercises']),
 
         exerciseAreaItems() {   // 'usebodyData'를 사용하여 `<v-select>`를 렌더링하는 computed 속성 추가
             return this.usebodyData;
@@ -93,7 +97,7 @@ export default {
     },
 
     methods: {
-        // ...mapMutations(['updateDayExercises']),
+        ...mapMutations(['addExerciseToBox']),
         ...mapActions(['fetchExerciseData', 'fetchUsebodyData']),
         performSearch() {
             // 검색어를 이용하여 검색을 수행하는 로직을 여기에 추가
@@ -104,6 +108,17 @@ export default {
             // fetchUsebodyData와 fetchExerciseData를 호출하여 서버에서 데이터 가져오기
             this.fetchExerciseData();
             this.fetchUsebodyData();
+            // 추가: 모달을 열 때마다 exerciseList를 초기화하기
+            this.resetExerciseList();
+        },
+        resetExerciseList() {
+            // exerciseList를 초기 상태로 리셋
+            this.exerciseList = {
+                ExerciseArea: '', // 선택한 운동 부위
+                ExerciseName: '', // 선택한 운동 이름
+                ExerciseID: '',  // 선택한 운동의 ID
+                ExerciseEquipment: '', // 선택한 운동의 운동 기구
+            };
         },
         getExerciseNamesByArea(area) {
             console.log('exerciseData:', this.exerciseData);
@@ -138,8 +153,6 @@ export default {
                 else {
                     this.errorflag = false;
                 }
-
-
 
                 // 데이터 형식을 확인하고 배열로 변환하기
                 if (Array.isArray(response.data)) {
@@ -188,6 +201,9 @@ export default {
             if (selectedExerciseData) {
                 this.exerciseList.ExerciseEquipment = selectedExerciseData.equipment_name;
                 console.log('선택 장비 결과:', this.exerciseList.ExerciseEquipment);
+                // 여기에 id 받아오기 추가
+                this.exerciseList.ExerciseID = selectedExerciseData.exercise_id;
+                console.log('선택 운동 id 결과:', this.exerciseList.ExerciseID);
             } else {
                 // 선택한 운동 데이터를 찾을 수 없는 경우 에러 처리
                 console.error('선택한 운동 장비 데이터를 찾을 수 없습니다.');
@@ -197,7 +213,7 @@ export default {
             // 먼저 운동 부위 업데이트
             this.updateUsebody(selectedExercise);
             // 다음으로 운동 기구 업데이트
-            await this.updateExerciseEquipment(selectedExercise);
+            this.updateExerciseEquipment(selectedExercise);     // await 안써도 되는듯
 
             // 선택된 아이템이 없을 때, 즉 아무것도 선택되지 않았을 때 초기화
             if (!selectedExercise) {
@@ -205,7 +221,17 @@ export default {
             }
         },
         closeDialogAndSave() {
-
+            const selectedBoxIndex = this.boxIndex;
+            // exerciseList를 exercise 데이터가 되도록 보내기
+            console.log("저장 직전 운동 이름 :", this.exerciseList.ExerciseName);
+            console.log("저장 직전 검색어 상태 :", this.searchData);
+            this.exerciseList.ExerciseName = this.searchData;   // 검색어를 운동 이름으로 갱신
+            this.addExerciseToBox({
+                boxIndex: selectedBoxIndex,
+                exercise: this.exerciseList
+            });
+            // exercise 데이터를 box안에 넣기
+            console.log('exercises :', this.exercises);
             this.dialog = false;
         },
     },

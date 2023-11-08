@@ -14,6 +14,9 @@ export default createStore({
   },
   getters: {
     // --------------------- routine-write.vue -------------------------------
+    boxesWithExercises: state => {
+      return state.boxes.filter(box => box.exercises && box.exercises.length > 0);
+    }
   },
   mutations: {
     // --------------------- routine-write.vue -------------------------------
@@ -42,7 +45,19 @@ export default createStore({
     // 해당 인덱스의 day-routine-box를 삭제
     DELETE_DAY_BOX(state, dayindex) {
       state.boxes.splice(dayindex, 1);
-    }
+    },
+    addExerciseToBox(state, { boxIndex, exercise }) {
+      // boxIndex는 운동을 추가할 박스의 인덱스
+      // exercise는 추가할 운동 객체
+      if (state.boxes[boxIndex]) {
+        state.boxes[boxIndex].exercises.push(exercise);
+        // 상태 업데이트 후 콘솔에 로깅
+        console.log(`Box at index ${boxIndex} after adding exercise:`, state.boxes[boxIndex]);
+      } else {
+        // 에러 메시지를 로그로 남기는 것도 유용할 수 있습니다.
+        console.error(`Box at index ${boxIndex} does not exist.`);
+      }
+    },
   },
   actions: {
     // 'usebody_name' 데이터를 가져오기

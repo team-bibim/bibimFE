@@ -41,14 +41,14 @@
                                                     mdi-delete
                                                 </v-icon>
                                             </v-btn>
+                                            {{ exercises }}
                                         </div>
 
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
                                             class="day-routine-subbox">
-                                            <!-- <v-text-field v-model="exercise.title" class="exercise-title" label="운동 이름"
-                                                readonly></v-text-field>
-                                            <v-text-field v-model="exercise.time" class="exercise-time" label="시간"
-                                                readonly></v-text-field> -->
+                                            <v-text-field v-model="exercise.ExerciseName" class="exercise-title"
+                                                label="운동 이름" readonly></v-text-field>
+                                            <v-text-field v-model="exercise.ExerciseArea" label="운동 부위" readonly />
 
                                             <!-- <textarea v-model="exercise.title" class="exercise-title" placeholder="운동 이름"
                                                 readonly></textarea> -->
@@ -82,7 +82,7 @@
                                         <!-- <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
                                             :exerciseData="editExerciseData" :isEditModal="isEditModal"
                                             @close-modal="showModal = false; isEditModal = false" /> -->
-                                        <Modal v-if="box.exercises.length < 5">
+                                        <Modal v-if="box.exercises.length < 5" :boxIndex="dayindex">
                                         </Modal>
                                     </div>
                                     <!-- <v-btn v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
@@ -152,7 +152,7 @@ export default {
     computed: {
         // ...mapState(),
         // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
-        ...mapState(['boxes']),
+        ...mapState(['boxes', 'exercises']),
 
     },
     methods: {
