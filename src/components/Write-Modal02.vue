@@ -86,13 +86,13 @@ export default {
     },
     watch: {
         'exerciseList.ExerciseArea': function(newExerciseArea, oldExerciseArea) {
-            if (newExerciseArea !== oldExerciseArea) {  // exerciseList.ExerciseArea가 변경될 때 실행됨.
+            if (newExerciseArea !== oldExerciseArea && oldExerciseArea !== '') {    // 운동 처음 검색시 검색어 초기화 오류 해결
                 this.exerciseList.ExerciseEquipment = ''; // ExerciseEquipment 초기화
                 this.searchData = ''; // searchData 초기화
                 this.searchResults = []; // 검색 결과를 빈 배열로 초기화
             }
             this.performSearch();
-            this.searchData = '';
+            // this.searchData = '';    
         }
     },
 
