@@ -232,6 +232,7 @@ export default {
             });
             // exercise 데이터를 box안에 넣기
             console.log('exercises :', this.exercises);
+            this.searchData = ''; // searchData 초기화, 검색 없이 입력할때 검색어 남아있는 오류 해결
             this.dialog = false;
         },
     },
