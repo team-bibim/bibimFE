@@ -71,24 +71,10 @@
                                             </div>
                                         </div>
 
-                                        <!-- <v-btn v-if="box.exercises.length < 5" class="day-routine-subbox"
-                                            @click="addExercise(box)">
-                                            <v-icon color="white">
-                                                mdi-plus
-                                            </v-icon>
-                                        </v-btn> -->
-                                        <!-- <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
-                                            :exerciseData="editExerciseData" :isEditModal="isEditModal"
-                                            @close-modal="showModal = false; isEditModal = false" /> -->
                                         <Modal v-if="box.exercises.length < 5" :boxIndex="dayindex">
                                         </Modal>
                                     </div>
-                                    <!-- <v-btn v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
-                                        @click="addDayBox">
-                                        <v-icon color="white">
-                                            mdi-plus
-                                        </v-icon>
-                                    </v-btn> -->
+
                                     <button v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
                                         @click="addDayBox">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"
