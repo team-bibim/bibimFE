@@ -58,6 +58,10 @@ export default createStore({
         console.error(`Box at index ${boxIndex} does not exist.`);
       }
     },
+    deleteExerciseFromBox(state, { boxIndex, exerciseIndex }) {
+      state.boxes[boxIndex].exercises.splice(exerciseIndex, 1);
+    },
+
   },
   actions: {
     // 'usebody_name' 데이터를 가져오기

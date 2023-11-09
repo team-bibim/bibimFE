@@ -41,7 +41,6 @@
                                                     mdi-delete
                                                 </v-icon>
                                             </v-btn>
-                                            {{ exercises }}
                                         </div>
 
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
@@ -57,7 +56,6 @@
                                             <input v-model="exercise.ExerciseName" class="exercise-time" placeholder="운동 이름"
                                                 readonly> -->
 
-                                            <!-- 다른 필요한 데이터도 표시할 수 있습니다. -->
                                             <div class="icon-box">
                                                 <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
                                                     <img width="24" height="24"
@@ -129,7 +127,6 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
     data() {
         return {
-            // cards: ['루틴 작성', '최신 게시글'],
             links: [
                 ['mdi-inbox-arrow-down', 'HOME'],
                 ['mdi-send', '루틴 공유'],
@@ -142,7 +139,6 @@ export default {
             expInput: '',
 
             showWarning: false,
-
         };
     },
     components: {
@@ -150,13 +146,10 @@ export default {
         Modal,
     },
     computed: {
-        // ...mapState(),
-        // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
         ...mapState(['boxes', 'exercises']),
-
     },
     methods: {
-        ...mapMutations(['setTitle', 'setExp']),
+        ...mapMutations(['setTitle', 'setExp', 'deleteExerciseFromBox']),
         ...mapActions(['addDayBox', 'deleteDayBox']),
         searchBarInput() {
             this.setTitle(this.titleInput);    // 상태관리
@@ -167,66 +160,55 @@ export default {
             this.setExp(this.expInput);
             console.log(this.expInput);
         },
-        // addExercise(box) {
-        //     if (box.exercises.length < 5) {
-        //         // this.activeBox = box;
-        //         // this.showModal = true;
-        //     }
-        // },
+        deleteExercise(box, index) {
+            this.deleteExerciseFromBox({ boxIndex: this.boxes.indexOf(box), exerciseIndex: index });
+        },
+        submitData() {
+            // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
+            const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
 
-        // deleteExercise(box, index) {
-        //     box.exercises.splice(index, 1);
-        // },
-        // // editExercise(exercise) {
-        // //     // Set the exercise data to edit
-        // //     // this.editExerciseData = exercise;
-        // //     // this.isEditModal = true; // Show the modal in edit mode
-        // //     // this.showModal = true; // Ensure the modal is displayed
-        // // },
+            if (emptyBoxes.length > 0) {
+                // 비어있는 day-routine-box가 하나 이상 있다면 경고 메시지를 표시합니다.
+                const emptyBoxNumbers = emptyBoxes.map((box, index) => `Day ${this.boxes.indexOf(box) + 1}`).join(', ');
+                alert(`${emptyBoxNumbers}의 루틴 작성을 완료해주세요.`);  //비어 있는 상자의 번호를 가져와 쉼표로 구분된 문자열로 변환
+            }
+            else if (this.titleInput.trim() === '') {
+                // 제목 입력란이 비어있을 때 경고 메시지를 표시합니다.
+                this.showWarning = true;
 
-        // submitData() {
-        //     // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
-        //     const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
+                // Scroll to the warning message
+                // Vue 컴포넌트가 완전히 마운트된 후에 refs를 사용하여 경고 메시지로 스크롤합니다.
+                this.$nextTick(() => {
+                    const warningMessage = this.$el.querySelector('.warning-message');
+                    if (warningMessage) {
+                        warningMessage.scrollIntoView({
+                            behavior: 'smooth', // 스크롤 동작을 "auto" 또는 "smooth"로 설정할 수 있습니다.
+                            block: 'start',     // 요소의 맨 위로 스크롤합니다.
+                        });
+                    }
+                });
 
-        //     if (emptyBoxes.length > 0) {
-        //         // 비어있는 day-routine-box가 하나 이상 있다면 경고 메시지를 표시합니다.
-        //         const emptyBoxNumbers = emptyBoxes.map((box, index) => `Day ${this.boxes.indexOf(box) + 1}`).join(', ');
-        //         alert(`${emptyBoxNumbers}의 루틴 작성을 완료해주세요.`);  //비어 있는 상자의 번호를 가져와 쉼표로 구분된 문자열로 변환
-        //     }
-        //     else if (this.titleInput.trim() === '') {
-        //         // 제목 입력란이 비어있을 때 경고 메시지를 표시합니다.
-        //         this.showWarning = true;
+            }
+            else {
+                // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
+                this.showWarning = false; // 경고 메시지를 숨깁니다.
 
-        //         // Scroll to the warning message
-        //         // Vue 컴포넌트가 완전히 마운트된 후에 refs를 사용하여 경고 메시지로 스크롤합니다.
-        //         this.$nextTick(() => {
-        //             const warningMessage = this.$el.querySelector('.warning-message');
-        //             if (warningMessage) {
-        //                 warningMessage.scrollIntoView({
-        //                     behavior: 'smooth', // 스크롤 동작을 "auto" 또는 "smooth"로 설정할 수 있습니다.
-        //                     block: 'start',     // 요소의 맨 위로 스크롤합니다.
-        //                 });
-        //             }
-        //         });
+                const postData = {
+                    title: this.titleInput,
+                    explanation: this.expInput,
+                    // ... other properties ...
+                };
 
-        //     }
-        //     else {
-        //         // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
-        //         this.showWarning = false; // 경고 메시지를 숨깁니다.
 
-        //         const postData = {
-        //             title: this.titleInput,
-        //             explanation: this.expInput,
-        //         };
-        //     }
-        // },
+            }
+        },
 
     },
     watch: {
-        // titleInput의 변경을 감시합니다.
+        // titleInput의 변경 감시
         titleInput(newTitleInput) {     // ()안은 변경된 새로운 값
             if (newTitleInput.trim() !== '') {
-                // 제목 입력란이 더 이상 비어 있지 않으면 경고 메시지를 숨깁니다.
+                // 제목 입력란이 더 이상 비어 있지 않으면 경고 메시지를 숨기기
                 this.showWarning = false;
             }
         },
