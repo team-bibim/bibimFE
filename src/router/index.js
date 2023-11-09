@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/main',
     name: 'main',
-    component: MainView
+    component: MainView,
   },
   {
     path: '/routine',
@@ -51,5 +51,17 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+// 로그인 유지
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+
+  if (to.meta.requiresAuth && !token) {
+    // 인증이 필요한 페이지에 접근하려고 할 때
+    next('/login'); // 로그인 페이지로 리디렉션
+  } else {
+    next();
+  }
+});
 
 export default router

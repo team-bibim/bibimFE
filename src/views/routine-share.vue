@@ -6,7 +6,7 @@
           <v-list lines="two" style="background-color: #181B21;">
             <div style="height: 10px;"></div>
             <div style="display: flex;">
-              <v-list-subheader class="right-panel-hot-classify-text">
+              <v-list-subheader class="right-panel-classify-text">
                 <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;" @click="togglePageStatus('전체')">
                   <b>전체</b>
                 </v-btn>
@@ -15,13 +15,13 @@
                 </v-btn>
               </v-list-subheader>
               <v-text-field outline class="search-bar" v-model="textInput" label="검색할 내용을 입력하세요"
-                            @input="searchBarInput" variant="outlined" bg-color="#24272B" color="#3A4148"
+                            variant="outlined" bg-color="#24272B" color="#3A4148"
                             rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
             </div>
             <div style="height: 20px;"></div>
             <div v-if="pageStatus === '전체'">
               <div></div> <!-- ?? div 태그를 없애면 박살남 -->
-              <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 20px;">
+              <v-list-subheader class="right-panel-classify-text" style="margin-left: 20px;">
                 <b>이번 주 HOT 게시글 🔥</b>
               </v-list-subheader>
               <div style="height: 20px;"></div>
@@ -54,7 +54,7 @@
                         </v-row>
                       </div>
                       <div style="height: 10px;"></div>
-                      <v-list-item-title class="right-panel-hot-content">
+                      <button v-ripple class="right-panel-hot-content materialDesignButton pl-6 pr-6 pa-4 ma-2">
                         <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
                         <br><br>
                         {{ post.content }}
@@ -71,8 +71,9 @@
                           </v-btn>
                           {{ post.like }}
                         </div>
-                      </v-list-item-title>
+                      </button>
                     </v-list-item>
+                    <div style="height: 5px;"></div>
                   </template>
                 </template>
               </v-data-iterator>
@@ -83,7 +84,7 @@
             <!-- 팔로우 게시글 -->
             <div v-if="pageStatus === '팔로잉'">
               <div></div> <!-- ?? div 태그를 없애면 박살남 -->
-              <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 20px;">
+              <v-list-subheader class="right-panel-classify-text" style="margin-left: 20px;">
                 <b>팔로잉 게시글 👥</b>
               </v-list-subheader>
               <div style="height: 20px;"></div>
@@ -116,7 +117,7 @@
                         </v-row>
                       </div>
                       <div style="height: 10px;"></div>
-                      <v-list-item-title class="right-panel-hot-content">
+                      <button v-ripple class="right-panel-hot-content materialDesignButton pl-6 pr-6 pa-4 ma-2">
                         <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
                         <br><br>
                         {{ post.content }}
@@ -133,8 +134,9 @@
                           </v-btn>
                           {{ post.like }}
                         </div>
-                      </v-list-item-title>
+                      </button>
                     </v-list-item>
+                    <div style="height: 5px;"></div>
                   </template>
                 </template>
               </v-data-iterator>
@@ -150,7 +152,7 @@
         <v-card class="right-panel-new" v-if="pageStatus === '전체'">
           <v-list lines="two" style="background-color: #181B21;">
             <div style="height: 20px;"></div>
-            <v-list-subheader class="right-panel-hot-classify-text" style="margin-left: 35px;">
+            <v-list-subheader class="right-panel-classify-text" style="margin-left: 35px;">
               <b>최신 게시글</b>
             </v-list-subheader>
             <div style="height: 20px;"></div>
@@ -182,7 +184,7 @@
                     </v-row>
                   </div>
                   <div style="height: 10px;"></div>
-                  <v-list-item-title class="right-panel-new-content">
+                  <button v-ripple class="right-panel-new-content materialDesignButton pl-6 pr-6 pa-4 ma-2">
                     <b style="color:#F4D3D3; font-size: 20px;">{{ post.title }}</b>
                     <br>
                     <br>
@@ -201,8 +203,9 @@
                       </v-btn>
                       {{ post.like }}
                     </div>
-                  </v-list-item-title>
+                  </button>
                 </v-list-item>
+                <div style="height: 5px;"></div>
               </template>
             </template>
             <div style="height: 10px;"></div>
@@ -248,6 +251,10 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   created() {
+    // [상태관리] 로그인이 되어있는지 여부 확인
+    this.checkLoginStatus();
+    const token = localStorage.getItem('token');
+    console.log(token);
     // 핫 포스팅 갖고오기
     axios.get('http://52.78.77.1:8000/routine/recommend/pop/')
     .then(response => {
@@ -256,23 +263,42 @@ export default {
     .catch(error => {
       console.log(error);
     });
-    // 팔로우 포스팅 갖고오기
-    axios.get('http://52.78.77.1:8000/routine/recommend/follow')
+    axios.get('http://52.78.77.1:8000/routine/recommend/latest/')
+    .then(response => {
+      this.getNewPostings(response.data)
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    // 로그인 되어있는지 여부 확인
+    axios.get('http://52.78.77.1/accounts/auth/')
+    .then(response => {
+      if (response.data.id == null) console.log("로그인 정보가 없습니다.");
+      else
+      {
+        console.log(response.data.id);
+
+        // 팔로우 포스팅 갖고오기
+        axios.get('http://52.78.77.1:8000/routine/recommend/follow/')
+        .then(response => {
+          this.getFollowPostings(response.data)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    // 팔로우 게시글
+    axios.get('http://52.78.77.1:8000/routine/box/check/')
     .then(response => {
       this.getFollowPostings(response.data)
     })
     .catch(error => {
       console.log(error);
     });
-    /* 로그인 되어있는지 여부 확인
-    axios.get('http://52.78.77.1:8000/routine/recommend/follow')
-    .then(response => {
-      this.getFollowPostings(response.data)
-    })
-    .catch(error => {
-      console.log(error);
-    });
-    */
   },
 
   data: () => ({
@@ -291,28 +317,6 @@ export default {
         date: '2023/09/25 19:27',
         like: 0
       },
-      {
-        title: 'ㄱ. 로렘 입숨.',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer: 'exampleID',
-        date: '2023/09/25 19:27',
-        like: 0
-      }
-      /*
-      {
-        title,
-        writer,
-        date,
-        like
-      }
-      {
-        title: routine_name,
-        content: routine_comment,
-        writer: owner_id,
-        date: created_at,
-        like: 좋아요 수는 별도로 작동함
-      }
-      */
     ],
     newPostings: [
       {
@@ -348,11 +352,6 @@ export default {
     pageStatus: "전체",
   }),
   computed: {
-    /*
-    ...mapState({
-      user: state => state.user
-    })
-    */
     // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
     filteredHotPostings() {
       return this.hotPostings
@@ -401,6 +400,34 @@ export default {
     },
   },
   methods: {
+    fetchDataUsingToken() {
+    const token = this.$store.state.authToken; // Access the token from the store
+    axios.get('your-api-endpoint', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Attach the token to the request
+      },
+    })
+      .then(response => {
+        // Handle the response
+      })
+      .catch(error => {
+        // Handle the error
+      });
+    },
+    // 서버에 로그인 여부를 확인하는 요청을 보내고, 로그인되어 있다면 '로그인됨' 메시지를 출력
+    checkLoginStatus() {
+      axios.get('http://52.78.77.1/accounts/auth/')
+        .then(response => {
+          if (response.data.id != null) {
+            console.log("로그인됨");
+          } else {
+            console.log("로그인되지 않음");
+          }
+        })
+        .catch(error => {
+          console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+        });
+    },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {
         return { backgroundColor: '#834B4B' };
@@ -504,14 +531,14 @@ export default {
   text-align: center;
 }
 
-.right-panel-hot-classify-text {
+.right-panel-classify-text {
   background-color: #181B21;
   color: #FFFFFF;
   font-size: 30px;
   line-height: 30px;
 }
 
-.right-panel-hot-classify-text:first-of-type {
+.right-panel-classify-text:first-of-type {
   flex-direction: row;
   word-spacing: 100px;
   margin-left: 10px;
@@ -536,7 +563,7 @@ export default {
   border-radius: 20px;
   white-space: pre-line;
   height: auto;
-  width: auto;
+  width: 100%;
   text-align: left;
   padding: 1%;
 }
@@ -566,7 +593,7 @@ export default {
   border-radius: 20px;
   white-space: pre-line;
   height: auto;
-  width: auto;
+  width: 100%;
   text-align: left;
   padding: 1%;
 }

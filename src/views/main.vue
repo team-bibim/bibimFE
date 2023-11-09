@@ -72,13 +72,28 @@ const fetchUserData = async () => {
 
 <script>
 import Login from '@/components/Login.vue';
+import { ref } from 'vue';
+import { store } from '@/store/index'; // Vuex 스토어를 가져옴
 
   export default {
     components : {
         Login
     },
     setup() {
+        const showmodal = ref(false);
+
+        const login = () => {
+        store.commit('login'); // 로그인 액션을 호출하여 상태 변경
+        };
+
+        const logout = () => {
+        store.commit('logout'); // 로그아웃 액션을 호출하여 상태 변경
+        };
+
         return {
+            showmodal,
+            login,
+            logout,
             showmodal
             };
         }
