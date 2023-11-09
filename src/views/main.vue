@@ -95,9 +95,9 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
             login,
             logout,
             showmodal
-            };
-        }
-    };
+        };
+    }
+};
 </script>
 
 <style scoped>

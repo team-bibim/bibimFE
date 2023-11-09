@@ -5,6 +5,7 @@ import { store } from './store'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import '@/assets/css/routine-write-degisn.css'
+import VueCookies from "vue-cookies"; // Import VueCookies here
 
 loadFonts()
 
@@ -18,4 +19,8 @@ createApp(App)
   .use(router)
   .use(store)
   .use(vuetify)
+  .use(VueCookies) // Use VueCookies here
   .mount('#app')
+
+// vue-cookies
+VueCookies.config("7d"); // Update this line to use VueCookies
