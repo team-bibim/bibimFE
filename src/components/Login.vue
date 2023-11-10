@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { store } from '../store'
+import { store } from '../store';
+import axios from 'axios';
 
 export default {
   store,
@@ -35,7 +36,6 @@ export default {
           password: this.password
         });
 
-        this.$store.commit('setUser', response.data); // 사용자 정보를 Vuex store에 저장
         this.$cookies.set('loginToken', response.token);
 
         // 메인 페이지로 리다이렉트

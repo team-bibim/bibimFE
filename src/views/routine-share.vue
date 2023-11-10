@@ -251,6 +251,32 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   created() {
+
+
+
+
+
+    // 예시
+    const bibim = axios.get('http://52.78.77.1:8000/routine/recommend/follow/', {
+      headers: {
+        'Authorization': this.$cookies.get('loginToken')
+      }
+    })
+    .then(response => {
+      this.getFollowPostings(response.data);
+      console.log("모두가 주목하는 데이터: " + request.header);
+    })
+    .catch(error => {
+      console.log("에러남" + error);
+    });
+    // console.log("가져온 데이터는" + bibim.to);
+
+
+
+
+
+
+
     // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
     const token = localStorage.getItem('token');
@@ -273,13 +299,17 @@ export default {
     // 로그인 되어있는지 여부 확인
     axios.get('http://52.78.77.1/accounts/auth/')
     .then(response => {
-      if (response.data.id == null) console.log("로그인 정보가 없습니다.");
-      else
-      {
+      if (response.data.id == null) {
+        console.log("로그인 정보가 없습니다.");
+      } else {
         console.log(response.data.id);
 
         // 팔로우 포스팅 갖고오기
-        axios.get('http://52.78.77.1:8000/routine/recommend/follow/')
+        axios.get('http://52.78.77.1:8000/routine/recommend/follow/', {
+          headers: {
+            'Authorization': this.$cookies.get('loginToken')
+          }
+        })
         .then(response => {
           this.getFollowPostings(response.data)
         })
