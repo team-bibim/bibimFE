@@ -14,9 +14,6 @@ export default createStore({
   },
   getters: {
     // --------------------- routine-write.vue -------------------------------
-    boxesWithExercises: state => {
-      return state.boxes.filter(box => box.exercises && box.exercises.length > 0);
-    }
   },
   mutations: {
     // --------------------- routine-write.vue -------------------------------

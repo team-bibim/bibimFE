@@ -57,11 +57,11 @@
                                                 readonly> -->
 
                                             <div class="icon-box">
-                                                <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
+                                                <!-- <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
                                                     <img width="24" height="24"
                                                         src="https://img.icons8.com/fluency-systems-filled/24/FFFFFF/pencil-tip.png"
                                                         alt="pencil-tip" />
-                                                </v-btn>
+                                                </v-btn> -->
                                                 <v-btn class="delete-button" @click="deleteExercise(box, index)"
                                                     elevation="0">
                                                     <img width="24" height="24"
@@ -93,7 +93,27 @@
                                 <v-textarea class="explanation-bar" v-model="expInput" label="설명" @input="ExplanationInput"
                                     bg-color="#24272B" color="#3A4148" clearable no-resize rows="6" row-height="25"
                                     variant="outlined" rounded="xl"></v-textarea>
-                                <v-btn class="r-submit-button" color="#CD4444" @click="submitData">작성 완료</v-btn>
+                                <v-btn class="r-submit-button" color="#CD4444" @click.stop="submitData">작성 완료</v-btn>
+                                <v-dialog v-model="dialog2" max-width="340">
+                                    <v-card color="white">
+                                        <!-- <v-card-title class="headline"></v-card-title> -->
+                                        <v-card-text>
+                                            루틴 작성을 완료하시겠습니까?
+                                        </v-card-text>
+
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+
+                                            <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
+                                                아니요
+                                            </v-btn>
+
+                                            <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
+                                                네
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
                             </v-col>
                         </v-row>
                     </v-list>
@@ -125,6 +145,7 @@ export default {
             expInput: '',
 
             showWarning: false,
+            dialog2: false,
         };
     },
     components: {
@@ -175,9 +196,13 @@ export default {
                 });
 
             }
+            else if (this.boxes.length === 0) {
+                alert("루틴을 추가해주세요.");
+            }
             else {
                 // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
                 this.showWarning = false; // 경고 메시지를 숨깁니다.
+                this.dialog2 = true;
 
                 const postData = {
                     title: this.titleInput,

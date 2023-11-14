@@ -39,7 +39,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                    <v-btn color="blue-darken-1" variant="text" @click="cancelDialog">
                         닫기
                     </v-btn>
                     <v-btn color="blue-darken-1" variant="text" @click="closeDialogAndSave">
@@ -219,6 +219,10 @@ export default {
             if (!selectedExercise) {
                 this.exerciseList.ExerciseEquipment = '';
             }
+        },
+        cancelDialog() {
+            this.dialog = false;
+            this.searchData = "";
         },
         closeDialogAndSave() {
             const selectedBoxIndex = this.boxIndex;
