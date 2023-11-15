@@ -13,6 +13,12 @@
             </v-list-item-content>
           </router-link>
         </v-list-item>
+        <!-- 로그인 링크 추가 -->
+    <router-link to="/login" class="left-panel-box">
+      <v-list-item-content>
+        <v-list-item-title class="left-panel-text">로그인</v-list-item-title>
+      </v-list-item-content>
+    </router-link>
       </v-list>
 
       <div style="height:50px;"></div>
@@ -127,7 +133,6 @@ export default {
   color: #FFFFFF;
   transition: color 0.5s ease;
 }
-
 /* -----------------------------------우측 영역 ------------------------------------- */
 
 .v-card.v-theme--light.v-card--density-default.v-card--variant-elevated {
