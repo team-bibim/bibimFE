@@ -223,7 +223,7 @@ export default {
                 console.log("루틴 설명 : ", this.expInput);
                 console.log("루틴 day : ", this.boxes.length);
 
-                const response = await axios.post('http://52.78.77.1:8000/routine/', {
+                const response = await axios.post('/api/routine/', {
                     routine_name: this.titleInput,
                     routine_comment: this.expInput,
                     routine_day: this.boxes.length,

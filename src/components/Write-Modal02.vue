@@ -154,7 +154,7 @@ export default {
                 // 검색어와 선택한 운동 부위를 서버에 보내서 검색 수행
                 console.log('searchData: ', this.searchData);
                 console.log('usebodyName: ', this.exerciseList.ExerciseArea);
-                const response = await axios.post('http://52.78.77.1:8000/exercise/', {
+                const response = await axios.post('/api/exercise/', {
                     searchData: this.searchData,
                     usebodyName: this.exerciseList.ExerciseArea
                 });
@@ -188,7 +188,7 @@ export default {
 
                 try {
                     // usebody_id를 사용하여 해당 usebody의 데이터를 가져오기
-                    const usebodyResponse = await axios.get(`http://52.78.77.1:8000/usebody/${usebodyId}/`);
+                    const usebodyResponse = await axios.get(`/api/usebody/${usebodyId}/`);
                     const usebodyData = usebodyResponse.data;
 
                     if (usebodyData && usebodyData.usebody_name) {

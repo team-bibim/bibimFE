@@ -11,6 +11,9 @@ export default createStore({
 
     exerciseData: {}, // 부위에 따른 데이터 저장
     usebodyData: [], // 서버에서 가져온 'usebody_name' 데이터 저장
+
+    userData: null, // 유저데이터
+    token: null, // 토큰
   },
   getters: {
     // --------------------- routine-write.vue -------------------------------
@@ -59,12 +62,32 @@ export default createStore({
       state.boxes[boxIndex].exercises.splice(exerciseIndex, 1);
     },
 
+    setUserData(state, data) {
+      state.userData = data;
+    },
+    setToken(state, token) {
+      state.token = token;
+    },
   },
   actions: {
+    async loginUser({ commit }, credentials) {
+      try {
+        const response = await axios.post('/api/accounts/auth/', credentials, {
+          withCredentials: true,
+        });
+        commit('setToken', response.data.token);
+        commit('setUserData', response.data.user);
+        localStorage.setItem('token', response.data.token);
+        return response;
+      } catch (error) {
+        console.error('로그인 실패:', error);
+        throw error;
+      }
+    },
     // 'usebody_name' 데이터를 가져오기
     async fetchUsebodyData({ commit }) {
       try {
-        const response = await axios.get('http://52.78.77.1:8000/usebody/');
+        const response = await axios.get('/api/usebody/');
         const usebodyNames = response.data.map(item => item.usebody_name); // usebody_name만 추출(1차원 배열 형태)
         commit('SET_USEBODY_DATA', usebodyNames); // 추출한 데이터를 저장
         console.log('Usebody Data:', usebodyNames);
@@ -78,7 +101,7 @@ export default createStore({
         // 1부터 9까지 반복하여 /exercise/body/01/부터 /exercise/body/09/까지 데이터 가져오기
         const fetchedUsebodyNames = []; // 이미 가져온 usebodyName을 기록할 배열
         for (let i = 1; i <= 9; i++) {
-          const response = await axios.get(`http://52.78.77.1:8000/exercise/body/0${i}/`);
+          const response = await axios.get(`/api/exercise/body/0${i}/`);
           const usebodyName = response.data[0].usebody_name;  // usebody_name을 가져옴
 
           // 이미 가져온 usebodyName이 아니라면 데이터를 저장

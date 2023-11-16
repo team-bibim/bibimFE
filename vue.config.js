@@ -1,18 +1,25 @@
-const { defineConfig } = require('@vue/cli-service')
+const { defineConfig } = require('@vue/cli-service');
+
 module.exports = defineConfig({
+  transpileDependencies: true,
+  lintOnSave: false, // Disable eslint
   devServer: {
+    //proxy: 'http://52.78.77.1:8000'
     proxy: {
-      '/exercise': {
-        target: 'http://15.164.228.112:8080',
+      '/api': {
+        target: 'http://52.78.77.1:8000',
+        ws: true,
         changeOrigin: true,
+        pathRewrite: {
+          '^/api': '', // Remove the /api prefix when forwarding the request
+        },
       },
     },
   },
-  transpileDependencies: true,
-  lintOnSave: false, // eslint 끄기
   pluginOptions: {
     vuetify: {
+      // Vuetify options
       // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
-    }
-  }
-})
+    },
+  },
+});
