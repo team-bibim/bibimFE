@@ -35,7 +35,7 @@
                     <v-list-item
                       style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                       <div style="display: flex;">
-                        <v-list-item-title class="right-panel-hot-writer-id">
+                        <v-list-item-content class="right-panel-hot-writer-id">
                           <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                           @{{ post.writer }}
                           <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
@@ -46,7 +46,7 @@
                               src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
                             ></v-img>
                           </v-btn>
-                        </v-list-item-title>
+                        </v-list-item-content>
                         <v-row justify-end>
                           <v-col align-self="start">
                             <v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>
@@ -61,7 +61,7 @@
                         <br><br>
                         <div style="align-items: right;">
                           {{ post.date }}
-                          <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
+                          <v-btn variant="plain" rounded="xl" @click="increaseLike(post.writer)">
                             <v-img
                               :width="30"
                               aspect-ratio="1/1"
@@ -98,7 +98,7 @@
                     <v-list-item
                       style="background-color: #834B4B; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                       <div style="display: flex;">
-                        <v-list-item-title class="right-panel-hot-writer-id">
+                        <v-list-item-content class="right-panel-hot-writer-id">
                           <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                           @{{ post.writer }}
                           <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
@@ -109,7 +109,7 @@
                               src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
                             ></v-img>
                           </v-btn>
-                        </v-list-item-title>
+                        </v-list-item-content>
                         <v-row justify-end>
                           <v-col align-self="start">
                             <v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>
@@ -124,7 +124,7 @@
                         <br><br>
                         <div style="align-items: right;">
                           {{ post.date }}
-                          <v-btn variant="plain" rounded="xl" @click="increaseHotLike(index)">
+                          <v-btn variant="plain" rounded="xl" @click="increaseLike(index)">
                             <v-img
                               :width="30"
                               aspect-ratio="1/1"
@@ -165,7 +165,7 @@
                   style="background-color: #1D2128; color: #FFFFFF; margin: 5px; border-radius: 20px; width:99%;">
                   <div style="display: flex;">
                     <!--여기가 v-btn 추가할 자리-->
-                    <v-list-item-title class="right-panel-new-writer-id">
+                    <v-list-item-content class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
                       @{{ post.writer }}
                       <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
@@ -176,7 +176,7 @@
                           src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
                         ></v-img>
                       </v-btn>
-                    </v-list-item-title>
+                    </v-list-item-content>
                     <v-row justify-end>
                       <v-col align-self="start">
                         <v-btn variant="flat" rounded="xl" class="save-post-button-new">게시물 담기</v-btn>
@@ -193,7 +193,7 @@
                     <br>  
                     <div style="align-items: right;">
                       {{ post.date }}
-                      <v-btn variant="plain" rounded="xl" @click="increaseNewLike(index)">
+                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.writer, post.liked)">
                         <v-img
                           :width="30"
                           aspect-ratio="1/1"
@@ -251,83 +251,25 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   created() {
-
-
-
-
-
-    // 예시
-    const bibim = axios.get('http://52.78.77.1:8000/routine/recommend/follow/', {
-      headers: {
-        'Authorization': this.$cookies.get('loginToken')
-      }
-    })
-    .then(response => {
-      this.getFollowPostings(response.data);
-      console.log("모두가 주목하는 데이터: " + request.header);
-    })
-    .catch(error => {
-      console.log("에러남" + error);
-    });
-    // console.log("가져온 데이터는" + bibim.to);
-
-
-
-
-
-
+    const token = localStorage.getItem('token');
 
     // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
-    const token = localStorage.getItem('token');
-    console.log(token);
+
     // 핫 포스팅 갖고오기
-    axios.get('http://52.78.77.1:8000/routine/recommend/pop/')
+    axios.get('/api/routine/recommend/pop/')
     .then(response => {
       this.getHotPostings(response.data)
     })
     .catch(error => {
-      console.log(error);
+      console.log("에러남1 ", error);
     });
-    axios.get('http://52.78.77.1:8000/routine/recommend/latest/')
+    axios.get('/api/routine/recommend/latest/')
     .then(response => {
       this.getNewPostings(response.data)
     })
     .catch(error => {
-      console.log(error);
-    });
-    // 로그인 되어있는지 여부 확인
-    axios.get('http://52.78.77.1/accounts/auth/')
-    .then(response => {
-      if (response.data.id == null) {
-        console.log("로그인 정보가 없습니다.");
-      } else {
-        console.log(response.data.id);
-
-        // 팔로우 포스팅 갖고오기
-        axios.get('http://52.78.77.1:8000/routine/recommend/follow/', {
-          headers: {
-            'Authorization': this.$cookies.get('loginToken')
-          }
-        })
-        .then(response => {
-          this.getFollowPostings(response.data)
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
-    // 팔로우 게시글
-    axios.get('http://52.78.77.1:8000/routine/box/check/')
-    .then(response => {
-      this.getFollowPostings(response.data)
-    })
-    .catch(error => {
-      console.log(error);
+      console.log("에러남2 ", error);
     });
   },
 
@@ -337,7 +279,8 @@ export default {
       content: '',
       writer: '',
       date: '',
-      like: 0
+      like: 0,
+      liked: false
     },
     hotPostings: [
       {
@@ -345,7 +288,8 @@ export default {
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: 'exampleID',
         date: '2023/09/25 19:27',
-        like: 0
+        like: 0,
+        liked: false
       },
     ],
     newPostings: [
@@ -354,7 +298,8 @@ export default {
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: 'exampleID',
         date: '2023/09/25 19:27',
-        like: 0
+        like: 0,
+        liked: false
       }
     ],
     followPostings: [
@@ -363,7 +308,8 @@ export default {
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         writer: 'exampleID',
         date: '2023/09/25 19:27',
-        like: 0
+        like: 0,
+        liked: false
       }
     ],
     drawer: null,
@@ -449,14 +395,27 @@ export default {
       axios.get('http://52.78.77.1/accounts/auth/')
         .then(response => {
           if (response.data.id != null) {
-            console.log("로그인됨");
+            console.log("로그인된 아이디는 ", response.data.id);
+
+            // 팔로우 가져오기
+            axios.get('/api/routine/recommend/follow/', {
+                withCredentials: true,
+            })
+            .then(response => {
+              this.getFollowPostings(response.data);
+              console.log("Response Headers: ", response.headers);
+              console.log("Request Headers: ", response.config.headers);
+            })
+            .catch(error => {
+                console.log("에러남0: ", error.message);
+            });
           } else {
             console.log("로그인되지 않음");
           }
         })
         .catch(error => {
           console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-        });
+        }); 
     },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {
@@ -476,29 +435,16 @@ export default {
         console.error(error);
       });*/
     },
-    increaseHotLike(index) {
-      console.log("좋아요 눌림");
-      /*axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
-      .then(res => {
-        console.log(res.data);
-        alert("저장되었습니다!!");
-      })
-      .catch(error => {
-        console.error(error);
-      });*/
-      this.hotPostings[index].like++;
-    },
-    increaseNewLike(index) {
-      console.log("좋아요 눌림");
-      /*axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
-      .then(res => {
-        console.log(res.data);
-        alert("저장되었습니다!!");
-      })
-      .catch(error => {
-        console.error(error);
-      });*/
-      this.newPostings[index].like++;
+    increaseLike(targetId) {
+      axios.post('/api/routine/like/', { routine_id: targetId })
+        .then(res => {
+          console.log(res.data);
+          this.post.liked = !this.post.liked;
+          console.log("좋아요 토글됨");
+        })
+        .catch(error => {
+          console.error(error);
+        });
     },
     togglePageStatus(status) {
       this.pageStatus = status;
@@ -593,7 +539,7 @@ export default {
   border-radius: 20px;
   white-space: pre-line;
   height: auto;
-  width: 100%;
+  width: 99%;
   text-align: left;
   padding: 1%;
 }
