@@ -107,10 +107,13 @@
                                             <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
                                                 아니요
                                             </v-btn>
-
-                                            <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
+                                            <v-btn color="green darken-1" flat="flat" @click="performRoutineSend">
                                                 네
                                             </v-btn>
+
+                                            <!-- <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
+                                                네
+                                            </v-btn> -->
                                         </v-card-actions>
                                     </v-card>
                                 </v-dialog>
@@ -129,6 +132,7 @@
 import WritePage from '@/views/routine-write.vue';
 import Modal from '@/components/Write-Modal02.vue';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import axios from 'axios'
 
 export default {
     data() {
@@ -211,6 +215,24 @@ export default {
                 };
 
 
+            }
+        },
+        async performRoutineSend() {
+            try {
+                console.log("루틴 제목 : ", this.titleInput);
+                console.log("루틴 설명 : ", this.expInput);
+                console.log("루틴 day : ", this.boxes.length);
+
+                const response = await axios.post('http://52.78.77.1:8000/routine/', {
+                    routine_name: this.titleInput,
+                    routine_comment: this.expInput,
+                    routine_day: this.boxes.length,
+                });
+                console.log(response);
+
+                this.dialog2 = false;
+            } catch (error) {
+                console.error('루틴 전송하기 오류:', error);
             }
         },
 

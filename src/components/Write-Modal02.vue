@@ -13,12 +13,15 @@
                     <span class="text-h5">운동 추가하기</span>
                 </v-card-title>
                 <v-card-text>
+                    운동 부위를 선택하거나 검색어를 입력해주세요.
+                </v-card-text>
+                <v-card-text>
                     <v-container>
                         <v-row>
                             <v-col cols="12" sm="6" md="6">
                                 <!-- 운동 부위 선택-->
                                 <v-select v-model="exerciseList.ExerciseArea" :items="exerciseAreaItems" label="운동 부위"
-                                    required></v-select>
+                                    :rules="[rules.required]"></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                                 <v-text-field v-model="exerciseList.ExerciseEquipment" label="운동 기구"
@@ -28,7 +31,8 @@
                                 <div class="search-wrapper">
                                     <v-combobox label="운동 검색" v-model="searchData" placeholder="검색어를 입력하세요"
                                         @keydown.enter="onEnterKeyPress" @update:modelValue="updateExerciseAndUsebody"
-                                        :items="searchResults" clearable></v-combobox>
+                                        :items="searchResults" clearable :menu="isComboboxOpen"
+                                        hint="검색어를 입력한 뒤 Enter를 누르시고 원하는 운동을 선택해주세요."></v-combobox>
                                     <v-icon @click="performSearch">mdi-magnify</v-icon>
                                 </div>
                                 <v-alert v-if=this.errorflag text="검색 결과가 없습니다." type="warning" variant="tonal"></v-alert>
@@ -75,6 +79,10 @@ export default {
                 ExerciseID: '',
                 ExerciseEquipment: '',  // 선택한 운동의 운동 기구
             },
+            rules: {
+                required: value => !!value || '운동 부위를 선택해주세요.',
+            },
+            isComboboxOpen: false,
         }
     },
     computed: {
@@ -90,6 +98,11 @@ export default {
                 this.exerciseList.ExerciseEquipment = ''; // ExerciseEquipment 초기화
                 this.searchData = ''; // searchData 초기화
                 this.searchResults = []; // 검색 결과를 빈 배열로 초기화
+            }
+            if (newExerciseArea) {
+                this.isComboboxOpen = true; // 선택된 아이템이 있을 때 열기
+            } else {
+                this.isComboboxOpen = false; // 선택된 아이템이 없을 때 닫기
             }
             this.performSearch();
             // this.searchData = '';    
