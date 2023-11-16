@@ -253,6 +253,14 @@ export default {
   created() {
     const token = localStorage.getItem('token');
 
+    // 팔로우 가져오기
+    axios.get('/api/routine/recommend/follow/', {
+        withCredentials: true,
+    })
+    .catch(error => {
+        console.log("에러남0: ", error.message);
+    });
+
     // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
 
@@ -270,6 +278,39 @@ export default {
     })
     .catch(error => {
       console.log("에러남2 ", error);
+    });
+    // 로그인 되어있는지 여부 확인
+    axios.get('/api/accounts/auth/')
+    .then(response => {
+      if (response.data.id == null) {
+        console.log("로그인 정보가 없습니다.");
+      } else {
+        // 로그인이 되어있을 때
+        console.log("로그인된 아이디는 ", response.data.id);
+
+        axios.get('/api/routine/recommend/follow/', {
+          headers: {
+            'Authorization': this.$cookies.get('loginToken')
+          }
+        })
+        .then(response => {
+          this.getFollowPostings(response.data)
+        })
+        .catch(error => {
+          console.log("에러남3: ", error);
+        });
+      }
+    })
+    .catch(error => {
+      console.log("에러남4 ", error);
+    });
+    // 팔로우 게시글
+    axios.get('/api/routine/box/check/')
+    .then(response => {
+      this.getFollowPostings(response.data)
+    })
+    .catch(error => {
+      console.log("에러남5 ", error);
     });
   },
 
@@ -395,27 +436,14 @@ export default {
       axios.get('http://52.78.77.1/accounts/auth/')
         .then(response => {
           if (response.data.id != null) {
-            console.log("로그인된 아이디는 ", response.data.id);
-
-            // 팔로우 가져오기
-            axios.get('/api/routine/recommend/follow/', {
-                withCredentials: true,
-            })
-            .then(response => {
-              this.getFollowPostings(response.data);
-              console.log("Response Headers: ", response.headers);
-              console.log("Request Headers: ", response.config.headers);
-            })
-            .catch(error => {
-                console.log("에러남0: ", error.message);
-            });
+            console.log("로그인됨");
           } else {
             console.log("로그인되지 않음");
           }
         })
         .catch(error => {
           console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-        }); 
+        });
     },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {

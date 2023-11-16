@@ -7,8 +7,6 @@ import { loadFonts } from './plugins/webfontloader'
 import '@/assets/css/routine-write-degisn.css'
 import VueCookies from "vue-cookies"; // Import VueCookies here
 
-Vue.use(Vuetify)
-
 loadFonts()
 
 // 로그인 토큰을 로드하고 Vuex 스토어에 설정
