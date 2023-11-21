@@ -107,7 +107,7 @@
                                             <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
                                                 아니요
                                             </v-btn>
-                                            <v-btn color="green darken-1" flat="flat" @click="performRoutineSend">
+                                            <v-btn color="green darken-1" flat="flat">
                                                 네
                                             </v-btn>
 
@@ -208,13 +208,7 @@ export default {
                 this.showWarning = false; // 경고 메시지를 숨깁니다.
                 this.dialog2 = true;
 
-                const postData = {
-                    title: this.titleInput,
-                    explanation: this.expInput,
-                    // ... other properties ...
-                };
-
-
+                this.performRoutineSend();
             }
         },
         async performRoutineSend() {
@@ -229,8 +223,10 @@ export default {
                     routine_day: this.boxes.length,
                 });
                 console.log(response);
+                console.log('데이터 : ', response.data);
+                console.log('routine_id :', response.data.routine_id);
 
-                this.dialog2 = false;
+                //this.dialog2 = false;
             } catch (error) {
                 console.error('루틴 전송하기 오류:', error);
             }
