@@ -94,7 +94,7 @@
                                     bg-color="#24272B" color="#3A4148" clearable no-resize rows="6" row-height="25"
                                     variant="outlined" rounded="xl"></v-textarea>
                                 <v-btn class="r-submit-button" color="#CD4444" @click.stop="submitData">작성 완료</v-btn>
-                                <v-dialog v-model="dialog2" max-width="340">
+                                <v-dialog v-model="dialog2" max-width="340" persistent> <!-- persistent:바깥쪽 클릭 방지 -->
                                     <v-card color="white">
                                         <!-- <v-card-title class="headline"></v-card-title> -->
                                         <v-card-text>
@@ -104,7 +104,7 @@
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
 
-                                            <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
+                                            <v-btn color="green darken-1" flat="flat" @click="performRoutineDelete">
                                                 아니요
                                             </v-btn>
                                             <v-btn color="green darken-1" flat="flat">
@@ -150,6 +150,7 @@ export default {
 
             showWarning: false,
             dialog2: false,
+            routineId: '',
         };
     },
     components: {
@@ -225,13 +226,25 @@ export default {
                 console.log(response);
                 console.log('데이터 : ', response.data);
                 console.log('routine_id :', response.data.routine_id);
+                this.routineId = response.data.routine_id;
+                //console.log('routine_id :', this.routineId);
 
-                //this.dialog2 = false;
             } catch (error) {
                 console.error('루틴 전송하기 오류:', error);
             }
         },
+        async performRoutineDelete() {
+            try {
+                console.log('routine_id :', this.routineId);
+                //const response = await axios.delete('/api/routine/delete/' + this.routineId + '/');
+                const response = await axios.delete(`/api/routine/delete/${this.routineId}/`);
+                console.log('삭제 response :', response);
 
+                this.dialog2 = false;
+            } catch (error) {
+                console.error('루틴 삭제하기 오류:', error);
+            }
+        },
     },
     watch: {
         // titleInput의 변경 감시
