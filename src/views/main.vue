@@ -1,120 +1,145 @@
 <template>
-<div class="ex1">
-    <Login />
-    <div class="ex1_center_text">오늘의 운동 진행률</div>
-
-    <div class="container">
-        <v-btn @click="$router.push('/write')" div class="box1">
-            <div class="box1_text">루틴 작성하기</div>
-        </v-btn>
-        <v-btn @click="$router.push('/')" div class="box2">
-            <div class="box2_text">루틴 보관함</div>
-        </v-btn>
-        <v-btn @click="$router.push('/share')" div class="box3">
-            <div class="box3_text">루틴 공유하기</div>
-        </v-btn>
-    </div>
-</div>
-<!--버튼-->
-<div class="ex3">
-    <div class="btn">
-        <div data-bs-toggle="modal" data-bs-target="#routinedatamodal" style="margin-top: 10px;">+</div>
-    </div>
-</div>
-<!--모달내용-->
-<div class="modal fade" id="routinedatamodal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="routinedatamodal">내가 담은 루틴</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div v-if="userData">
-          <div v-for="routine in userData" :key="routine.id" class="routine-item">
-            {{ routine.name }} <!-- 루틴 데이터의 'name' 필드를 가정하고 있습니다. -->
-          </div>
+    <div class="ex1">
+        <div class="container">
+            <v-btn @click="$router.push('/write')" div class="box1">
+                <div class="box1_text">루틴 작성하기</div>
+            </v-btn>
+            <v-btn @click="$router.push('/')" div class="box2">
+                <div class="box2_text">루틴 보관함</div>
+            </v-btn>
+            <v-btn @click="$router.push('/share')" div class="box3">
+                <div class="box3_text">루틴 공유하기</div>
+            </v-btn>
         </div>
+    </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-bs-dismiss="modal" class="close-btn">닫기</button>
-                    </div>
+    <div class="ex3">
+        <div id="routineid" v-if="selectedRoutine">
+      <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Routine ID: {{ selectedRoutine.routine_id }}</li>
+          <li class="list-group-item">Routine Name: {{ selectedRoutine.routine_name }}</li>
+          <li class="list-group-item">Routine Comment: {{ selectedRoutine.routine_comment }}</li>
+          <li class="list-group-item">Recommend Count: {{ selectedRoutine.recommend_count }}</li>
+          <li class="list-group-item">Routine Day: {{ selectedRoutine.routine_day }}</li>
+          <li class="list-group-item">Nickname: {{ selectedRoutine.nickname }}</li>
+          <li class="list-group-item">Created At: {{ selectedRoutine.created_at }}</li>
+          <!-- 추가로 표시할 데이터가 있다면 여기에 계속 추가 -->
+        </ul>
+      </div>
+    </div>
+    <div class="btn"> <!-- 모달 열기 버튼-->
+            <div data-bs-toggle="modal" data-bs-target="#routinedatamodal" style="margin-top: 10px;" @click="onModalShow">+</div>
+        </div>
+</div>
+
+<!-- 모달내용 -->
+    <div class="modal fade" id="routinedatamodal" tabindex="-1"> <!--@show="onModalShow"-->
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="routinedatamodal">내가 담은 루틴</h5>
                 </div>
+            <div class="modal-body" id="routin-table">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Routine ID</th>
+                        <th scope="col">User Routin ID</th>
+                        <th scope="col">버튼</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="userData" v-for="(routine, index) in userData" :key="index">
+                        <th scope="row">{{ index + 1 }}</th>
+                            <td>{{ routine.routine }}</td>
+                            <td>{{ routine.user }}</td>
+                            <td> <!--상세보기 버튼 클릭후 모달창이 닫히고 그것에 대한 routineid가 들어와야함-->
+                                <button @click="showRoutineId(routine)">상세 보기</button>
+                            </td>
+                        </tr>
+                    </tbody>  
+                </table>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal" class="close-btn">닫기</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import axios from 'axios';
+import { store } from '@/store';
+
 
 const showmodal = ref(false);
+const userData = ref(null);
+const selectedRoutine = ref(null);
 
-const dialog = ref(false); //모달창이 열려있는지 여부를 나타냄
-const userData = ref(null); //유저 데이터를 담는 ref
+watch(selectedRoutine, (newVal, oldVal) => {
+    console.log('Selected Routine changed:', newVal);   
+    showmodal.value = !!newVal;
 
-const reverseMessage = () => {
-  store.commit('reverseMessage');
+});
+
+const onModalShow = () => {
+    fetchRoutineData();
+    selectedRoutine.value = null;
 };
-const fetchUserData = async () => {
-  try {
-    const response = await axios.get('http://52.78.77.1:8000/routine/box/', {
-      params: {
-        user_routine_id: 0,
-        routine_id: 0
-      }
-    });
-    userData.value = response.data;
-  } catch (error) {
+
+onMounted(async () => {
+    try {
+    await fetchRoutineData();
+    } catch (error) {
     console.error(error);
-  }
-};
-</script>
-
-<script>
-import Login from '@/components/Login.vue';
-import { ref } from 'vue';
-import { store } from '@/store/index'; // Vuex 스토어를 가져옴
-
-  export default {
-    components : {
-        Login
-    },
-    setup() {
-        const showmodal = ref(false);
-
-        const login = () => {
-        store.commit('login'); // 로그인 액션을 호출하여 상태 변경
-        };
-
-        const logout = () => {
-        store.commit('logout'); // 로그아웃 액션을 호출하여 상태 변경
-        };
-
-        return {
-            showmodal,
-            login,
-            logout,
-            showmodal
-        };
     }
+});
+
+const fetchRoutineData = async () => {
+    try {
+        const response = await axios.get('/api/routine/box/check/');
+        userData.value = response.data;
+        // console.log('Received userData:', userData.value);
+    } catch (error) {
+        console.error(error);
+        userData.value = [];
+    }
+}
+const showRoutineId = async (routine) => {
+    console.log('Clicked Routine ID:', routine);
+    // console.log('All User Data:', userData.value);
+    try {
+        await store.dispatch('fetchRoutineId', routine.routine);
+        const response = await store.dispatch('fetchRoutineId', routine.routine);
+        console.log('Response from fetchRoutineId:', response);
+
+        if (!response || !response.data) {
+        return;
+        }
+
+        selectedRoutine.value = response.data;
+        if (showmodal.value) {
+            showmodal.value = false;
+        }
+      } catch (error) {
+        console.error('루틴 ID를 불러오는 중 에러 발생:', error);
+        throw error;
+      }
 };
 </script>
+
 
 <style scoped>
 .ex1 {
         position: relative;
         background-color: #181B21;
         border-radius: 20px;
-        height: 520px;
+        height: 490px;
         margin-bottom: 10px;
-}
-.ex1_center_text {
-    position: relative;
-    text-align: center;
-    color: white;
-    font-size: 40px;
-    padding-top: 50px;
-    font-weight: bold;
 }
 /*-------------------------------- 위에 박스 세개---------------------------- */
 .container {
@@ -125,8 +150,8 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
     background-color: #6790CE;
     border-radius: 20px;
     width: 420px;
-    height: 290px;
-    margin-top: 110px;
+    height: 400px;
+    margin-top: 50px;
     margin-left: 10px;
     float: left;
 }
@@ -134,7 +159,7 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
     position: relative;
     color: white;
     font-size: 40px;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 
 .box2 {
@@ -142,8 +167,8 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
     background-color: #C75B6F;
     border-radius: 20px;
     width: 420px;
-    height: 290px;
-    margin-top: 110px;
+    height: 400px;
+    margin-top: 50px;
     margin-left: 10px;
     float: left;
 }
@@ -151,7 +176,7 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
     position: relative;
     color: white;
     font-size: 40px;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 
 .box3 {
@@ -159,8 +184,8 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
     background-color: #8EC693;
     border-radius: 20px;
     width: 420px;
-    height: 290px;
-    margin-top: 110px;
+    height: 400px;
+    margin-top: 50px;
     margin-left: 10px;
     float: left;
 }
@@ -168,7 +193,7 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
     position: relative;
     color: white;
     font-size: 40px;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 /* ------------------------------위에 박스 세개 ---------------------------*/
 .ex3 {
@@ -186,7 +211,8 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
   border-radius: 50%;
   color: white;
   font-size: 40px;
-  top: 250px; 
+  top: 250px;
+  margin-left: 600px;
 }
 .modal-content {
     background-color: #181B21;
@@ -217,5 +243,20 @@ import { store } from '@/store/index'; // Vuex 스토어를 가져옴
 
 .login {
     color: white;
+}
+
+#routin-table {
+    background-color: white;
+}
+.login-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>
