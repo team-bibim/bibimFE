@@ -262,7 +262,16 @@ export default {
       like: 0,
       liked: false
     },
-    hotPostings: [],
+    hotPostings: [
+      {
+        title: '더미 데이터',
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        writer: 'exampleID',
+        date: '2023/09/25 19:27',
+        like: 0,
+        liked: false
+      }
+    ],
     newPostings: [],
     followPostings: [],
     drawer: null,
@@ -302,12 +311,19 @@ export default {
     });
 
     // 팔로우 게시글 갖고오기
-    axios.get('/api/routine/recommend/follow/')
+    axios.get('/api/routine/recommend/follow/', { withCredentials: true })
     .then(response => {
       this.getFollowPostings(response.data)
     })
     .catch(error => {
-      console.log("에러남3 (아마 INVALID_TOKEN이 뜨는 것으로 보아 로그인이 안 되어 있어서일 가능성 많음), ", error);
+      console.log("에러남3 (아마 INVALID_TOKEN이 뜨는 것으로 보아 로그인이 안 되어 있어서일 가능성 있음), ", error);
+      if (error.response) {
+            console.log("Error Response Data: ", error.response.data);
+            console.log("Error Response Status: ", error.response.status);
+            console.log("Error Response Headers: ", error.response.headers);
+        } else {
+            console.log("Request Error: ", error.message);
+        }
     });
 
     // [상태관리] 로그인이 되어있는지 여부 확인
@@ -388,7 +404,6 @@ export default {
     filteredNewPostingsPerPage() {
       const startIndex = (this.newPage - 1) * 4;
       const endIndex   = startIndex + 4;
-      console.log("얘는 실행이 될까?");
       return this.filteredNewPostings.slice(startIndex, endIndex);
     },
   },
@@ -407,19 +422,19 @@ export default {
         // Handle the error
       });
     },
-    // 서버에 로그인 여부를 확인하는 요청을 보내고, 로그인되어 있다면 '로그인됨' 메시지를 출력
+    // 서버에서 로그인 여부를 확인, 로그인되어 있다면 '로그인됨' 메시지를 출력
     checkLoginStatus() {
-      axios.get('/api/accounts/auth/')
-        .then(response => {
-          if (response.data.id != null) {
-            console.log("로그인됨");
-          } else {
-            console.log("로그인되지 않음");
-          }
-        })
-        .catch(error => {
-          console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-        });
+      axios.get('/api/accounts/auth/', { withCredentials: true })
+      .then(response => {
+        if (response.data.id != null) {
+          console.log("로그인됨");
+        } else {
+          console.log("로그인되지 않음");
+        }
+      })
+      .catch(error => {
+        console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+      });
     },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {

@@ -1,33 +1,24 @@
 const { defineConfig } = require('@vue/cli-service');
 
-module.exports = defineConfig({
+module.exports = {
   transpileDependencies: true,
   lintOnSave: false,
-  devServer: {
-    //proxy: 'http://52.78.77.1:8000'
-    proxy: {
-      '/api': {
-        target: 'http://52.78.77.1:8000',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': '', // Remove the /api prefix when forwarding the request
-        },
-      },
-      '/another-api': {
-        target: 'http://52.78.77.1',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/another-api': '', // Remove the /api prefix when forwarding the request
-        },
-      },
-    },
-  },
   pluginOptions: {
     vuetify: {
       // Vuetify options
       // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
     },
   },
-});
+  // 개발 서버 설정
+  devServer: {
+      // 프록시 설정
+      proxy: {
+          // 프록시 요청을 보낼 api의 시작 부분
+          '/api': {
+              // 프록시 요청을 보낼 서버의 주소
+              target: 'http://52.78.77.1:8000',
+              pathRewrite: { '^/api': '' }, // 이 부분을 추가하여 경로에서 '/api'를 제거
+          }
+      }
+  }
+};

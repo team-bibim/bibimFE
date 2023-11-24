@@ -1,4 +1,5 @@
 <template>
+    <login-component></login-component>
     <div class="ex1">
         <div class="container">
             <v-btn @click="$router.push('/write')" div class="box1">
@@ -69,6 +70,16 @@
         </div>
     </div>
 </template>
+
+<script>
+import LoginComponent from './LoginView.vue'; // 실제 파일 경로로 변경
+
+export default {
+    components: {
+        'login-component': LoginComponent,
+    },
+};
+</script>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
