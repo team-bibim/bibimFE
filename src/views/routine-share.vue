@@ -38,7 +38,7 @@
                       <v-list-item-content class="right-panel-hot-writer-id">
                         <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         @{{ post.writer }}
-                        <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -49,12 +49,12 @@
                       </v-list-item-content>
                       <v-row justify-end>
                         <v-col align-self="start">
-                          <v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>
+                          <!--<v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>-->
                         </v-col>
                       </v-row>
                     </div>
                     <div style="height: 10px;"></div>
-                    <button v-ripple class="right-panel-hot-content materialDesignButton pl-6 pr-6 pa-4 ma-2">
+                    <button v-ripple class="right-panel-hot-content materialDesignButton pl-6 pr-6 pa-4 ma-2" @click="sendUserToPage()">
                       <b style="color:#F4D3D3; font-size: 20px;">
                         {{ post.title }}
                       </b>
@@ -65,7 +65,7 @@
                       <br>
                       <div style="align-items: right;">
                         {{ post.date }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.writer)">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -103,7 +103,7 @@
                       <v-list-item-content class="right-panel-hot-writer-id">
                         <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         @{{ post.writer }}
-                        <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -114,7 +114,7 @@
                       </v-list-item-content>
                       <v-row justify-end>
                         <v-col align-self="start">
-                          <v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>
+                          <!--<v-btn variant="flat" rounded="xl" class="save-post-button-hot">게시물 담기</v-btn>-->
                         </v-col>
                       </v-row>
                     </div>
@@ -126,7 +126,7 @@
                       <br><br>
                       <div style="align-items: right;">
                         {{ post.date }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseLike(index)">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -169,7 +169,7 @@
                     <v-list-item-content class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
                       @{{ post.writer }}
-                      <v-btn variant="plain" rounded="xl" @click="exampleFollowFunction()">
+                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
                         <v-img
                           :width="30"
                           aspect-ratio="1/1"
@@ -180,7 +180,7 @@
                     </v-list-item-content>
                     <v-row justify-end>
                       <v-col align-self="start">
-                        <v-btn variant="flat" rounded="xl" class="save-post-button-new">게시물 담기</v-btn>
+                        <!--<v-btn variant="flat" rounded="xl" class="save-post-button-new">게시물 담기</v-btn>-->
                       </v-col>
                     </v-row>
                   </div>
@@ -196,7 +196,7 @@
                     <br>  
                     <div style="align-items: right;">
                       {{ post.date }}
-                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.writer, post.liked)">
+                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
                         <v-img
                           :width="30"
                           aspect-ratio="1/1"
@@ -237,21 +237,21 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   data: () => ({
     post: {
-      title: '',
+      id     : '',
+      title  : '',
       content: '',
-      writer: '',
-      date: '',
-      like: 0,
-      liked: false
+      writer : '',
+      date   : '',
+      like   : 0,
     },
     hotPostings: [
       {
-        title: '더미 데이터',
+        id     : 1,
+        title  : '더미 데이터',
         content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer: 'exampleID',
-        date: '2023/09/25 19:27',
-        like: 0,
-        liked: false
+        writer : 'exampleID',
+        date   : '2023/09/25 19:27',
+        like   : 0,
       }
     ],
     newPostings: [],
@@ -272,91 +272,20 @@ export default {
     pageStatus: "전체",
   }),
   created() {
-    const loginTokenPayload = VueCookies.get("loginToken");
-    console.log('Access Token Payload:', loginTokenPayload);
-
-    // refresh 토큰 디코드
-    const loginUserPayload = VueCookies.get("loginUserData");
-    console.log('Refresh Token Payload:', loginUserPayload);
-
-    // 인기 게시글 갖고오기
-    axios.get('/api/routine/recommend/pop/')
-    .then(response => {
-      this.getHotPostings(response.data)
-    })
-    .catch(error => {
-      console.log("에러남1, ", error);
-    });
-
-    // 최신 게시글 갖고오기
-    axios.get('/api/routine/recommend/latest/')
-    .then(response => {
-      this.getNewPostings(response.data)
-    })
-    .catch(error => {
-      console.log("에러남2, ", error);
-    });
-
-    // 팔로우 게시글 갖고오기
-    axios.get('/api/routine/recommend/follow/', { withCredentials: true })
-    .then(response => {
-      this.getFollowPostings(response.data)
-    })
-    .catch(error => {
-      console.log("에러남3 (아마 INVALID_TOKEN이 뜨는 것으로 보아 로그인이 안 되어 있어서일 가능성 있음), ", error);
-      if (error.response) {
-            console.log("Error Response Data: ", error.response.data);
-            console.log("Error Response Status: ", error.response.status);
-            console.log("Error Response Headers: ", error.response.headers);
-        } else {
-            console.log("Request Error: ", error.message);
-        }
-    });
-
     // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
-
-    // -----게시글 갖고오기----- //
   },
-
-  // 로그인 되어있는지 여부 확인
-    /*
-    axios.get('/api/accounts/auth/')
-    .then(response => {
-      if (response.data.id == null) {
-        console.log("로그인 정보가 없습니다.");
-      } else {
-        // 로그인이 되어있을 때
-        console.log("로그인된 아이디는 ", response.data.id);
-
-        axios.get('/api/routine/recommend/follow/', {
-          headers: {
-            'Authorization': this.$cookies.get('loginToken')
-          }
-        })
-        .then(response => {
-          this.getFollowPostings(response.data)
-        })
-        .catch(error => {
-          console.log("에러남3: ", error);
-        });
-      }
-    })
-    .catch(error => {
-      console.log("에러남4 ", error);
-    });
-    */
   computed: {
     // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
     filteredHotPostings() {
       return this.hotPostings
-        .filter(post => {
-          const searchText = this.textInput.toLowerCase();
-          const title      = post.title.toLowerCase();
-          const content    = post.content.toLowerCase();
-          return title.includes(searchText) || content.includes(searchText);
-        })
-        .sort((a, b) => a.title.localeCompare(b.title));
+      .filter(post => {
+        const searchText = this.textInput.toLowerCase();
+        const title      = post.title.toLowerCase();
+        const content    = post.content.toLowerCase();
+        return title.includes(searchText) || content.includes(searchText);
+      })
+      .sort((a, b) => a.title.localeCompare(b.title));
     },
     filteredHotPostingsPerPage() {
       const startIndex = (this.hotPage - 1) * 4;
@@ -365,13 +294,13 @@ export default {
     },
     filteredFollowPostings() {
       return this.followPostings
-        .filter(post => {
-          const searchText = this.textInput.toLowerCase();
-          const title      = post.title.toLowerCase();
-          const content    = post.content.toLowerCase();
-          return title.includes(searchText) || content.includes(searchText);
-        })
-        .sort((a, b) => a.title.localeCompare(b.title));
+      .filter(post => {
+        const searchText = this.textInput.toLowerCase();
+        const title      = post.title.toLowerCase();
+        const content    = post.content.toLowerCase();
+        return title.includes(searchText) || content.includes(searchText);
+      })
+      .sort((a, b) => a.title.localeCompare(b.title));
     },
     filteredFollowPostingsPerPage() {
       const startIndex = (this.followPage - 1) * 4;
@@ -380,13 +309,13 @@ export default {
     },
     filteredNewPostings() {
       return this.newPostings
-        .filter(post => {
-          const searchText = this.textInput.toLowerCase();
-          const title      = post.title.toLowerCase();
-          const content    = post.content.toLowerCase();
-          return title.includes(searchText) || content.includes(searchText);
-        })
-        .sort((a, b) => a.title.localeCompare(b.title));
+      .filter(post => {
+        const searchText = this.textInput.toLowerCase();
+        const title      = post.title.toLowerCase();
+        const content    = post.content.toLowerCase();
+        return title.includes(searchText) || content.includes(searchText);
+      })
+      .sort((a, b) => a.title.localeCompare(b.title));
     },
     filteredNewPostingsPerPage() {
       const startIndex = (this.newPage - 1) * 4;
@@ -395,6 +324,45 @@ export default {
     },
   },
   methods: {
+    getPostings() {
+      // 인기 게시글 갖고오기
+      axios.get('/api/routine/recommend/pop/')
+      .then(response => {
+        this.getHotPostings(response.data)
+      })
+      .catch(error => {
+        console.log("에러남1, ", error);
+      });
+
+      // 최신 게시글 갖고오기
+      axios.get('/api/routine/recommend/latest/')
+      .then(response => {
+        this.getNewPostings(response.data)
+      })
+      .catch(error => {
+        console.log("에러남2, ", error);
+      });
+
+      // 팔로우 게시글 갖고오기
+      axios.get('/api/routine/recommend/follow/', { withCredentials: true })
+      .then(response => {
+        this.getFollowPostings(response.data)
+      })
+      .catch(error => {
+        console.log("에러남3 (아마 INVALID_TOKEN이 뜨는 것으로 보아 로그인이 안 되어 있어서일 가능성 있음), ", error);
+        if (error.response) {``
+              console.log("Error Response Data: ", error.response.data);
+              console.log("Error Response Status: ", error.response.status);
+              console.log("Error Response Headers: ", error.response.headers);
+          } else {
+              console.log("Request Error: ", error.message);
+          }
+      });
+    },
+    sendUserToPage() {
+      // 나중에, 페이지 만들어지면 코드 작성할 것.
+      this.$router.push('/share');
+    },
     fetchDataUsingToken() {
     const token = this.$store.state.authToken; // Access the token from the store
     axios.get('your-api-endpoint', {
@@ -430,27 +398,14 @@ export default {
         return { backgroundColor: '#1D2128' };
       }
     },
-    exampleFollowFunction() {
-      console.log("팔로우 눌림");
-      /*axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
+    increaseLike(postId, postLikeNumber) {
+      axios.post('/api/routine/like/', { routine_id: postId })
       .then(res => {
-        console.log(res.data);
-        alert("저장되었습니다!!");
+        // Code here
       })
       .catch(error => {
         console.error(error);
-      });*/
-    },
-    increaseLike(targetId) {
-      axios.post('/api/routine/like/', { routine_id: targetId })
-        .then(res => {
-          console.log(res.data);
-          this.post.liked = !this.post.liked;
-          console.log("좋아요 토글됨");
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      });
     },
     togglePageStatus(status) {
       this.pageStatus = status;
@@ -458,11 +413,12 @@ export default {
     getHotPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          title:   data[i].routine_name,
+          id     : data[i].routine_id,
+          title  : data[i].routine_name,
           content: data[i].routine_comment,
-          writer:  data[i].nickname,
-          like:    data[i].recommend_count,
-          date:    data[i].created_at
+          writer : data[i].nickname,
+          like   : data[i].recommend_count,
+          date   : data[i].created_at
         };
         this.hotPostings.push(post);
       }
@@ -470,11 +426,12 @@ export default {
     getNewPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          title:   data[i].routine_name,
+          id     : data[i].routine_id,
+          title  : data[i].routine_name,
           content: data[i].routine_comment,
-          writer:  data[i].nickname,
-          like:    data[i].recommend_count,
-          date:    data[i].created_at
+          writer : data[i].nickname,
+          like   : data[i].recommend_count,
+          date   : data[i].created_at
         };
         this.newPostings.push(post);
       }
@@ -482,11 +439,12 @@ export default {
     getFollowPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          title:   data[i].routine_name,
+          id     : data[i].routine_id,
+          title  : data[i].routine_name,
           content: data[i].routine_comment,
-          writer:  data[i].nickname,
-          like:    data[i].recommend_count,
-          date:    data[i].created_at
+          writer : data[i].nickname,
+          like   : data[i].recommend_count,
+          date   : data[i].created_at
         };
         this.followPostings.push(post);
       }
