@@ -252,7 +252,7 @@ export default {
         writer : 'exampleID',
         date   : '2023/09/25 19:27',
         like   : 0,
-      }
+      },
     ],
     newPostings: [],
     followPostings: [],
