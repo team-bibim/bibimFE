@@ -38,7 +38,7 @@ export default {
 
         VueCookies.set("loginToken", response.token);
         VueCookies.set('loginUserData', response.user); // 사용자 정보를 Vuex store에 저장
-        console.log("login Token is   :      " + JSON.stringify(response.user, null, 2));
+        console.log("login Token is   : " + JSON.stringify(response.user, null, 2));
         console.log("login UserData is: " + JSON.stringify(response.token, null, 2));
 
         // 실험: Vuex 스토어에 쿠키 저장하기

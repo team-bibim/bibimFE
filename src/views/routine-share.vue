@@ -231,26 +231,8 @@ Content : Guys.
 
 <script>
 import axios from 'axios';
+import VueCookies from 'vue-cookies';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
-
-// 좋아요
-/*submitBtn.addEventListener('click', () => {
-  let titleValue   = diaryTitle.value;
-  let contentValue = diaryContent.value;
-
-  if (contentValue === "") {
-    alert("텍스트 입력란이 공란입니다.");
-  } else {
-    axios.post('http://15.164.228.112:8000/routine/', { title: titleValue, content: contentValue })
-    .then(res => {
-      console.log(res.data);
-      alert("저장되었습니다!!");
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  }
-});*/
 
 export default {
   data: () => ({
@@ -290,7 +272,12 @@ export default {
     pageStatus: "전체",
   }),
   created() {
-    const token = localStorage.getItem('token');
+    const loginTokenPayload = VueCookies.get("loginToken");
+    console.log('Access Token Payload:', loginTokenPayload);
+
+    // refresh 토큰 디코드
+    const loginUserPayload = VueCookies.get("loginUserData");
+    console.log('Refresh Token Payload:', loginUserPayload);
 
     // 인기 게시글 갖고오기
     axios.get('/api/routine/recommend/pop/')

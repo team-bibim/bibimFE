@@ -2,7 +2,7 @@ const { defineConfig } = require('@vue/cli-service');
 
 module.exports = {
   transpileDependencies: true,
-  lintOnSave: false,
+  lintOnSave: false, // eslint 비활성화
   pluginOptions: {
     vuetify: {
       // Vuetify options
