@@ -107,13 +107,9 @@
                                             <v-btn color="green darken-1" flat="flat" @click="performRoutineDelete">
                                                 아니요
                                             </v-btn>
-                                            <v-btn color="green darken-1" flat="flat">
+                                            <v-btn color="green darken-1" flat="flat" @click="performRdSend">
                                                 네
                                             </v-btn>
-
-                                            <!-- <v-btn color="green darken-1" flat="flat" @click="dialog2 = false">
-                                                네
-                                            </v-btn> -->
                                         </v-card-actions>
                                     </v-card>
                                 </v-dialog>
@@ -245,6 +241,31 @@ export default {
                 console.error('루틴 삭제하기 오류:', error);
             }
         },
+        async performRdSend() {
+            try {
+                for (let i = 0; i < this.boxes.length; i++) {
+                    console.log(`boxes[${i}] :`, this.boxes[i]);
+                    for (let j = 0; j < this.boxes[i].exercises.length; j++) {
+                        console.log(`${i + 1} ${j + 1}의 routine_id :`, this.routineId);
+                        console.log(`${i + 1} ${j + 1}의 exercise_id :`, this.boxes[i].exercises[j].ExerciseID);
+                        console.log(`${j + 1}의 day :`, i + 1);
+
+                        const response = await axios.post('/api/routine/detail/', {
+                            routine_id: this.routineId,
+                            exercise_id: this.boxes[i].exercises[j].ExerciseID,
+                            day: i + 1,
+                        });
+
+                        console.log(`${i + 1} ${j + 1}의 루틴디테일 전송 response :`, response);
+                        this.dialog2 = false;
+                    }
+
+                }
+
+            } catch (error) {
+                console.error('루틴 디테일 전송하기 오류:', error);
+            }
+        }
     },
     watch: {
         // titleInput의 변경 감시

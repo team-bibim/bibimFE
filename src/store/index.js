@@ -53,6 +53,7 @@ export default createStore({
         state.boxes[boxIndex].exercises.push(exercise);
         // 상태 업데이트 후 콘솔에 로깅
         console.log(`Box at index ${boxIndex} after adding exercise:`, state.boxes[boxIndex]);
+        console.log('exercise ID : ', state.boxes[boxIndex].ExerciseID);
       } else {
         // 에러 메시지를 로그로 남기는 것도 유용할 수 있습니다.
         console.error(`Box at index ${boxIndex} does not exist.`);
