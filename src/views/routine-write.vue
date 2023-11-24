@@ -46,8 +46,9 @@
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
                                             class="day-routine-subbox">
                                             <v-text-field v-model="exercise.ExerciseName" class="exercise-title"
-                                                label="운동 이름" readonly></v-text-field>
-                                            <v-text-field v-model="exercise.ExerciseArea" label="운동 부위" readonly />
+                                                label="운동 이름" variant="plain" readonly></v-text-field>
+                                            <v-text-field v-model="exercise.ExerciseArea" label="운동 부위" variant="plain"
+                                                readonly />
 
                                             <!-- <textarea v-model="exercise.title" class="exercise-title" placeholder="운동 이름"
                                                 readonly></textarea> -->
@@ -246,18 +247,22 @@ export default {
                 for (let i = 0; i < this.boxes.length; i++) {
                     console.log(`boxes[${i}] :`, this.boxes[i]);
                     for (let j = 0; j < this.boxes[i].exercises.length; j++) {
+                        // console.log(typeof this.routineId);
+                        // console.log(typeof this.boxes[i].exercises[j].ExerciseID);
+                        // console.log(typeof (i + 1));
                         console.log(`${i + 1} ${j + 1}의 routine_id :`, this.routineId);
                         console.log(`${i + 1} ${j + 1}의 exercise_id :`, this.boxes[i].exercises[j].ExerciseID);
                         console.log(`${j + 1}의 day :`, i + 1);
 
                         const response = await axios.post('/api/routine/detail/', {
-                            routine_id: this.routineId,
-                            exercise_id: this.boxes[i].exercises[j].ExerciseID,
+                            routine: this.routineId,
+                            exercise: this.boxes[i].exercises[j].ExerciseID,
                             day: i + 1,
                         });
 
                         console.log(`${i + 1} ${j + 1}의 루틴디테일 전송 response :`, response);
                         this.dialog2 = false;
+                        location.reload();  // 페이지 새로고침
                     }
 
                 }
