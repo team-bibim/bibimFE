@@ -1,7 +1,6 @@
 // 상태관리.js
 import Vue from 'vue';
 import Vuex from 'vuex';
-import axios from 'axios';
 
 import { createStore } from 'vuex'
 
