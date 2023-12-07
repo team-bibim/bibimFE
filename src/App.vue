@@ -13,6 +13,12 @@
             </v-list-item-content>
           </router-link>
         </v-list-item>
+        <!-- 로그인 링크 추가 -->
+        <router-link to="/login" class="left-panel-box">
+          <v-list-item-content>
+            <v-list-item-title class="left-panel-text">로그인</v-list-item-title>
+          </v-list-item-content>
+        </router-link>
       </v-list>
 
       <div style="height:50px;"></div>

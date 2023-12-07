@@ -39,7 +39,7 @@ export default {
         this.$store.commit('setUserData', response.data.user); // 사용자 정보를 Vuex store에 저장
 
         // 메인 페이지로 리다이렉트
-        this.$router.push('/write');
+        this.$router.push('/main');
       } catch (error) {
         console.error('로그인 실패:', error);
         alert('로그인 실패');

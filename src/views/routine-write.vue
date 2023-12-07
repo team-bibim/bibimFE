@@ -309,43 +309,6 @@ export default {
     line-height: 30px;
 }
 
-/* ---------------------------------------------------------------- */
-
-.routine-add-container {
-    display: flex;
-    justify-content: center;
-    /* width: 1088px; */
-    align-items: flex-start;
-    gap: 12px;
-    margin: 35px 0;
-}
-
-.day-routine-box {
-    min-width: 208px;
-    height: max-content;
-    min-height: 450px;
-    flex-shrink: 0;
-    border-radius: 20px;
-    background: #4C6672;
-    margin: 0px 10px;
-    overflow: hidden;
-}
-
-.day-routine-box-title {
-    color: #FFF;
-    font-family: Inter;
-    font-size: 25px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    margin: 25px;
-
-    display: flex;
-    justify-content: space-between;
-}
-
-
-.exercise-title,
 .exercise-area {
     color: #FFF;
     font-family: Inter;
