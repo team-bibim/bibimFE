@@ -45,17 +45,12 @@
 
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
                                             class="day-routine-subbox">
-                                            <v-text-field v-model="exercise.ExerciseName" class="exercise-title"
-                                                label="운동 이름" variant="plain" readonly></v-text-field>
-                                            <v-text-field v-model="exercise.ExerciseArea" label="운동 부위" variant="plain"
-                                                readonly />
+                                            <v-textarea v-model="exercise.ExerciseName" class="exercise-title" label="운동 이름"
+                                                variant="plain" auto-grow hide-details readonly></v-textarea>
+                                            <v-text-field v-model="exercise.ExerciseArea" class="exercise-area"
+                                                label="운동 부위" variant="plain" hide-details readonly />
 
-                                            <!-- <textarea v-model="exercise.title" class="exercise-title" placeholder="운동 이름"
-                                                readonly></textarea> -->
-                                            <!-- <input v-model="exercise.ExerciseArea" class="exercise-title"
-                                                placeholder="운동 부위" readonly>
-                                            <input v-model="exercise.ExerciseName" class="exercise-time" placeholder="운동 이름"
-                                                readonly> -->
+
 
                                             <div class="icon-box">
                                                 <!-- <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
@@ -351,7 +346,7 @@ export default {
 
 
 .exercise-title,
-.exercise-time {
+.exercise-area {
     color: #FFF;
     font-family: Inter;
     font-size: 17px;
@@ -359,10 +354,12 @@ export default {
     font-weight: 500;
     line-height: normal;
     margin: 0;
+    min-height: max-content;
+    min-width: fit-content;
 
-    white-space: normal !important;
+    /* white-space: normal !important; */
     /* 기본 줄바꿈 설정을 적용합니다 */
-    overflow: visible !important;
+    /* overflow: visible !important; */
     /* 내용이 넘치더라도 숨기지 않도록 설정합니다 */
 }
 
