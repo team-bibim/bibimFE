@@ -14,11 +14,11 @@
           </router-link>
         </v-list-item>
         <!-- 로그인 링크 추가 -->
-    <router-link to="/login" class="left-panel-box">
-      <v-list-item-content>
-        <v-list-item-title class="left-panel-text">로그인</v-list-item-title>
-      </v-list-item-content>
-    </router-link>
+        <router-link to="/login" class="left-panel-box">
+          <v-list-item-content>
+            <v-list-item-title class="left-panel-text">로그인</v-list-item-title>
+          </v-list-item-content>
+        </router-link>
       </v-list>
 
       <div style="height:50px;"></div>
@@ -34,34 +34,6 @@
 
         <router-view></router-view> <!-- 각 페이지를 보여주는 곳 -->
 
-        <!-- <v-row>
-          <v-col v-for="card in cards" :key="card" cols="12">
-            <v-card class="right-panel">
-              <div class="routine-write-top">루틴작성</div>
-              <div class="routine-write-title">제목</div>
-              <v-list lines="two" style="background-color: #181B21;">
-
-                <template v-for="n in 5" :key="n">
-                  <v-list-item style="background-color: #834B4B; color: #FFFFFF; margin: 10px; border-radius: 20px;">
-
-                    <template v-slot:prepend>
-                      <v-avatar color="#CC8484"></v-avatar>
-                    </template>
-
-                    <v-list-item-title>
-                      안뇽 {{ n }}
-                    </v-list-item-title>
-
-                    <v-list-item-subtitle>
-                      <br>~ 루틴 보여주는 곳 ~<br>
-                    </v-list-item-subtitle>
-                  </v-list-item>
-
-                </template>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row> -->
       </v-container>
     </v-main>
   </v-app>
@@ -75,8 +47,9 @@ const links = [
   ['mdi-inbox-arrow-down', 'HOME', '/main'],    /* 3번째 변수(route) 추가 */
   ['mdi-send', '루틴 공유', '/share'],
   ['mdi-delete', '루틴 작성', '/write'],
-  ['mdi-alert-octagon', '내 루틴 보관함', '/'],
-  ['mdi-alert-octagon', '설정', '/'],
+  // ['mdi-alert-octagon', '내 루틴 보관함', '/routine'],
+  ['mdi-alert-octagon', '설정', '/settings'],
+  ['mdi-alert-octagon', '로그인', '/login'],
 ]
 
 const drawer = ref(null)
@@ -133,6 +106,7 @@ export default {
   color: #FFFFFF;
   transition: color 0.5s ease;
 }
+
 /* -----------------------------------우측 영역 ------------------------------------- */
 
 .v-card.v-theme--light.v-card--density-default.v-card--variant-elevated {

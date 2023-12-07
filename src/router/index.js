@@ -3,7 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import WriteView from '../views/routine-write.vue'
 import ShareView from '../views/routine-share.vue'
 import MainView from '../views/main.vue'
-import LoginView from '../views/LoginView'; 
+import MyRoutineView from '../views/my-routine.vue'
+import SettingsView from '../views/settings.vue'
+import LoginView from '../views/LoginView';
 
 const routes = [
   {
@@ -35,11 +37,21 @@ const routes = [
     component: MainView
   },
   {
+    path: '/routine',
+    name: 'routine',
+    component: MyRoutineView
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: SettingsView
+  },
+  {
     path: '/login',
     name: 'login',
     component: LoginView
   },
-];
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
