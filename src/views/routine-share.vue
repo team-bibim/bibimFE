@@ -64,7 +64,7 @@
                       <br>
                       <br>
                       <div style="align-items: right;">
-                        {{ post.date }}
+                        {{ formatDate(post.date) }}
                         <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'hot')">
                           <v-img
                             :width="30"
@@ -125,7 +125,7 @@
                       {{ post.content }}
                       <br><br>
                       <div style="align-items: right;">
-                        {{ post.date }}
+                        {{ formatDate(post.date) }}
                         <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'follow')">
                           <v-img
                             :width="30"
@@ -195,7 +195,7 @@
                     <br>
                     <br>  
                     <div style="align-items: right;">
-                      {{ post.date }}
+                      {{ formatDate(post.date) }}
                       <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'new')">
                         <v-img
                           :width="30"
@@ -231,8 +231,7 @@ Content : Guys.
 
 <script>
 import axios from 'axios';
-import VueCookies from 'vue-cookies';
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import moment from 'moment';
 
 export default {
   data: () => ({
@@ -319,6 +318,16 @@ export default {
     },
   },
   methods: {
+    formatDate(dateString) {
+      const parsedDate = moment(dateString);
+      const formattedDate = parsedDate.format("YYYY년 MM월 DD일 HH시 mm분");
+
+      if (!dateString) {
+        return "----년 --월 --일 --시 --분";
+      } else {
+        return formattedDate;
+      }
+    },
     getPostings() {
       // 인기 게시글 갖고오기
       axios.get('/api/routine/recommend/pop/')
