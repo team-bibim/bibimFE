@@ -11,8 +11,20 @@ export const store = new Vuex.Store({
     userData: null, // 유저데이터
     token: null, // 토큰
     selectedRoutineId: null, // 선택한 루틴
+    // 내 코드
+    hotPostings: [],
+    newPostings: [],
+    followPostings: [],
   },
   mutations: {
+    // 내 코드
+    updateLike(state, { postId, newLike }) {
+      const postIndex = state.hotPostings.findIndex(post => post.id === postId);
+      if (postIndex !== -1) {
+        state.hotPostings[postIndex].like = newLike;
+      }
+    },
+    // 희경누나 코드
     reverseMessage(state) {
       state.message = state.message.split('').reverse().join('');
     },

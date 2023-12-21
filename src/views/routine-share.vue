@@ -38,7 +38,7 @@
                       <v-list-item-content class="right-panel-hot-writer-id">
                         <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         @{{ post.writer }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'hot')">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -65,7 +65,7 @@
                       <br>
                       <div style="align-items: right;">
                         {{ post.date }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'hot')">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -103,7 +103,7 @@
                       <v-list-item-content class="right-panel-hot-writer-id">
                         <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         @{{ post.writer }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'follow')">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -126,7 +126,7 @@
                       <br><br>
                       <div style="align-items: right;">
                         {{ post.date }}
-                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
+                        <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'follow')">
                           <v-img
                             :width="30"
                             aspect-ratio="1/1"
@@ -169,7 +169,7 @@
                     <v-list-item-content class="right-panel-new-writer-id">
                       <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
                       @{{ post.writer }}
-                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
+                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'new')">
                         <v-img
                           :width="30"
                           aspect-ratio="1/1"
@@ -196,7 +196,7 @@
                     <br>  
                     <div style="align-items: right;">
                       {{ post.date }}
-                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.Like)">
+                      <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'new')">
                         <v-img
                           :width="30"
                           aspect-ratio="1/1"
@@ -244,18 +244,6 @@ export default {
       date   : '',
       like   : 0,
     },
-    hotPostings: [
-      {
-        id     : 1,
-        title  : '더미 데이터',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        writer : 'exampleID',
-        date   : '2023/09/25 19:27',
-        like   : 0,
-      },
-    ],
-    newPostings: [],
-    followPostings: [],
     drawer: null,
     links: [
       ['mdi-inbox-arrow-down', 'HOME'],
@@ -274,11 +262,18 @@ export default {
   created() {
     // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
+    this.getPostings();
+    this.$store.watch(
+      () => this.$store.state.hotPostings,
+      () => {
+        // hotPostings가 업데이트될 때 실행되는 로직
+      }
+    );
   },
   computed: {
     // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
     filteredHotPostings() {
-      return this.hotPostings
+      return this.$store.state.hotPostings
       .filter(post => {
         const searchText = this.textInput.toLowerCase();
         const title      = post.title.toLowerCase();
@@ -293,7 +288,7 @@ export default {
       return this.filteredHotPostings.slice(startIndex, endIndex);
     },
     filteredFollowPostings() {
-      return this.followPostings
+      return this.$store.state.followPostings
       .filter(post => {
         const searchText = this.textInput.toLowerCase();
         const title      = post.title.toLowerCase();
@@ -308,7 +303,7 @@ export default {
       return this.filteredFollowPostings.slice(startIndex, endIndex);
     },
     filteredNewPostings() {
-      return this.newPostings
+      return this.$store.state.newPostings
       .filter(post => {
         const searchText = this.textInput.toLowerCase();
         const title      = post.title.toLowerCase();
@@ -398,14 +393,40 @@ export default {
         return { backgroundColor: '#1D2128' };
       }
     },
-    increaseLike(postId, postLikeNumber) {
+    increaseLike(postId, postLikeNumber, postType) {
       axios.post('/api/routine/like/', { routine_id: postId })
-      .then(res => {
-        // Code here
-      })
-      .catch(error => {
-        console.error(error);
-      });
+        .then(res => {
+          let postIndex = "";
+
+          if (postType === "hot") {
+            postIndex = this.$store.state.hotPostings.findIndex(post => post.id === postId);
+          } else if (postType === "new") {
+            postIndex = this.$store.state.newPostings.findIndex(post => post.id === postId);
+          } else if (postType === "follow") {
+            postIndex = this.$store.state.followPostings.findIndex(post => post.id === postId);
+          }
+
+          if (res.data.message === "Recommend Success") {
+            postLikeNumber += 1;
+          } else if (res.data.message === "Unrecommend Success") {
+            postLikeNumber -= 1;
+          }
+
+          console.log(postLikeNumber);
+
+          if (postIndex !== -1) {
+            if (postType === "hot") {
+              this.$store.state.hotPostings[postIndex].like = postLikeNumber;
+            } else if (postType === "new") {
+              this.$store.state.newPostings[postIndex].like = postLikeNumber;
+            } else if (postType === "follow") {
+              this.$store.state.followPostings[postIndex].like = postLikeNumber;
+            }
+          }
+        })
+        .catch(error => {
+          console.error('Error updating like:', error);
+        });
     },
     togglePageStatus(status) {
       this.pageStatus = status;
@@ -420,7 +441,7 @@ export default {
           like   : data[i].recommend_count,
           date   : data[i].created_at
         };
-        this.hotPostings.push(post);
+        this.$store.state.hotPostings.push(post);
       }
     },
     getNewPostings(data) {
@@ -433,7 +454,7 @@ export default {
           like   : data[i].recommend_count,
           date   : data[i].created_at
         };
-        this.newPostings.push(post);
+        this.$store.state.newPostings.push(post);
       }
     },
     getFollowPostings(data) {
@@ -446,7 +467,7 @@ export default {
           like   : data[i].recommend_count,
           date   : data[i].created_at
         };
-        this.followPostings.push(post);
+        this.$store.state.followPostings.push(post);
       }
     },
   }
