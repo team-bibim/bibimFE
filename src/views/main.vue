@@ -14,13 +14,14 @@
     </div>
 
     <div class="ex3">
-        <div class="btn" v-if="!ROUTINE_ID">
+        <div class="btn" v-if="!ISROUTINEID">
             <div data-bs-toggle="modal" data-bs-target="#routinedatamodal" style="margin-top: 10px;" @click="onModalShow">
                 <i class="bi bi-search"></i>
             </div>
         </div>
-        <div class="daily" v-if="ROUTINE_ID">
+        <div class="daily" v-if="ISROUTINEID">
             <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
+
         </div>
     </div>
 
@@ -89,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watchEffect, computed } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
 import axios from 'axios';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 //import { store } from '@/store';
@@ -102,7 +103,20 @@ const selectedRoutine = ref(null);
 const router = useRouter();
 const store = useStore(); // 밖으로 빼서 선언해야함.
 
-const ROUTINE_ID = ref(false);
+const ISROUTINEID = ref(false);
+
+const fetchRoutineById = async () => {
+    try {
+        const ROUTINE_ID = localStorage.getItem('routineId');
+        const response = await axios.get(`/api/routine/check/${ROUTINE_ID}/`);
+        console.log('루틴 아이디로 루틴 정보 불러오기 : ', response.data);
+
+        const response_2 = await axios.get(`/api/routine/detail/check/${ROUTINE_ID}/`);
+        console.log('루틴 아이디로 운동 불러오기 : ', response.data);
+    } catch (error) {
+        console.log("루틴 아이디로 루틴 정보 불러오기 오류");
+    }
+}
 
 watchEffect(() => {
     const storedRoutineId = localStorage.getItem('routineId');
@@ -110,13 +124,15 @@ watchEffect(() => {
     // Check if routineId is set in localStorage
     if (storedRoutineId) {
         // Update ROUTINE_ID to true
-        ROUTINE_ID.value = true;
+        ISROUTINEID.value = true;
+        // routine detail 가져오기
+        fetchRoutineById();
+
     } else {
         // Update ROUTINE_ID to false if routineId is not set
-        ROUTINE_ID.value = false;
+        ISROUTINEID.value = false;
     }
 });
-
 
 const onModalShow = () => {
     fetchRoutineData();
