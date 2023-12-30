@@ -3,7 +3,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
 import { createStore } from 'vuex'
-import axios from 'axios'
 
 export default createStore({
   state: {
@@ -85,8 +84,14 @@ export default createStore({
     reverseMessage(state) {
       state.message = state.message.split('').reverse().join('');
     },
+
+    setChosenRoutineId(state, routineId) {
+      state.routineId = routineId;
+      console.log('루틴 아이디 저장 완료!!! : ', state.routineId);
+    },
   },
   actions: {
+    // --------------------- main.vue -------------------------------
     async loginUser({ commit }, credentials) {
       try {
         const response = await axios.post('/api/accounts/auth/', credentials, {
@@ -100,9 +105,6 @@ export default createStore({
         console.error('로그인 실패:', error);
         throw error;
       }
-    },
-    setSelectedRoutineId({ commit }, routineId) {
-      commit('setSelectedRoutineId', routineId);
     },
 
     async fetchRoutineData({ commit, state }) {
@@ -128,6 +130,7 @@ export default createStore({
         throw error;
       }
     },
+    // --------------------- routine-write.vue -------------------------------
     // 'usebody_name' 데이터를 가져오기
     async fetchUsebodyData({ commit }) {
       try {
