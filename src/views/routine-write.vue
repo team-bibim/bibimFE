@@ -46,7 +46,7 @@
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
                                             class="day-routine-subbox">
                                             <v-textarea v-model="exercise.ExerciseName" class="exercise-title" label="운동 이름"
-                                                variant="plain" auto-grow hide-details readonly></v-textarea>
+                                                variant="plain" auto-grow hide-details readonly rows="2"></v-textarea>
                                             <v-text-field v-model="exercise.ExerciseArea" class="exercise-area"
                                                 label="운동 부위" variant="plain" hide-details readonly />
 
@@ -287,6 +287,10 @@ export default {
 </script>
 
 <style scoped>
+.v-textarea .v-field {
+    --v-textarea-control-height: var(--v-input-control-height);
+}
+
 .v-row {
     /* 스크롤바 보이는 현상 해결*/
     margin: 0;
