@@ -258,7 +258,7 @@ export default {
     number: 0,
     pageStatus: "전체",
   }),
-  created() {
+  async created() {
     // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
     this.getPostings();
@@ -268,6 +268,7 @@ export default {
         // hotPostings가 업데이트될 때 실행되는 로직
       }
     );
+    await console.log(this.$store.state.userData.id);
   },
   computed: {
     // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
@@ -279,7 +280,7 @@ export default {
         const content    = post.content.toLowerCase();
         return title.includes(searchText) || content.includes(searchText);
       })
-      .sort((a, b) => a.title.localeCompare(b.title));
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     filteredHotPostingsPerPage() {
       const startIndex = (this.hotPage - 1) * 4;
@@ -294,7 +295,7 @@ export default {
         const content    = post.content.toLowerCase();
         return title.includes(searchText) || content.includes(searchText);
       })
-      .sort((a, b) => a.title.localeCompare(b.title));
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     filteredFollowPostingsPerPage() {
       const startIndex = (this.followPage - 1) * 4;
@@ -309,7 +310,7 @@ export default {
         const content    = post.content.toLowerCase();
         return title.includes(searchText) || content.includes(searchText);
       })
-      .sort((a, b) => a.title.localeCompare(b.title));
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     filteredNewPostingsPerPage() {
       const startIndex = (this.newPage - 1) * 4;
@@ -367,26 +368,13 @@ export default {
       // 나중에, 페이지 만들어지면 코드 작성할 것.
       this.$router.push('/share');
     },
-    fetchDataUsingToken() {
-    const token = this.$store.state.authToken; // Access the token from the store
-    axios.get('your-api-endpoint', {
-      headers: {
-        Authorization: `Bearer ${token}`, // Attach the token to the request
-      },
-    })
-      .then(response => {
-        // Handle the response
-      })
-      .catch(error => {
-        // Handle the error
-      });
-    },
     // 서버에서 로그인 여부를 확인, 로그인되어 있다면 '로그인됨' 메시지를 출력
     checkLoginStatus() {
       axios.get('/api/accounts/auth/', { withCredentials: true })
       .then(response => {
         if (response.data.id != null) {
           console.log("로그인됨");
+          // console.log(this.$store.state.userData.id);
         } else {
           console.log("로그인되지 않음");
         }

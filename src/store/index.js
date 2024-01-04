@@ -2,13 +2,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import createPersistedState from 'vuex-persistedstate';
 
 export const store = new Vuex.Store({
   state: {
     message: 'Hello Vue.js',
     routineData: null, // box/check
     routineId: null, // box/check{id}
-    userData: null, // 유저데이터
+    userData: {
+      id: "로그인을 해 주세요"
+    }, // 유저데이터
     token: null, // 토큰
     selectedRoutineId: null, // 선택한 루틴
     // 내 코드
@@ -52,6 +55,7 @@ export const store = new Vuex.Store({
         });
         commit('setToken', response.data.token);
         commit('setUserData', response.data.user);
+        console.log(response.data.user);
         localStorage.setItem('token', response.data.token);
         return response;
       } catch (error) {
@@ -86,5 +90,8 @@ export const store = new Vuex.Store({
         throw error;
       }
     }
-  }
+  },
+  plugins: [
+    createPersistedState()
+  ]
 });

@@ -5,6 +5,7 @@ import ShareView from '../views/routine-share.vue'
 import MainView from '../views/main.vue'
 import MyRoutineView from '../views/my-routine.vue'
 import SettingsView from '../views/settings.vue'
+import MyPageView from '../views/my-page.vue'
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
     path: '/settings',
     name: 'settings',
     component: SettingsView
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: MyPageView
   }
 ]
 
