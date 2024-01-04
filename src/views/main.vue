@@ -2,13 +2,13 @@
     <div class="ex1">
         <div class="container">
             <v-btn @click="$router.push('/write')" div class="box1">
-                <div class="box1_text">루틴 작성하기</div>
+                <div class="box1_text"><b>루틴 작성하기</b></div>
             </v-btn>
             <v-btn @click="$router.push('/')" div class="box2">
-                <div class="box2_text">루틴 보관함</div>
+                <div class="box2_text"><b>루틴 보관함</b></div>
             </v-btn>
             <v-btn @click="$router.push('/share')" div class="box3">
-                <div class="box3_text">루틴 공유하기</div>
+                <div class="box3_text"><b>루틴 공유하기</b></div>
             </v-btn>
         </div>
     </div>
@@ -21,7 +21,7 @@
         </div>
         <div class="daily" v-if="ISROUTINEID">
             <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
-
+            <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
         </div>
     </div>
 
@@ -104,12 +104,14 @@ const router = useRouter();
 const store = useStore(); // 밖으로 빼서 선언해야함.
 
 const ISROUTINEID = ref(false);
+const selectedRoutineTitle = ref(null);
 
 const fetchRoutineById = async () => {
     try {
         const ROUTINE_ID = localStorage.getItem('routineId');
         const response = await axios.get(`/api/routine/check/${ROUTINE_ID}/`);
         console.log('루틴 아이디로 루틴 정보 불러오기 : ', response.data);
+        selectedRoutineTitle.value = response.data.routine_name + " 루틴";      // 루틴 제목 보여주기
 
         const response_2 = await axios.get(`/api/routine/detail/check/${ROUTINE_ID}/`);
         console.log('루틴 아이디로 운동 불러오기 : ', response.data);
@@ -286,6 +288,15 @@ const goBack = () => {
     border-radius: 20px;
     height: 650px;
     margin-bottom: 10px;
+}
+
+.routine-title {
+    display: flex;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 30px;
+    padding: 35px 0;
 }
 
 /* ----------------------모달 ------------------------------------*/
