@@ -24,7 +24,7 @@
             <div v-if="pageStatus === '전체'">
               <div></div> <!-- ?? div 태그를 없애면 박살남 -->
               <v-list-subheader class="right-panel-classify-text" style="margin-left: 20px;">
-                <b>이번 주 HOT 게시글 🔥</b>
+                <b>HOT 게시글 🔥</b>
               </v-list-subheader>
               <div style="height: 20px;"></div>
               <template v-if="filteredHotPostings.length === 0">
@@ -257,6 +257,7 @@ export default {
     followPage: 1,
     number: 0,
     pageStatus: "전체",
+    resizeObserver: null,
   }),
   async created() {
     // [상태관리] 로그인이 되어있는지 여부 확인
@@ -271,7 +272,7 @@ export default {
     await console.log(this.$store.state.userData.id);
   },
   computed: {
-    // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
+    /* filteredHotPostings()만 따로 사용할 수 있도록 두 개 함수는 일부로 분리해둠 */
     filteredHotPostings() {
       return this.$store.state.hotPostings
       .filter(post => {
@@ -384,7 +385,7 @@ export default {
       });
     },
     getPanelBackStyle(card) {
-      if (card === "이번주 HOT 게시글 🔥") {
+      if (card === "HOT 게시글 🔥") {
         return { backgroundColor: '#834B4B' };
       } else if (card === "최신 게시글") {
         return { backgroundColor: '#1D2128' };
@@ -467,7 +468,7 @@ export default {
         this.$store.state.followPostings.push(post);
       }
     },
-  }
+  },
 }
 </script>
   

@@ -18,6 +18,7 @@ export const store = new Vuex.Store({
     hotPostings: [],
     newPostings: [],
     followPostings: [],
+    userInfo: null,
   },
   mutations: {
     // 내 코드
