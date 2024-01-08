@@ -99,10 +99,10 @@ export default {
 
                 axios.get('/api/accounts/info/')
                 .then(response => {
-                    console.log('헐 대박 됨!! => ' + response);
+                    console.log('헐 대박 됨!! => ' + response.data.height);
                     // 임시 야매 코드
-                    this.height = '10';
-                    this.weight = '10';
+                    this.height = response.data.height;
+                    this.weight = response.data.weight;
                 })
                 .catch(error => {
                     console.log('내 정보 받아오다가 에러남', error);
@@ -114,20 +114,23 @@ export default {
             }
         },
         completeEdit() {
+            console.log(this.height);
             axios.put('/api/accounts/info/', {
-                // 임시 야매 코드
-                height: 100,
-                weight: 100
+                // 임시 야매 코드 (공개여부 데이터 항상 있어야 함)
+                height: parseInt(this.height),
+                weight: parseFloat(this.weight),
+                acc_visibility: 1,
                 /*
                 height: this.height,
                 weight: this.weight
+                acc_visibility: this.??
                 */
             })
             .then(response => {
-                console.log("수정됨!! " + response);
+                console.log("데이터가 있음 " + response);
             })
             .catch(error => {
-                console.log("수정하다가 에러남 ", error);
+                console.log("데이터가 없음 ", error);
             })
         }
     }
