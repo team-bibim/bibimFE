@@ -89,6 +89,11 @@ export default createStore({
       state.routineId = routineId;
       console.log('루틴 아이디 저장 완료!!! : ', state.routineId);
     },
+
+    LOGOUT(state) {
+      localStorage.removeItem('token');
+      location.reload();
+    },
   },
   actions: {
     // --------------------- main.vue -------------------------------
@@ -170,7 +175,12 @@ export default createStore({
     },
     deleteDayBox({ commit }) {
       commit('DELETE_DAY_BOX');
-    }
+    },
+
+    // 로그아웃 기능
+    logout({ commit }) {
+      commit('LOGOUT');
+    },
   },
   modules: {
   }

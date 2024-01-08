@@ -22,6 +22,19 @@
         <div class="daily" v-if="ISROUTINEID">
             <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
             <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
+            <div class="day-routine-box" v-for="(routine, dayindex) in selectedRoutineData" :key="dayindex">
+                <div class="day-routine-box-title">Day {{ dayindex + 1 }}</div>
+                <div class="day-routine-exercise-box">
+                    <div class="day-routine-exercise-box-name" v-for="(exercise, exindex) in selectedRoutineData"
+                        :key="exindex">
+                        {{ exercise.exercise_name }}
+                        <v-checkbox label="완료" color="success" value="success"></v-checkbox>
+                    </div>
+
+                </div>
+
+
+            </div>
         </div>
     </div>
 
@@ -106,6 +119,8 @@ const store = useStore(); // 밖으로 빼서 선언해야함.
 const ISROUTINEID = ref(false);
 const selectedRoutineTitle = ref(null);
 
+const selectedRoutineData = ref(null);
+
 const fetchRoutineById = async () => {
     try {
         const ROUTINE_ID = localStorage.getItem('routineId');
@@ -114,7 +129,10 @@ const fetchRoutineById = async () => {
         selectedRoutineTitle.value = response.data.routine_name + " 루틴";      // 루틴 제목 보여주기
 
         const response_2 = await axios.get(`/api/routine/detail/check/${ROUTINE_ID}/`);
-        console.log('루틴 아이디로 운동 불러오기 : ', response.data);
+        console.log('루틴 아이디로 운동 불러오기 : ', response_2.data);
+        selectedRoutineData.value = response_2.data;
+
+        console.log('루틴 day : ', response_2.data.length);
     } catch (error) {
         console.log("루틴 아이디로 루틴 정보 불러오기 오류");
     }
@@ -283,10 +301,11 @@ const goBack = () => {
 }
 
 /* ------------------------------위에 박스 세개 ---------------------------*/
+/* ------------------------------루틴 정보 불러오는 박스 ---------------------------*/
 .ex3 {
     background-color: #181B21;
     border-radius: 20px;
-    height: 650px;
+    /* height: 650px; */
     margin-bottom: 10px;
 }
 
@@ -299,6 +318,17 @@ const goBack = () => {
     padding: 35px 0;
 }
 
+.day-routine-box {
+    margin: 35px;
+}
+
+.day-routine-exercise-box-name {
+    display: flex;
+    height: 40px;
+    line-height: 56px;
+}
+
+/* ------------------------------루틴 정보 불러오는 박스 ---------------------------*/
 /* ----------------------모달 ------------------------------------*/
 .btn {
     position: relative;
