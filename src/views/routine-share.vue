@@ -24,7 +24,7 @@
             <div v-if="pageStatus === '전체'">
               <div></div> <!-- ?? div 태그를 없애면 박살남 -->
               <v-list-subheader class="right-panel-classify-text" style="margin-left: 20px;">
-                <b>이번 주 HOT 게시글 🔥</b>
+                <b>HOT 게시글 🔥</b>
               </v-list-subheader>
               <div style="height: 20px;"></div>
               <template v-if="filteredHotPostings.length === 0">
