@@ -3,8 +3,8 @@
 - ../store/index.js에 `userData: null`을 아래와 같이 수정함
 ```js
 userData: {
-  id: "로그인이 필요합니다"
-}, // 유저데이터
+  id: ""
+},
 ``` 
 
 # 남은 일
