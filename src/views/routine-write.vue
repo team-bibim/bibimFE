@@ -136,7 +136,6 @@ export default {
                 ['mdi-alert-octagon', '내 루틴 보관함'],
                 ['mdi-alert-octagon', '설정'],
             ],
-
             titleInput: '', // computed 속성에서 data 속성으로 변경
             expInput: '',
 
