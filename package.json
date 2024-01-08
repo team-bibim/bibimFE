@@ -16,6 +16,7 @@
     "express": "^4.18.2",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
+    "vue-moment": "^4.1.0",
     "vue-router": "^4.0.3",
     "vuetify": "^3.3.11",
     "vuex": "^4.0.0",

@@ -7,16 +7,18 @@
             <div style="height: 10px;"></div>
             <div style="display: flex;">
               <v-list-subheader class="right-panel-classify-text">
-                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;" @click="togglePageStatus('전체')">
+                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"
+                  @click="togglePageStatus('전체')">
                   <b>전체</b>
                 </v-btn>
-                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;" @click="togglePageStatus('팔로잉')">
+                <v-btn variant="text" density="compact" size="x-large" style="font-size: 30px;"
+                  @click="togglePageStatus('팔로잉')">
                   <b>팔로잉</b>
                 </v-btn>
               </v-list-subheader>
-              <v-text-field outline class="search-bar" v-model="textInput" label="검색할 내용을 입력하세요"
-                            variant="outlined" bg-color="#24272B" color="#3A4148"
-                            rounded="lg" :style="{ 'border-radius': '20px !important' }"></v-text-field>
+              <v-text-field outline class="search-bar" v-model="textInput" label="검색할 내용을 입력하세요" variant="outlined"
+                bg-color="#24272B" color="#3A4148" rounded="lg"
+                :style="{ 'border-radius': '20px !important' }"></v-text-field>
             </div>
             <div style="height: 20px;"></div>
 
@@ -39,12 +41,8 @@
                         <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         @{{ post.writer }}
                         <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'hot')">
-                          <v-img
-                            :width="30"
-                            aspect-ratio="1/1"
-                            cover
-                            src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
-                          ></v-img>
+                          <v-img :width="30" aspect-ratio="1/1" cover
+                            src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"></v-img>
                         </v-btn>
                       </v-list-item-content>
                       <v-row justify-end>
@@ -54,7 +52,8 @@
                       </v-row>
                     </div>
                     <div style="height: 10px;"></div>
-                    <button v-ripple class="right-panel-hot-content materialDesignButton pl-6 pr-6 pa-4 ma-2" @click="sendUserToPage()">
+                    <button v-ripple class="right-panel-hot-content materialDesignButton pl-6 pr-6 pa-4 ma-2"
+                      @click="sendUserToPage()">
                       <b style="color:#F4D3D3; font-size: 20px;">
                         {{ post.title }}
                       </b>
@@ -66,12 +65,8 @@
                       <div style="align-items: right;">
                         {{ formatDate(post.date) }}
                         <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'hot')">
-                          <v-img
-                            :width="30"
-                            aspect-ratio="1/1"
-                            cover
-                            src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
-                          ></v-img>
+                          <v-img :width="30" aspect-ratio="1/1" cover
+                            src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"></v-img>
                         </v-btn>
                         {{ post.like }}
                       </div>
@@ -81,7 +76,8 @@
                 </template>
               </template>
               <div style="height: 10px;"></div>
-              <v-pagination v-model="hotPage" :length="Math.ceil(filteredHotPostings.length / 4)" style="color:white"></v-pagination>
+              <v-pagination v-model="hotPage" :length="Math.ceil(filteredHotPostings.length / 4)"
+                style="color:white"></v-pagination>
             </div>
 
             <!--팔로우 게시글-->
@@ -104,12 +100,8 @@
                         <v-avatar class="right-panel-hot-avatar" style="margin-right:5px;"></v-avatar>
                         @{{ post.writer }}
                         <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'follow')">
-                          <v-img
-                            :width="30"
-                            aspect-ratio="1/1"
-                            cover
-                            src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
-                          ></v-img>
+                          <v-img :width="30" aspect-ratio="1/1" cover
+                            src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"></v-img>
                         </v-btn>
                       </v-list-item-content>
                       <v-row justify-end>
@@ -127,12 +119,8 @@
                       <div style="align-items: right;">
                         {{ formatDate(post.date) }}
                         <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'follow')">
-                          <v-img
-                            :width="30"
-                            aspect-ratio="1/1"
-                            cover
-                            src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
-                          ></v-img>
+                          <v-img :width="30" aspect-ratio="1/1" cover
+                            src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"></v-img>
                         </v-btn>
                         {{ post.like }}
                       </div>
@@ -142,7 +130,8 @@
                 </template>
               </template>
               <div style="height: 10px;"></div>
-              <v-pagination v-model="followPage" :length="Math.ceil(filteredFollowPostings.length / 4)" style="color:white"></v-pagination>
+              <v-pagination v-model="followPage" :length="Math.ceil(filteredFollowPostings.length / 4)"
+                style="color:white"></v-pagination>
             </div>
           </v-list>
         </v-card>
@@ -170,12 +159,8 @@
                       <v-avatar class="right-panel-new-avatar" style="margin-right:5px;"></v-avatar>
                       @{{ post.writer }}
                       <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'new')">
-                        <v-img
-                          :width="30"
-                          aspect-ratio="1/1"
-                          cover
-                          src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"
-                        ></v-img>
+                        <v-img :width="30" aspect-ratio="1/1" cover
+                          src="https://img.icons8.com/ios-glyphs/90/FFFFFF/user--v1.png"></v-img>
                       </v-btn>
                     </v-list-item-content>
                     <v-row justify-end>
@@ -193,16 +178,12 @@
                     <br>
                     {{ post.content }}
                     <br>
-                    <br>  
+                    <br>
                     <div style="align-items: right;">
                       {{ formatDate(post.date) }}
                       <v-btn variant="plain" rounded="xl" @click="increaseLike(post.id, post.like, 'new')">
-                        <v-img
-                          :width="30"
-                          aspect-ratio="1/1"
-                          cover
-                          src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"
-                        ></v-img>
+                        <v-img :width="30" aspect-ratio="1/1" cover
+                          src="https://img.icons8.com/material/90/FFFFFF/facebook-like--v1.png"></v-img>
                       </v-btn>
                       {{ post.like }}
                     </div>
@@ -212,7 +193,8 @@
               </template>
             </template>
             <div style="height: 10px;"></div>
-            <v-pagination v-model="newPage" :length="Math.ceil(filteredNewPostings.length / 4)" style="color:white"></v-pagination>
+            <v-pagination v-model="newPage" :length="Math.ceil(filteredNewPostings.length / 4)"
+              style="color:white"></v-pagination>
           </v-list>
         </v-card>
       </v-container>
@@ -236,12 +218,12 @@ import moment from 'moment';
 export default {
   data: () => ({
     post: {
-      id     : '',
-      title  : '',
+      id: '',
+      title: '',
       content: '',
-      writer : '',
-      date   : '',
-      like   : 0,
+      writer: '',
+      date: '',
+      like: 0,
     },
     drawer: null,
     links: [
@@ -268,53 +250,52 @@ export default {
         // hotPostings가 업데이트될 때 실행되는 로직
       }
     );
-    await console.log(this.$store.state.userData.id);
   },
   computed: {
     // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록
     filteredHotPostings() {
       return this.$store.state.hotPostings
-      .filter(post => {
-        const searchText = this.textInput.toLowerCase();
-        const title      = post.title.toLowerCase();
-        const content    = post.content.toLowerCase();
-        return title.includes(searchText) || content.includes(searchText);
-      })
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+        .filter(post => {
+          const searchText = this.textInput.toLowerCase();
+          const title = post.title.toLowerCase();
+          const content = post.content.toLowerCase();
+          return title.includes(searchText) || content.includes(searchText);
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     filteredHotPostingsPerPage() {
       const startIndex = (this.hotPage - 1) * 4;
-      const endIndex   = startIndex + 4;
+      const endIndex = startIndex + 4;
       return this.filteredHotPostings.slice(startIndex, endIndex);
     },
     filteredFollowPostings() {
       return this.$store.state.followPostings
-      .filter(post => {
-        const searchText = this.textInput.toLowerCase();
-        const title      = post.title.toLowerCase();
-        const content    = post.content.toLowerCase();
-        return title.includes(searchText) || content.includes(searchText);
-      })
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+        .filter(post => {
+          const searchText = this.textInput.toLowerCase();
+          const title = post.title.toLowerCase();
+          const content = post.content.toLowerCase();
+          return title.includes(searchText) || content.includes(searchText);
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     filteredFollowPostingsPerPage() {
       const startIndex = (this.followPage - 1) * 4;
-      const endIndex   = startIndex + 4;
+      const endIndex = startIndex + 4;
       return this.filteredFollowPostings.slice(startIndex, endIndex);
     },
     filteredNewPostings() {
       return this.$store.state.newPostings
-      .filter(post => {
-        const searchText = this.textInput.toLowerCase();
-        const title      = post.title.toLowerCase();
-        const content    = post.content.toLowerCase();
-        return title.includes(searchText) || content.includes(searchText);
-      })
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+        .filter(post => {
+          const searchText = this.textInput.toLowerCase();
+          const title = post.title.toLowerCase();
+          const content = post.content.toLowerCase();
+          return title.includes(searchText) || content.includes(searchText);
+        })
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
     },
     filteredNewPostingsPerPage() {
       const startIndex = (this.newPage - 1) * 4;
-      const endIndex   = startIndex + 4;
+      const endIndex = startIndex + 4;
       return this.filteredNewPostings.slice(startIndex, endIndex);
     },
   },
@@ -332,37 +313,38 @@ export default {
     getPostings() {
       // 인기 게시글 갖고오기
       axios.get('/api/routine/recommend/pop/')
-      .then(response => {
-        this.getHotPostings(response.data)
-      })
-      .catch(error => {
-        console.log("에러남1, ", error);
-      });
+        .then(response => {
+          this.getHotPostings(response.data)
+        })
+        .catch(error => {
+          console.log("에러남1, ", error);
+        });
 
       // 최신 게시글 갖고오기
       axios.get('/api/routine/recommend/latest/')
-      .then(response => {
-        this.getNewPostings(response.data)
-      })
-      .catch(error => {
-        console.log("에러남2, ", error);
-      });
+        .then(response => {
+          this.getNewPostings(response.data)
+        })
+        .catch(error => {
+          console.log("에러남2, ", error);
+        });
 
       // 팔로우 게시글 갖고오기
       axios.get('/api/routine/recommend/follow/', { withCredentials: true })
-      .then(response => {
-        this.getFollowPostings(response.data)
-      })
-      .catch(error => {
-        console.log("에러남3 (아마 INVALID_TOKEN이 뜨는 것으로 보아 로그인이 안 되어 있어서일 가능성 있음), ", error);
-        if (error.response) {``
-              console.log("Error Response Data: ", error.response.data);
-              console.log("Error Response Status: ", error.response.status);
-              console.log("Error Response Headers: ", error.response.headers);
+        .then(response => {
+          this.getFollowPostings(response.data)
+        })
+        .catch(error => {
+          console.log("에러남3 (아마 INVALID_TOKEN이 뜨는 것으로 보아 로그인이 안 되어 있어서일 가능성 있음), ", error);
+          if (error.response) {
+            ``
+            console.log("Error Response Data: ", error.response.data);
+            console.log("Error Response Status: ", error.response.status);
+            console.log("Error Response Headers: ", error.response.headers);
           } else {
-              console.log("Request Error: ", error.message);
+            console.log("Request Error: ", error.message);
           }
-      });
+        });
     },
     sendUserToPage() {
       // 나중에, 페이지 만들어지면 코드 작성할 것.
@@ -371,17 +353,17 @@ export default {
     // 서버에서 로그인 여부를 확인, 로그인되어 있다면 '로그인됨' 메시지를 출력
     checkLoginStatus() {
       axios.get('/api/accounts/auth/', { withCredentials: true })
-      .then(response => {
-        if (response.data.id != null) {
-          console.log("공유페이지에서 로그인됨");
-          // console.log(this.$store.state.userData.id);
-        } else {
-          console.log("공유페이지에서 로그인되지 않음");
-        }
-      })
-      .catch(error => {
-        console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-      });
+        .then(response => {
+          if (response.data.id != null) {
+            console.log("공유페이지에서 로그인됨");
+            // console.log(this.$store.state.userData.id);
+          } else {
+            console.log("공유페이지에서 로그인되지 않음");
+          }
+        })
+        .catch(error => {
+          console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+        });
     },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {
@@ -393,38 +375,38 @@ export default {
     increaseLike(postId, postLikeNumber, postType) {
       if (this.ifLogined) {
         axios.post('/api/routine/like/', { routine_id: postId })
-        .then(res => {
-          let postIndex = "";
+          .then(res => {
+            let postIndex = "";
 
-          if (postType === "hot") {
-            postIndex = this.$store.state.hotPostings.findIndex(post => post.id === postId);
-          } else if (postType === "new") {
-            postIndex = this.$store.state.newPostings.findIndex(post => post.id === postId);
-          } else if (postType === "follow") {
-            postIndex = this.$store.state.followPostings.findIndex(post => post.id === postId);
-          }
-
-          if (res.data.message === "Recommend Success") {
-            postLikeNumber += 1;
-          } else if (res.data.message === "Unrecommend Success") {
-            postLikeNumber -= 1;
-          }
-
-          console.log(postLikeNumber);
-
-          if (postIndex !== -1) {
             if (postType === "hot") {
-              this.$store.state.hotPostings[postIndex].like = postLikeNumber;
+              postIndex = this.$store.state.hotPostings.findIndex(post => post.id === postId);
             } else if (postType === "new") {
-              this.$store.state.newPostings[postIndex].like = postLikeNumber;
+              postIndex = this.$store.state.newPostings.findIndex(post => post.id === postId);
             } else if (postType === "follow") {
-              this.$store.state.followPostings[postIndex].like = postLikeNumber;
+              postIndex = this.$store.state.followPostings.findIndex(post => post.id === postId);
             }
-          }
-        })
-        .catch(error => {
-          console.error('Error updating like:', error);
-        });
+
+            if (res.data.message === "Recommend Success") {
+              postLikeNumber += 1;
+            } else if (res.data.message === "Unrecommend Success") {
+              postLikeNumber -= 1;
+            }
+
+            console.log(postLikeNumber);
+
+            if (postIndex !== -1) {
+              if (postType === "hot") {
+                this.$store.state.hotPostings[postIndex].like = postLikeNumber;
+              } else if (postType === "new") {
+                this.$store.state.newPostings[postIndex].like = postLikeNumber;
+              } else if (postType === "follow") {
+                this.$store.state.followPostings[postIndex].like = postLikeNumber;
+              }
+            }
+          })
+          .catch(error => {
+            console.error('Error updating like:', error);
+          });
       } else {
         alert('로그인이 필요합니다!');
         this.$router.push('/main');
@@ -436,12 +418,12 @@ export default {
     getHotPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          id     : data[i].routine_id,
-          title  : data[i].routine_name,
+          id: data[i].routine_id,
+          title: data[i].routine_name,
           content: data[i].routine_comment,
-          writer : data[i].nickname,
-          like   : data[i].recommend_count,
-          date   : data[i].created_at
+          writer: data[i].nickname,
+          like: data[i].recommend_count,
+          date: data[i].created_at
         };
         this.$store.state.hotPostings.push(post);
       }
@@ -449,12 +431,12 @@ export default {
     getNewPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          id     : data[i].routine_id,
-          title  : data[i].routine_name,
+          id: data[i].routine_id,
+          title: data[i].routine_name,
           content: data[i].routine_comment,
-          writer : data[i].nickname,
-          like   : data[i].recommend_count,
-          date   : data[i].created_at
+          writer: data[i].nickname,
+          like: data[i].recommend_count,
+          date: data[i].created_at
         };
         this.$store.state.newPostings.push(post);
       }
@@ -462,12 +444,12 @@ export default {
     getFollowPostings(data) {
       for (let i = 0; i < data.length; i++) {
         let post = {
-          id     : data[i].routine_id,
-          title  : data[i].routine_name,
+          id: data[i].routine_id,
+          title: data[i].routine_name,
           content: data[i].routine_comment,
-          writer : data[i].nickname,
-          like   : data[i].recommend_count,
-          date   : data[i].created_at
+          writer: data[i].nickname,
+          like: data[i].recommend_count,
+          date: data[i].created_at
         };
         this.$store.state.followPostings.push(post);
       }
@@ -479,9 +461,9 @@ export default {
 <style scoped>
 .search-bar {
   color: #FFFFFF;
-    height: 60px;
-    text-indent: 10px;
-    margin: 10px 35px;
+  height: 60px;
+  text-indent: 10px;
+  margin: 10px 35px;
 }
 
 .search-bar::placeholder {
@@ -508,7 +490,7 @@ export default {
   flex-direction: row;
   word-spacing: 100px;
   margin-left: 10px;
-  margin-right:30px;
+  margin-right: 30px;
 }
 
 .right-panel-hot {
@@ -586,5 +568,4 @@ export default {
   font-size: auto;
   float: right;
 }
-
 </style>

@@ -66,7 +66,8 @@
                                     <button @click="showRoutineId(routine)">더보기</button>
                                 </td>
                                 <td>
-                                    <v-btn elevation="1" data-bs-dismiss="modal" @click="saveRoutineId(routine)">
+                                    <v-btn elevation="1" data-bs-dismiss="modal" @click="saveRoutineId(routine)"
+                                        color="black">
                                         선택
                                     </v-btn>
                                 </td>
@@ -320,6 +321,7 @@ const goBack = () => {
 
 .day-routine-box {
     margin: 35px;
+    color: white;
 }
 
 .day-routine-exercise-box-name {
