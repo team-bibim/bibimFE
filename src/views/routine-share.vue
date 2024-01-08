@@ -370,22 +370,18 @@ export default {
     },
     // 서버에서 로그인 여부를 확인, 로그인되어 있다면 '로그인됨' 메시지를 출력
     checkLoginStatus() {
-      if (this.ifLogined) {
-        axios.get('/api/accounts/auth/', { withCredentials: true })
-        .then(response => {
-          if (response.data.id != null) {
-            console.log("로그인됨");
-            // console.log(this.$store.state.userData.id);
-          } else {
-            console.log("로그인되지 않음");
-          }
-        })
-        .catch(error => {
-          console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-        });
-      } else {
-        alert('로그인이 필요합니다!!');
-      }
+      axios.get('/api/accounts/auth/', { withCredentials: true })
+      .then(response => {
+        if (response.data.id != null) {
+          console.log("로그인됨");
+          // console.log(this.$store.state.userData.id);
+        } else {
+          console.log("로그인되지 않음");
+        }
+      })
+      .catch(error => {
+        console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+      });
     },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {
@@ -395,7 +391,8 @@ export default {
       }
     },
     increaseLike(postId, postLikeNumber, postType) {
-      axios.post('/api/routine/like/', { routine_id: postId })
+      if (this.ifLogined) {
+        axios.post('/api/routine/like/', { routine_id: postId })
         .then(res => {
           let postIndex = "";
 
@@ -428,6 +425,9 @@ export default {
         .catch(error => {
           console.error('Error updating like:', error);
         });
+      } else {
+        alert('로그인이 필요합니다!');
+      }
     },
     togglePageStatus(status) {
       this.pageStatus = status;
