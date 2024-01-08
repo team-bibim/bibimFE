@@ -27,59 +27,21 @@
         </v-row>
       </v-col>
 
-<<<<<<< HEAD
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-5">
-          Important Links
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-=======
       <v-col class="mb-5" cols="12">
         <h2 class="headline font-weight-bold mb-5">Important Links</h2>
 
         <v-row justify="center">
           <a v-for="(link, i) in importantLinks" :key="i" :href="link.href" class="subheading mx-3" target="_blank">
->>>>>>> a8bbcbffcf4296d8b917b4466ef51c369cb848ac
             {{ link.text }}
           </a>
         </v-row>
       </v-col>
 
-<<<<<<< HEAD
-      <v-col
-        class="mb-5"
-        cols="12"
-      >
-        <h2 class="headline font-weight-bold mb-5">
-          Ecosystem
-        </h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-=======
       <v-col class="mb-5" cols="12">
         <h2 class="headline font-weight-bold mb-5">Ecosystem</h2>
 
         <v-row justify="center">
           <a v-for="(eco, i) in ecosystem" :key="i" :href="eco.href" class="subheading mx-3" target="_blank">
->>>>>>> a8bbcbffcf4296d8b917b4466ef51c369cb848ac
             {{ eco.text }}
           </a>
         </v-row>
@@ -89,14 +51,8 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-
-export default {
-  name: 'HelloWorld',
-=======
 export default {
   name: "HelloWorld",
->>>>>>> a8bbcbffcf4296d8b917b4466ef51c369cb848ac
 
   data: () => ({
     ecosystem: [
