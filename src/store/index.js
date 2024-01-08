@@ -9,9 +9,7 @@ export const store = new Vuex.Store({
     message: 'Hello Vue.js',
     routineData: null, // box/check
     routineId: null, // box/check{id}
-    userData: {
-      id: "로그인을 해 주세요"
-    }, // 유저데이터
+    userData: null,
     token: null, // 토큰
     selectedRoutineId: null, // 선택한 루틴
     // 내 코드
@@ -53,6 +51,7 @@ export const store = new Vuex.Store({
         const response = await axios.post('/api/accounts/auth/', credentials, {
           withCredentials: true,
         });
+        // 로그인 성공시 유저 정보를 상태관리에 저장
         commit('setToken', response.data.token);
         commit('setUserData', response.data.user);
         console.log(response.data.user);

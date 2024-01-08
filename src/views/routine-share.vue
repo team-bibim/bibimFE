@@ -373,10 +373,10 @@ export default {
       axios.get('/api/accounts/auth/', { withCredentials: true })
       .then(response => {
         if (response.data.id != null) {
-          console.log("로그인됨");
+          console.log("공유페이지에서 로그인됨");
           // console.log(this.$store.state.userData.id);
         } else {
-          console.log("로그인되지 않음");
+          console.log("공유페이지에서 로그인되지 않음");
         }
       })
       .catch(error => {

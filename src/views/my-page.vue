@@ -66,58 +66,62 @@ import axios from 'axios';
 
 export default {
     data: () => ({
+        sessionId: null,
         height: "",
         weight: "",
     }),
     created() {
         /* 로그인 여부 확인 */
-        axios.get('/api/accounts/auth/', { withCredentials: true })
-        .then(response => {
-        if (response.data.id != null) {
-            console.log("로그인됨");
-            // console.log(this.$store.state.userData.id);
-        } else {
-            console.log("로그인되지 않음");
-        }
-        })
-        .catch(error => {
-        console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-        });
-
-        /* 유저 데이터 받아오기 */
-        this.getUserData();
+        this.checkLoginStatus();
     },
     methods: {
-        getUserData() {
-            axios.get('/api/accounts/auth/' + this.$store.state.userData.id + '/')
-            .then(response => {
-            this.$store.commit('setUserData', response.data);
-            // console.log('유저 소개 메시지는 ' + response.data.info);
+        async checkLoginStatus() {
+            try {
+                const response = await axios.get('/api/accounts/auth/', { withCredentials: true });
 
-            const userName  = response.data.nickname;
-            const userEmail = response.data.email;
+                if (response.data.id != null) {
+                    console.log("마이페이지에서 로그인됨");
+                    this.sessionId = response.data.id;
+                    this.getUserData();
+                } else {
+                    console.log("마이페이지에서 로그인되지 않음");
+                }
+            } catch (error) {
+                console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+            }
+        },
+        async getUserData() {
+            try {
+                console.log('로그인한 계정 ID는 ' + this.sessionId + '임'); // $store.state.sessionId
 
-            console.log(userName, userEmail);
-            })
-            .catch(error => {
+                const response = await axios.get('/api/accounts/auth/' + this.sessionId + '/');
+                this.$store.commit('setUserData', response.data);
+
+                axios.get('/api/accounts/info/')
+                .then(response => {
+                    console.log('헐 대박 됨!! => ' + response);
+                    // 임시 야매 코드
+                    this.height = '10';
+                    this.weight = '10';
+                })
+                .catch(error => {
+                    console.log('내 정보 받아오다가 에러남', error);
+                    this.height = '';
+                    this.weight = '';
+                });
+            } catch (error) {
                 console.error("유저데이터 받아오다가 에러남, ", error);
-            });
-
-            axios.get('/api/accounts/info/')
-            .then(response => {
-                this.height = '10cm';
-                this.weight = '10kg';
-            })
-            .catch(error => {
-                console.log('내 정보 받아오다가 에러남', error);
-                this.height = '';
-                this.weight = '';
-            })
+            }
         },
         completeEdit() {
             axios.put('/api/accounts/info/', {
+                // 임시 야매 코드
+                height: 100,
+                weight: 100
+                /*
                 height: this.height,
                 weight: this.weight
+                */
             })
             .then(response => {
                 console.log("수정됨!! " + response);
