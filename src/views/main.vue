@@ -22,11 +22,11 @@
 </div>
 
 <!-- 모달내용 -->
-    <div class="modal fade" id="routinedatamodal" tabindex="-1"> <!--@show="onModalShow"-->
+    <div class="modal fade" id="routinedatamodal" tabindex="-1"> 
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">내가 담은 루틴</h5> <!--id="routinedatamodal"-->
+                    <h5 class="modal-title">내가 담은 루틴</h5> 
                 </div>
             <div class="modal-body" id="routin-table">
                 <table class="table">
@@ -47,9 +47,6 @@
                             <td>
                                 <button @click="showRoutineId(routine)">더보기</button>
                             </td>
-                            <!-- <td>
-                                <button @click="editRoutine(routine)">수정버튼</button>
-                            </td> -->
                         </tr>
                     </tbody>  
                 </table>
@@ -114,8 +111,8 @@ const fetchRoutineData = async () => {
 }
 const showRoutineId = async (routine) => {
   try {
-    const routineId = routine.routine; // Assuming routine ID is extracted correctly
-    const apiUrl = `/api/routine/check/${routineId}/`; // Your API address
+    const routineId = routine.routine; 
+    const apiUrl = `/api/routine/check/${routineId}/`; 
 
     const response = await axios.get(apiUrl);
     console.log('Response from fetchRoutineId:', response);
@@ -125,7 +122,6 @@ const showRoutineId = async (routine) => {
       return;
     }
 
-    // Display routine details in the modal
     console.log('Routine ID:', response.data.routine_id);
     console.log('Routine Name:', response.data.routine_name);
 
@@ -139,19 +135,6 @@ const showRoutineId = async (routine) => {
 const goBack = () => {
   selectedRoutine.value = null;
 };
-
-// const router = useRouter();
-
-// const editRoutine = async (routine) => {
-//   try {
-//     const routineId = routine.routine;
-//     // Assuming your edit route is named 'edit'
-//     router.push({ name: 'edit', params: { id: routineId } });
-//   } catch (error) {
-//     console.error('Error navigating to edit page:', error);
-//   }
-// };
-
 
 </script>
 
