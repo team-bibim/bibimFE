@@ -5,7 +5,11 @@ import ShareView from '../views/routine-share.vue'
 import MainView from '../views/main.vue'
 import MyRoutineView from '../views/my-routine.vue'
 import SettingsView from '../views/settings.vue'
+<<<<<<< HEAD
 import MyPageView from '../views/my-page.vue'
+=======
+import LoginView from '../views/LoginView';
+>>>>>>> a8bbcbffcf4296d8b917b4466ef51c369cb848ac
 
 const routes = [
   {
@@ -34,7 +38,7 @@ const routes = [
   {
     path: '/main',
     name: 'main',
-    component: MainView,
+    component: MainView
   },
   {
     path: '/routine',
@@ -50,7 +54,12 @@ const routes = [
     path: '/mypage',
     name: 'mypage',
     component: MyPageView
-  }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
+  },
 ]
 
 const router = createRouter({

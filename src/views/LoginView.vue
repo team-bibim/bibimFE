@@ -35,21 +35,14 @@ export default {
           password: this.password
         });
 
-        /* 코드 싹 버려
-        VueCookies.set("loginToken", response.token);
-        VueCookies.set('loginUserData', response.user); // 사용자 정보를 Vuex store에 저장
-        console.log("login Token is   : " + JSON.stringify(response.user, null, 2));
-        console.log("login UserData is: " + JSON.stringify(response.token, null, 2));
-        */
-
-        // 실험: Vuex 스토어에 쿠키 저장하기
-        // this.$store.commit('setToken', loginToken);
+        this.$store.commit('setToken', response.data.token); // 토큰을 저장
+        this.$store.commit('setUserData', response.data.user); // 사용자 정보를 Vuex store에 저장
 
         // 메인 페이지로 리다이렉트
-        this.$router.push('/share');
+        this.$router.push('/main');
       } catch (error) {
         console.error('로그인 실패:', error);
-          alert('로그인 실패');
+        alert('로그인 실패');
       }
     }
   }

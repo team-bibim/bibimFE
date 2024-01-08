@@ -17,9 +17,6 @@
                     <v-list lines="two" style="background-color: #181B21;">
                         <v-list-subheader class="right-panel-classify-text" style="margin: 35px;">
                             <b>루틴 작성</b>
-                            <!-- {{ getMessage }} // 상태관리 연습 -->
-                            <!-- {{ getTitleInput }} -->
-                            <!-- {{ getExpInput }} -->
                         </v-list-subheader>
 
                         <v-row>
@@ -48,26 +45,19 @@
 
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
                                             class="day-routine-subbox">
-                                            <!-- <v-text-field v-model="exercise.title" class="exercise-title" label="운동 이름"
-                                                readonly></v-text-field>
-                                            <v-text-field v-model="exercise.time" class="exercise-time" label="시간"
-                                                readonly></v-text-field> -->
+                                            <v-textarea v-model="exercise.ExerciseName" class="exercise-title" label="운동 이름"
+                                                variant="plain" auto-grow hide-details readonly></v-textarea>
+                                            <v-text-field v-model="exercise.ExerciseArea" class="exercise-area"
+                                                label="운동 부위" variant="plain" hide-details readonly />
 
-                                            <!-- <textarea v-model="exercise.title" class="exercise-title" placeholder="운동 이름"
-                                                readonly></textarea> -->
-                                            <!-- <input v-model="exercise.ExerciseArea" class="exercise-title"
-                                                placeholder="운동 부위" readonly>
-                                            <input v-model="exercise.ExerciseName" class="exercise-time" placeholder="운동 이름"
-                                                readonly> -->
-                                            <!-- 이 부분에 Modal.vue에서 전달된 운동 정보를 표시합니다. -->
-                                            {{ exercise.ExerciseArea }} {{ exercise.ExerciseName }}
-                                            <!-- 다른 필요한 데이터도 표시할 수 있습니다. -->
+
+
                                             <div class="icon-box">
-                                                <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
+                                                <!-- <v-btn class="edit-button" @click="editExercise(exercise)" elevation="0">
                                                     <img width="24" height="24"
                                                         src="https://img.icons8.com/fluency-systems-filled/24/FFFFFF/pencil-tip.png"
                                                         alt="pencil-tip" />
-                                                </v-btn>
+                                                </v-btn> -->
                                                 <v-btn class="delete-button" @click="deleteExercise(box, index)"
                                                     elevation="0">
                                                     <img width="24" height="24"
@@ -77,24 +67,10 @@
                                             </div>
                                         </div>
 
-                                        <!-- <v-btn v-if="box.exercises.length < 5" class="day-routine-subbox"
-                                            @click="addExercise(box)">
-                                            <v-icon color="white">
-                                                mdi-plus
-                                            </v-icon>
-                                        </v-btn> -->
-                                        <!-- <ModalComponent v-if="showModal" :showModal="showModal" :box="activeBox"
-                                            :exerciseData="editExerciseData" :isEditModal="isEditModal"
-                                            @close-modal="showModal = false; isEditModal = false" /> -->
-                                        <Modal v-if="box.exercises.length < 5">
+                                        <Modal v-if="box.exercises.length < 5" :boxIndex="dayindex">
                                         </Modal>
                                     </div>
-                                    <!-- <v-btn v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
-                                        @click="addDayBox">
-                                        <v-icon color="white">
-                                            mdi-plus
-                                        </v-icon>
-                                    </v-btn> -->
+
                                     <button v-if="boxes.length < 5" class="day-routine-box" style="display:flex;"
                                         @click="addDayBox">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"
@@ -113,9 +89,26 @@
                                 <v-textarea class="explanation-bar" v-model="expInput" label="설명" @input="ExplanationInput"
                                     bg-color="#24272B" color="#3A4148" clearable no-resize rows="6" row-height="25"
                                     variant="outlined" rounded="xl"></v-textarea>
-                                <!-- <v-btn class="r-submit-button" :style="{ filter: showModal ? 'brightness(30%)' : 'none' }"
-                                    color="#CD4444" @click="submitData" :disabled="showModal">작성 완료</v-btn> -->
-                                <v-btn class="r-submit-button" color="#CD4444" @click="submitData">작성 완료</v-btn>
+                                <v-btn class="r-submit-button" color="#CD4444" @click.stop="submitData">작성 완료</v-btn>
+                                <v-dialog v-model="dialog2" max-width="340" persistent> <!-- persistent:바깥쪽 클릭 방지 -->
+                                    <v-card color="white">
+                                        <!-- <v-card-title class="headline"></v-card-title> -->
+                                        <v-card-text>
+                                            루틴 작성을 완료하시겠습니까?
+                                        </v-card-text>
+
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+
+                                            <v-btn color="green darken-1" flat="flat" @click="performRoutineDelete">
+                                                아니요
+                                            </v-btn>
+                                            <v-btn color="green darken-1" flat="flat" @click="performRdSend">
+                                                네
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
                             </v-col>
                         </v-row>
                     </v-list>
@@ -128,16 +121,14 @@
   
 
 <script>
-//import { ref } from 'vue';
 import WritePage from '@/views/routine-write.vue';
-// import ModalComponent from '@/components/Write-Modal.vue';
 import Modal from '@/components/Write-Modal02.vue';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+import axios from 'axios'
 
 export default {
     data() {
         return {
-            // cards: ['루틴 작성', '최신 게시글'],
             links: [
                 ['mdi-inbox-arrow-down', 'HOME'],
                 ['mdi-send', '루틴 공유'],
@@ -145,110 +136,36 @@ export default {
                 ['mdi-alert-octagon', '내 루틴 보관함'],
                 ['mdi-alert-octagon', '설정'],
             ],
-            exercises: [
-                //{ title: '바벨 숄더 프레스', time: '30m' },   time대신 equip 사용
-            ],
-            boxes: [],
-            // showModal: false,
-
-            // activeBox: null,
-            // titleInput: '',
             titleInput: '', // computed 속성에서 data 속성으로 변경
             expInput: '',
 
             showWarning: false,
-
-            // editExerciseData: null, // Exercise data to edit
-            // isEditModal: false,    // Flag to control whether the modal is in edit mode
+            dialog2: false,
+            routineId: '',
         };
     },
     components: {
         WritePage,
-        // ModalComponent,
         Modal,
     },
     computed: {
-        // ...mapState(),
-        // ...mapGetters(['getMessage', 'getTitleInput', 'getExpInput']),
-        ...mapState(['dayExercises']),
-        // 상태 관리에서 운동 정보를 가져와서 표시하는 계산된 속성을 추가합니다.
-        box() {
-            // 예를 들어, 상태 관리에서 현재 선택된 루틴의 운동 정보를 가져오려면 다음과 같이 할 수 있습니다.
-            // 이 코드는 예시이며, 실제로 사용하는 상태 관리의 구조에 따라서 변경할 수 있습니다.
-            // 'dayExercises'는 상태 관리에서 사용하는 상태 이름이며, 필요에 따라 변경해야 할 수 있습니다.
-            return this.$store.state.dayExercises;
-        },
+        ...mapState(['boxes', 'exercises']),
     },
     methods: {
-        ...mapMutations(['setTitleInput', 'setExpInput', 'updateDayExercises']),
-        // ...mapActions(),
+        ...mapMutations(['setTitle', 'setExp', 'deleteExerciseFromBox']),
+        ...mapActions(['addDayBox', 'deleteDayBox']),
         searchBarInput() {
-            this.setTitleInput(this.titleInput);    // 상태관리
+            this.setTitle(this.titleInput);    // 상태관리
             console.log(this.titleInput);
         },
         ExplanationInput() {
             // expInput 상태를 업데이트 (data의 expInput과 state 의 expInput 동기화 역할)
-            this.setExpInput(this.expInput);
+            this.setExp(this.expInput);
             console.log(this.expInput);
         },
-        addExercise(box) {
-            if (box.exercises.length < 5) {
-                // this.activeBox = box;
-                // this.showModal = true;
-            }
-        },
-
         deleteExercise(box, index) {
-            box.exercises.splice(index, 1);
+            this.deleteExerciseFromBox({ boxIndex: this.boxes.indexOf(box), exerciseIndex: index });
         },
-        // editExercise(exercise) {
-        //     // Set the exercise data to edit
-        //     // this.editExerciseData = exercise;
-        //     // this.isEditModal = true; // Show the modal in edit mode
-        //     // this.showModal = true; // Ensure the modal is displayed
-        // },
-        addDayBox() {
-            if (this.boxes.length < 5) {
-                this.boxes.push({ exercises: [] });
-
-                // dayExercises를 업데이트하기 위해 mutations 호출
-                this.updateDayExercises({ day: this.boxes.length, exercises: [] });
-            }
-        },
-        deleteDayBox(dayindex) {
-            // 해당 인덱스의 day-routine-box를 삭제합니다.
-            this.boxes.splice(dayindex, 1);
-        },
-        // onModalClose(updatedExercise) {
-        //     if (updatedExercise) {
-        //         // Update the exercise data in the main component
-        //         if (this.isEditModal) {
-        //             // Find and update the existing exercise data
-        //             const exerciseIndex = this.activeBox.exercises.findIndex(
-        //                 exercise => exercise === this.editExerciseData
-        //             );
-        //             if (exerciseIndex !== -1) {
-        //                 this.activeBox.exercises[exerciseIndex] = updatedExercise;
-        //             }
-        //         } else {
-        //             // Add the new exercise data
-        //             this.activeBox.exercises.push(updatedExercise);
-        //         }
-        //     }
-        //     // this.showModal = false;
-        //     this.isEditModal = false;
-        // },
-        // addDayBox() {
-        //     if (this.boxes.length < 5) {
-        //         this.boxes.push({ exercises: [] });
-        //     }
-        // },
-        // updateExerciseData(data) {
-        //     // Modal에서 emit한 이벤트를 처리하는 메서드
-        //     this.selectedExerciseArea = data.ExerciseArea;
-        //     this.selectedExerciseName = data.ExerciseName;
-        // },
-
         submitData() {
             // 각 day-routine-box를 확인하고 비어있는지 여부를 판단합니다.
             const emptyBoxes = this.boxes.filter(box => box.exercises.length === 0);
@@ -275,44 +192,85 @@ export default {
                 });
 
             }
+            else if (this.boxes.length === 0) {
+                alert("루틴을 추가해주세요.");
+            }
             else {
                 // 제목 입력란이 비어 있지 않은 경우 데이터 제출을 진행합니다.
                 this.showWarning = false; // 경고 메시지를 숨깁니다.
+                this.dialog2 = true;
 
-                const postData = {
-                    title: this.titleInput,
-                    explanation: this.expInput,
-                    // ... other properties ...
-                };
-
-                // Assuming you have an API endpoint for data submission
-                // 데이터 제출을 위한 POST 요청을 보냅니다. (API 엔드포인트를 사용해야 합니다.)
-
-                // Replace 'your_api_endpoint' with the actual URL
-                // 데이터 제출을 위해 fetch() 또는 axios를 사용하여 API 엔드포인트로 요청을 보냅니다.
-                fetch('your_api_endpoint', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(postData),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Data successfully submitted:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error submitting data:', error);
-                    });
+                this.performRoutineSend();
             }
         },
+        async performRoutineSend() {
+            try {
+                console.log("루틴 제목 : ", this.titleInput);
+                console.log("루틴 설명 : ", this.expInput);
+                console.log("루틴 day : ", this.boxes.length);
 
+                const response = await axios.post('/api/routine/', {
+                    routine_name: this.titleInput,
+                    routine_comment: this.expInput,
+                    routine_day: this.boxes.length,
+                });
+                console.log(response);
+                console.log('데이터 : ', response.data);
+                console.log('routine_id :', response.data.routine_id);
+                this.routineId = response.data.routine_id;
+                //console.log('routine_id :', this.routineId);
+
+            } catch (error) {
+                console.error('루틴 전송하기 오류:', error);
+            }
+        },
+        async performRoutineDelete() {
+            try {
+                console.log('routine_id :', this.routineId);
+                //const response = await axios.delete('/api/routine/delete/' + this.routineId + '/');
+                const response = await axios.delete(`/api/routine/delete/${this.routineId}/`);
+                console.log('삭제 response :', response);
+
+                this.dialog2 = false;
+            } catch (error) {
+                console.error('루틴 삭제하기 오류:', error);
+            }
+        },
+        async performRdSend() {
+            try {
+                for (let i = 0; i < this.boxes.length; i++) {
+                    console.log(`boxes[${i}] :`, this.boxes[i]);
+                    for (let j = 0; j < this.boxes[i].exercises.length; j++) {
+                        // console.log(typeof this.routineId);
+                        // console.log(typeof this.boxes[i].exercises[j].ExerciseID);
+                        // console.log(typeof (i + 1));
+                        console.log(`${i + 1} ${j + 1}의 routine_id :`, this.routineId);
+                        console.log(`${i + 1} ${j + 1}의 exercise_id :`, this.boxes[i].exercises[j].ExerciseID);
+                        console.log(`${j + 1}의 day :`, i + 1);
+
+                        const response = await axios.post('/api/routine/detail/', {
+                            routine: this.routineId,
+                            exercise: this.boxes[i].exercises[j].ExerciseID,
+                            day: i + 1,
+                        });
+
+                        console.log(`${i + 1} ${j + 1}의 루틴디테일 전송 response :`, response);
+                        this.dialog2 = false;
+                        location.reload();  // 페이지 새로고침
+                    }
+
+                }
+
+            } catch (error) {
+                console.error('루틴 디테일 전송하기 오류:', error);
+            }
+        }
     },
     watch: {
-        // titleInput의 변경을 감시합니다.
+        // titleInput의 변경 감시
         titleInput(newTitleInput) {     // ()안은 변경된 새로운 값
             if (newTitleInput.trim() !== '') {
-                // 제목 입력란이 더 이상 비어 있지 않으면 경고 메시지를 숨깁니다.
+                // 제목 입력란이 더 이상 비어 있지 않으면 경고 메시지를 숨기기
                 this.showWarning = false;
             }
         },
@@ -387,7 +345,7 @@ export default {
 
 
 .exercise-title,
-.exercise-time {
+.exercise-area {
     color: #FFF;
     font-family: Inter;
     font-size: 17px;
@@ -395,10 +353,12 @@ export default {
     font-weight: 500;
     line-height: normal;
     margin: 0;
+    min-height: max-content;
+    min-width: fit-content;
 
-    white-space: normal !important;
+    /* white-space: normal !important; */
     /* 기본 줄바꿈 설정을 적용합니다 */
-    overflow: visible !important;
+    /* overflow: visible !important; */
     /* 내용이 넘치더라도 숨기지 않도록 설정합니다 */
 }
 
