@@ -257,9 +257,9 @@ export default {
     followPage: 1,
     number: 0,
     pageStatus: "전체",
+    ifLogined: false,
   }),
   async created() {
-    // [상태관리] 로그인이 되어있는지 여부 확인
     this.checkLoginStatus();
     this.getPostings();
     this.$store.watch(
@@ -370,18 +370,22 @@ export default {
     },
     // 서버에서 로그인 여부를 확인, 로그인되어 있다면 '로그인됨' 메시지를 출력
     checkLoginStatus() {
-      axios.get('/api/accounts/auth/', { withCredentials: true })
-      .then(response => {
-        if (response.data.id != null) {
-          console.log("로그인됨");
-          // console.log(this.$store.state.userData.id);
-        } else {
-          console.log("로그인되지 않음");
-        }
-      })
-      .catch(error => {
-        console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-      });
+      if (this.ifLogined) {
+        axios.get('/api/accounts/auth/', { withCredentials: true })
+        .then(response => {
+          if (response.data.id != null) {
+            console.log("로그인됨");
+            // console.log(this.$store.state.userData.id);
+          } else {
+            console.log("로그인되지 않음");
+          }
+        })
+        .catch(error => {
+          console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+        });
+      } else {
+        alert('로그인이 필요합니다!!');
+      }
     },
     getPanelBackStyle(card) {
       if (card === "이번주 HOT 게시글 🔥") {
