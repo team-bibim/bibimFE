@@ -19,6 +19,21 @@ module.exports = {
               target: 'http://52.78.77.1:8000',
               pathRewrite: { '^/api': '' }, // 이 부분을 추가하여 경로에서 '/api'를 제거
           }
+      },
+      // routine-share.vue에서 발생하는 "ResizeObserver loop completed with undelivered notifications." 에러 무시 처리
+      client: {
+        overlay: {
+          runtimeErrors: (error) => {
+            const ignoreErrors = [
+              "ResizeObserver loop limit exceeded",
+              "ResizeObserver loop completed with undelivered notifications.",
+            ];
+            if (ignoreErrors.includes(error.message)) {
+              return false;
+            }
+            return true;
+          },
+        },
       }
   }
 };
