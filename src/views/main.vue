@@ -39,19 +39,15 @@
             </div>
 
 
+            <!-- 모달내용 -->
+      <div class="modal fade" id="routinedatamodal" tabindex="-1"> 
 
-
-
-        </div>
-    </div>
-
-    <!-- 모달내용 -->
-    <div class="modal fade" id="routinedatamodal" tabindex="-1"> <!--@show="onModalShow"-->
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">내가 담은 루틴</h5> <!--id="routinedatamodal"-->
+                    <h5 class="modal-title">내가 담은 루틴</h5> 
                 </div>
+
                 <div class="modal-body" id="routin-table">
                     <table class="table">
                         <thead>
@@ -84,6 +80,30 @@
                             </tr>
                         </tbody>
                     </table>
+
+            <div class="modal-body" id="routin-table">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Routine ID</th>
+                        <th scope="col">User Routin ID</th>
+                        <th scope="col">상세</th>
+                        <!-- <th scope="col">수정</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="userData" v-for="(routine, index) in userData" :key="index">
+                        <th scope="row">{{ index + 1 }}</th>
+                            <td>{{ routine.routine }}</td>
+                            <td>{{ routine.user }}</td>
+                            <td>
+                                <button @click="showRoutineId(routine)">더보기</button>
+                            </td>
+                        </tr>
+                    </tbody>  
+                </table>
+
 
                     <div v-if="selectedRoutine">
                         <div class="goback-btn">
@@ -208,9 +228,9 @@ const fetchRoutineData = async () => {
     }
 };
 const showRoutineId = async (routine) => {
-    try {
-        const routineId = routine.routine; // Assuming routine ID is extracted correctly
-        const apiUrl = `/api/routine/check/${routineId}/`; // Your API address
+  try {
+      const routineId = routine.routine; 
+      const apiUrl = `/api/routine/check/${routineId}/`; 
 
         const response = await axios.get(apiUrl);
         console.log('Response from fetchRoutineId:', response);
@@ -260,6 +280,7 @@ const goBack = () => {
 //     console.error('Error navigating to edit page:', error);
 //   }
 // };
+
 
 </script>
 
