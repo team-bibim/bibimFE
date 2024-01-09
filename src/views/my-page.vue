@@ -54,7 +54,6 @@
                         </div>
 
                         <div class="divider"></div>
-<<<<<<< HEAD
 
                         <div id="back">
                             <div id="back-round">
@@ -97,8 +96,6 @@
                                 </div>
                             </div>
                         </div>
-=======
->>>>>>> d2b191bf62d38bcca4103e42c20380413c5c83bf
                     </div>
                 </v-card>
             </v-container>
@@ -111,7 +108,6 @@ import axios from 'axios';
 
 export default {
     data: () => ({
-<<<<<<< HEAD
         height: "",
         weight: "",
         // 희경 누나 코드
@@ -213,76 +209,6 @@ export default {
         // 희경 누나 코드
         this.fetchRoutineData();
     },
-=======
-        sessionId: null,
-        height: "",
-        weight: "",
-    }),
-    created() {
-        /* 로그인 여부 확인 */
-        this.checkLoginStatus();
-    },
-    methods: {
-        async checkLoginStatus() {
-            try {
-                const response = await axios.get('/api/accounts/auth/', { withCredentials: true });
-
-                if (response.data.id != null) {
-                    console.log("마이페이지에서 로그인됨");
-                    this.sessionId = response.data.id;
-                    this.getUserData();
-                } else {
-                    console.log("마이페이지에서 로그인되지 않음");
-                }
-            } catch (error) {
-                console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-            }
-        },
-        async getUserData() {
-            try {
-                console.log('로그인한 계정 ID는 ' + this.sessionId + '임'); // $store.state.sessionId
-
-                const response = await axios.get('/api/accounts/auth/' + this.sessionId + '/');
-                this.$store.commit('setUserData', response.data);
-
-                axios.get('/api/accounts/info/')
-                .then(response => {
-                    console.log('헐 대박 됨!! => ' + response.data.height);
-                    // 임시 야매 코드
-                    this.height = response.data.height;
-                    this.weight = response.data.weight;
-                })
-                .catch(error => {
-                    console.log('내 정보 받아오다가 에러남', error);
-                    this.height = '';
-                    this.weight = '';
-                });
-            } catch (error) {
-                console.error("유저데이터 받아오다가 에러남, ", error);
-            }
-        },
-        completeEdit() {
-            console.log(this.height);
-            axios.put('/api/accounts/info/', {
-                // 임시 야매 코드 (공개여부 데이터 항상 있어야 함)
-                height: parseInt(this.height),
-                weight: parseFloat(this.weight),
-                acc_visibility: 1,
-                /*
-                height: this.height,
-                weight: this.weight
-                acc_visibility: this.??
-                */
-            })
-            .then(response => {
-                console.log("데이터가 있음 " + response);
-            })
-            .catch(error => {
-                console.log("데이터가 없음 ", error);
-            })
-        }
-    }
->>>>>>> d2b191bf62d38bcca4103e42c20380413c5c83bf
 }
 </script>
 
@@ -296,10 +222,10 @@ export default {
 }
 
 .avatar {
-  background-color: #FFFFFF;
-  margin: auto;
-  align-items: center;
-  text-align: center;
+    background-color: #FFFFFF;
+    margin: auto;
+    align-items: center;
+    text-align: center;
 }
 
 .id {
@@ -394,7 +320,6 @@ export default {
     margin: 30px;
 }
 
-<<<<<<< HEAD
 /* 희경 누나 코드 */
 #back {
     position: relative;
@@ -462,9 +387,4 @@ export default {
 .v-text-field .v-input__suffix .v-text-field__suffix {
   color: white !important;
 }
-=======
-.v-btn {
-  color: white !important
-}
->>>>>>> d2b191bf62d38bcca4103e42c20380413c5c83bf
 </style>
