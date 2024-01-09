@@ -104,7 +104,7 @@ export default {
         routines: [],
     }),
     created() {
-        /* 로그인 여부 확인 */
+        /* 로그인 여부 확인 */ // --> 잘 작동됨
         axios.get('/api/accounts/auth/', { withCredentials: true })
             .then(response => {
                 if (response.data.id != null) {
@@ -122,6 +122,7 @@ export default {
         this.getUserData();
     },
     methods: {
+        // getUserData() 에서 this.sessionId = null 로 저장되는 중. 확인해야 할 듯
         async getUserData() {
             try {
                 console.log('로그인한 계정 ID는 ' + this.sessionId + '임'); // $store.state.sessionId
