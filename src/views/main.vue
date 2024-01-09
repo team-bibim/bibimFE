@@ -4,8 +4,8 @@
             <v-btn @click="$router.push('/write')" div class="box1">
                 <div class="box1_text"><b>루틴 작성하기</b></div>
             </v-btn>
-            <v-btn @click="$router.push('/')" div class="box2">
-                <div class="box2_text"><b>루틴 보관함</b></div>
+            <v-btn @click="$router.push('/mypage')" div class="box2">
+                <div class="box2_text"><b>마이페이지</b></div>
             </v-btn>
             <v-btn @click="$router.push('/share')" div class="box3">
                 <div class="box3_text"><b>루틴 공유하기</b></div>
