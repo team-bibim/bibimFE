@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="divider"></div>
-<<<<<<< HEAD
+
 
                         <div id="back">
                             <div id="back-round">
@@ -97,8 +97,6 @@
                                 </div>
                             </div>
                         </div>
-=======
->>>>>>> d2b191bf62d38bcca4103e42c20380413c5c83bf
                     </div>
                 </v-card>
             </v-container>
@@ -111,7 +109,7 @@ import axios from 'axios';
 
 export default {
     data: () => ({
-<<<<<<< HEAD
+
         height: "",
         weight: "",
         // 희경 누나 코드
@@ -213,7 +211,7 @@ export default {
         // 희경 누나 코드
         this.fetchRoutineData();
     },
-=======
+
         sessionId: null,
         height: "",
         weight: "",
@@ -282,7 +280,7 @@ export default {
             })
         }
     }
->>>>>>> d2b191bf62d38bcca4103e42c20380413c5c83bf
+
 }
 </script>
 
@@ -394,7 +392,7 @@ export default {
     margin: 30px;
 }
 
-<<<<<<< HEAD
+
 /* 희경 누나 코드 */
 #back {
     position: relative;
@@ -462,9 +460,8 @@ export default {
 .v-text-field .v-input__suffix .v-text-field__suffix {
   color: white !important;
 }
-=======
+
 .v-btn {
   color: white !important
 }
->>>>>>> d2b191bf62d38bcca4103e42c20380413c5c83bf
 </style>
