@@ -265,7 +265,7 @@ export default {
                 });
                 console.log('루틴 보관함에 추가 : ', response2);
 
-                //location.reload();  // 페이지 새로고침
+                location.reload();  // 페이지 새로고침
 
             } catch (error) {
                 console.error('루틴 디테일 전송하기 오류:', error);

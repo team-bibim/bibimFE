@@ -40,7 +40,7 @@ const links = [
   ['mdi-send', '루틴 공유', '/share'],
   ['mdi-delete', '루틴 작성', '/write'],
   //['mdi-alert-octagon', '내 루틴 보관함', '/'],
-  ['mdi-alert-octagon', '설정', '/'],
+  ['mdi-alert-octagon', '마이페이지', '/mypage'],
   ['mdi-alert-octagon', '로그인', '/login'],
 ]
 

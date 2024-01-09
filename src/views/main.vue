@@ -22,19 +22,26 @@
         <div class="daily" v-if="ISROUTINEID">
             <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
             <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
-            <div class="day-routine-box" v-for="(routine, dayindex) in selectedRoutineData" :key="dayindex">
-                <div class="day-routine-box-title">Day {{ dayindex + 1 }}</div>
-                <div class="day-routine-exercise-box">
-                    <div class="day-routine-exercise-box-name" v-for="(exercise, exindex) in selectedRoutineData"
-                        :key="exindex">
-                        {{ exercise.exercise_name }}
-                        <v-checkbox label="완료" color="success" value="success"></v-checkbox>
+            <div v-for="dayIndex in getUniqueDays(selectedRoutineData)" :key="dayIndex">
+                <div class="day-routine-box">
+                    <div class="day-routine-box-title">Day {{ dayIndex }}</div>
+                    <div class="day-routine-exercise-box">
+                        <!-- Filter exercises for the current day -->
+                        <div v-for="(exercise, exindex) in selectedRoutineData.filter(ex => ex.day === dayIndex)"
+                            :key="exindex">
+                            <div class="day-routine-exercise-box-name">
+                                {{ exercise.exercise_name }}
+                                <v-checkbox label="완료" color="success" value="success"></v-checkbox>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
-
-
             </div>
+
+
+
+
+
         </div>
     </div>
 
@@ -121,6 +128,29 @@ const ISROUTINEID = ref(false);
 const selectedRoutineTitle = ref(null);
 
 const selectedRoutineData = ref(null);
+
+const getUniqueDays = (data) => {
+    // Check if data is not null before using map
+    return data ? [...new Set(data.map(exercise => exercise.day))] : [];
+};
+
+const getExercisesByDay = (dayIndex) => {
+    // Check if selectedRoutineData is an array before using filter
+    const exercises = Array.isArray(selectedRoutineData) ? selectedRoutineData : [];
+
+    // Log the selectedRoutineData and dayIndex for debugging
+    console.log('Selected Routine Data:', selectedRoutineData);
+    console.log('Day Index:', dayIndex);
+
+    // Filter exercises based on the selected day
+    const filteredExercises = exercises.filter(exercise => exercise.day === dayIndex);
+
+    // Log the filtered exercises to the console for debugging
+    console.log('Filtered Exercises for Day ' + dayIndex + ':', filteredExercises);
+
+    // Return only the exercise names
+    return filteredExercises.map(exercise => exercise.exercise_name);
+};
 
 const fetchRoutineById = async () => {
     try {
@@ -308,6 +338,10 @@ const goBack = () => {
     border-radius: 20px;
     /* height: 650px; */
     margin-bottom: 10px;
+}
+
+.daily {
+    padding: 20px;
 }
 
 .routine-title {
