@@ -174,5 +174,8 @@ export default createStore({
     }
   },
   modules: {
-  }
+  },
+  plugins: [
+    createPersistedState()
+  ]
 });

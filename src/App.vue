@@ -25,9 +25,7 @@
 
     <v-main style="background-color: #3B4048;">
       <v-container class="px-5" fluid>
-
         <router-view></router-view> <!-- 각 페이지를 보여주는 곳 -->
-
       </v-container>
     </v-main>
   </v-app>
@@ -41,8 +39,8 @@ const links = [
   ['mdi-inbox-arrow-down', 'HOME', '/main'],    /* 3번째 변수(route) 추가 */
   ['mdi-send', '루틴 공유', '/share'],
   ['mdi-delete', '루틴 작성', '/write'],
-  // ['mdi-alert-octagon', '내 루틴 보관함', '/routine'],
-  ['mdi-alert-octagon', '설정', '/settings'],
+  ['mdi-alert-octagon', '내 루틴 보관함', '/'],
+  ['mdi-alert-octagon', '설정', '/'],
   ['mdi-alert-octagon', '로그인', '/login'],
 ]
 

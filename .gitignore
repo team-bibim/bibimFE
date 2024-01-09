@@ -23,5 +23,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 node_modules
-node_modules
->>>>>>> main
+>>>>>>> a8bbcbffcf4296d8b917b4466ef51c369cb848ac
