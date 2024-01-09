@@ -58,6 +58,7 @@
                                 <th scope="col">Routine ID</th>
                                 <th scope="col">User Routin ID</th>
                                 <th scope="col">상세</th>
+                                <th scope="col"></th>
                                 <!-- <th scope="col">수정</th> -->
                             </tr>
                         </thead>

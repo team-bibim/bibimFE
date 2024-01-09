@@ -122,46 +122,45 @@ export default {
         this.getUserData();
     },
     methods: {
-        getUserData() {
-            axios.get('/api/accounts/auth/' + this.$store.state.userData.id + '/')
-                .then(response => {
-                    this.$store.commit('setUserData', response.data);
-                    // console.log('유저 소개 메시지는 ' + response.data.info);
-
-                    const userName = response.data.nickname;
-                    const userEmail = response.data.email;
-
-                    console.log(userName, userEmail);
-                })
-                .catch(error => {
-                    console.error("유저데이터 받아오다가 에러남, ", error);
-                });
-
-            axios.get('/api/accounts/info/')
-                .then(response => {
-                    console.log('내 정보 잘 받아옴', response);
-                    this.$store.commit('userInfo', response.info);
-                    this.height = response.data.height;
-                    this.weight = response.data.weight;
-                    console.log('accVisibility', response.data.acc_visibility);
-                })
-                .catch(error => {
-                    console.log('내 정보 받아오다가 에러남', error);
-                    this.height = '';
-                    this.weight = '';
-                })
+        async getUserData() {
+            try {
+                console.log('로그인한 계정 ID는 ' + this.sessionId + '임'); // $store.state.sessionId
+                const response = await axios.get('/api/accounts/auth/' + this.sessionId + '/');
+                this.$store.commit('setUserData', response.data);
+                axios.get('/api/accounts/info/')
+                    .then(response => {
+                        console.log('헐 대박 됨!! => ' + response.data.height);
+                        // 임시 야매 코드
+                        this.height = response.data.height;
+                        this.weight = response.data.weight;
+                    })
+                    .catch(error => {
+                        console.log('내 정보 받아오다가 에러남', error);
+                        this.height = '';
+                        this.weight = '';
+                    });
+            } catch (error) {
+                console.error("유저데이터 받아오다가 에러남, ", error);
+            }
         },
         completeEdit() {
+            console.log(this.height);
             axios.put('/api/accounts/info/', {
+                // 임시 야매 코드 (공개여부 데이터 항상 있어야 함)
                 height: parseInt(this.height),
                 weight: parseFloat(this.weight),
-                accVisibility: 1
+                acc_visibility: 1,
+                /*
+                height: this.height,
+                weight: this.weight
+                acc_visibility: this.??
+                */
             })
                 .then(response => {
-                    console.log("수정됨!! " + response);
+                    console.log("데이터가 있음 " + response);
                 })
                 .catch(error => {
-                    console.log("수정하다가 에러남 ", error);
+                    console.log("데이터가 없음 ", error);
                 })
         },
         // 희경 누나 코드
