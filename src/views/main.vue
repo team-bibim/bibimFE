@@ -14,11 +14,13 @@
     </div>
 
     <div class="ex3">
+        <div v-if="!ISROUTINEID" style="height:5em;"></div>
         <div class="btn" v-if="!ISROUTINEID">
             <div data-bs-toggle="modal" data-bs-target="#routinedatamodal" style="margin-top: 10px;" @click="onModalShow">
                 <i class="bi bi-search"></i>
             </div>
         </div>
+        <div v-if="!ISROUTINEID" style="height:5em;"></div>
         <div class="daily" v-if="ISROUTINEID">
             <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
             <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
@@ -364,15 +366,17 @@ const goBack = () => {
 /* ------------------------------루틴 정보 불러오는 박스 ---------------------------*/
 /* ----------------------모달 ------------------------------------*/
 .btn {
-    position: relative;
+    /* position: relative; */
+    display: block;
     background-color: #55B570;
     width: 100px;
     height: 100px;
     border-radius: 50%;
     color: white;
     font-size: 40px;
-    top: 250px;
-    margin-left: 600px;
+    /* top: 250px; */
+    /* margin-left: 600px; */
+    margin: auto;
 }
 
 .modal-content {
