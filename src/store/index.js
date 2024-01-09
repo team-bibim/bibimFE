@@ -16,14 +16,18 @@ export default createStore({
     exerciseData: {}, // 부위에 따른 데이터 저장
     usebodyData: [], // 서버에서 가져온 'usebody_name' 데이터 저장
 
-    userData: null, // 유저데이터
+    userData: {
+      id : "로그인이 필요합니다"
+    }, // 유저데이터
     token: null, // 토큰
 
     // --------------------- main.vue -------------------------------
     message: 'Hello Vue.js',
     routineData: null, // box/check
     routineId: null, // box/check{id}
-    userData: null, // 유저데이터
+    userData: {
+      id : "로그인이 필요합니다"
+    }, // 유저데이터 // 유저데이터
     token: null, // 토큰
     selectedRoutineId: null, // 선택한 루틴
   },
