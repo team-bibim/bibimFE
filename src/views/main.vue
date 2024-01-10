@@ -173,7 +173,7 @@ const getBackgroundColor = (usebodyName) => {
         case 'legs':
             return '#7D8B92';
         case 'back':
-            return '#8B7493';
+            return '#9D5478';
         case 'chest':
             return '#8E8495';
     }
