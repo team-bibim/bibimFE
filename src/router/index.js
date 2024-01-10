@@ -4,7 +4,7 @@ import WriteView from '../views/routine-write.vue'
 import ShareView from '../views/routine-share.vue'
 import MainView from '../views/main.vue'
 import MyRoutineView from '../views/my-routine.vue'
-import SettingsView from '../views/settings.vue'
+// import SettingsView from '../views/settings.vue'
 import MyPageView from '../views/my-page.vue'
 import LoginView from '../views/LoginView';
 
@@ -42,11 +42,11 @@ const routes = [
     name: 'routine',
     component: MyRoutineView
   },
-  {
-    path: '/settings',
-    name: 'settings',
-    component: SettingsView
-  },
+  // {
+  //   path: '/settings',
+  //   name: 'settings',
+  //   component: SettingsView
+  // },
   {
     path: '/mypage',
     name: 'mypage',

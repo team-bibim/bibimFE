@@ -81,7 +81,7 @@ import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useRouter } from 'vue-router';
-import { store } from '@/store';
+
 
 
 const userData = ref(null);
