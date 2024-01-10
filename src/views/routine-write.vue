@@ -46,7 +46,7 @@
                                         <div v-for="(exercise, index) in box.exercises" :key="index"
                                             class="day-routine-subbox">
                                             <v-textarea v-model="exercise.ExerciseName" class="exercise-title" label="운동 이름"
-                                                variant="plain" auto-grow hide-details readonly></v-textarea>
+                                                variant="plain" auto-grow hide-details readonly rows="2"></v-textarea>
                                             <v-text-field v-model="exercise.ExerciseArea" class="exercise-area"
                                                 label="운동 부위" variant="plain" hide-details readonly />
 
@@ -256,10 +256,16 @@ export default {
 
                         console.log(`${i + 1} ${j + 1}의 루틴디테일 전송 response :`, response);
                         this.dialog2 = false;
-                        location.reload();  // 페이지 새로고침
                     }
 
                 }
+                // 루틴 보관함에 루틴 추가(메인페이지에서 확인할 수 있도록)
+                const response2 = await axios.post('/api/routine/box/', {
+                    routine: this.routineId,
+                });
+                console.log('루틴 보관함에 추가 : ', response2);
+
+                location.reload();  // 페이지 새로고침
 
             } catch (error) {
                 console.error('루틴 디테일 전송하기 오류:', error);
@@ -279,6 +285,10 @@ export default {
 </script>
 
 <style scoped>
+.v-textarea .v-field {
+    --v-textarea-control-height: var(--v-input-control-height);
+}
+
 .v-row {
     /* 스크롤바 보이는 현상 해결*/
     margin: 0;

@@ -43,11 +43,6 @@ const routes = [
     component: MyRoutineView
   },
   {
-    path: '/settings',
-    name: 'settings',
-    component: SettingsView
-  },
-  {
     path: '/mypage',
     name: 'mypage',
     component: MyPageView
