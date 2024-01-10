@@ -103,42 +103,44 @@ export default {
         routines: [],
     }),
     created() {
-        /* 로그인 여부 확인 */ // --> 잘 작동됨
-        axios.get('/api/accounts/auth/', { withCredentials: true })
-            .then(response => {
-                if (response.data.id != null) {
-                    console.log("로그인됨");
-                    // console.log(this.$store.state.userData.id);
-                } else {
-                    console.log("로그인되지 않음");
-                }
-            })
-            .catch(error => {
-                console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
-            });
-
-        /* 유저 데이터 받아오기 */
-        this.getUserData();
+        /* 로그인 여부 확인 */
+        this.checkLoginStatus();
     },
     methods: {
-        // getUserData() 에서 this.sessionId = null 로 저장되는 중. 확인해야 할 듯
+        async checkLoginStatus() {
+            try {
+                const response = await axios.get('/api/accounts/auth/', { withCredentials: true });
+
+                if (response.data.id != null) {
+                    console.log("마이페이지에서 로그인됨");
+                    this.sessionId = response.data.id;
+                    this.getUserData();
+                } else {
+                    console.log("마이페이지에서 로그인되지 않음");
+                }
+            } catch (error) {
+                console.log("로그인 상태를 확인하는 중에 오류 발생: " + error);
+            }
+        },
         async getUserData() {
             try {
                 console.log('로그인한 계정 ID는 ' + this.sessionId + '임'); // $store.state.sessionId
+
                 const response = await axios.get('/api/accounts/auth/' + this.sessionId + '/');
                 this.$store.commit('setUserData', response.data);
+
                 axios.get('/api/accounts/info/')
-                    .then(response => {
-                        console.log('헐 대박 됨!! => ' + response.data.height);
-                        // 임시 야매 코드
-                        this.height = response.data.height;
-                        this.weight = response.data.weight;
-                    })
-                    .catch(error => {
-                        console.log('내 정보 받아오다가 에러남', error);
-                        this.height = '';
-                        this.weight = '';
-                    });
+                .then(response => {
+                    console.log('헐 대박 됨!! => ' + response.data.height);
+                    // 임시 야매 코드
+                    this.height = response.data.height;
+                    this.weight = response.data.weight;
+                })
+                .catch(error => {
+                    console.log('내 정보 받아오다가 에러남', error);
+                    this.height = '';
+                    this.weight = '';
+                });
             } catch (error) {
                 console.error("유저데이터 받아오다가 에러남, ", error);
             }
