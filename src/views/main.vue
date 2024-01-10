@@ -22,8 +22,12 @@
         </div>
         <div v-if="!ISROUTINEID" style="height:5em;"></div>
         <div class="daily" v-if="ISROUTINEID">
-            <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
-            <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
+            <div class="routine-header">
+                <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
+                <v-btn class="routineChangeBtn" block rounded="lg" variant="elevated" color="#616D78" min-width="10em"
+                    data-bs-toggle="modal" data-bs-target="#routinedatamodal" @click="onModalShow">다른 루틴으로 변경하기</v-btn>
+            </div>
+
             <div v-for="dayIndex in getUniqueDays(selectedRoutineData)" :key="dayIndex">
                 <div class="day-routine-box">
                     <div class="day-routine-box-title">Day {{ dayIndex }}</div>
@@ -379,6 +383,14 @@ const goBack = () => {
     font-size: 30px;
     line-height: 30px;
     padding: 35px 0;
+}
+
+.routineChangeBtn {
+    color: #181B21;
+    position: relative;
+    float: right;
+    margin-right: 5%;
+    margin-top: -5%;
 }
 
 .day-routine-box {
