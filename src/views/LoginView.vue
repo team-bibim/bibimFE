@@ -35,6 +35,8 @@ export default {
           password: this.password
         });
 
+        localStorage.clear(); // 로컬저장소 초기화(routineId 초기화)
+
         this.$store.commit('setToken', response.data.token); // 토큰을 저장
         this.$store.commit('setUserData', response.data.user); // 사용자 정보를 Vuex store에 저장
 
