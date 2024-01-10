@@ -7,6 +7,11 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    /* --------------------- routine-share.vue ------------------------------- */
+    hotPostings: [],
+    newPostings: [],
+    followPostings: [],
+    
     // --------------------- routine-write.vue -------------------------------
     title: '', // 루틴 제목
     exp: '',   // 루틴 설명
