@@ -42,11 +42,6 @@ const routes = [
     name: 'routine',
     component: MyRoutineView
   },
-  // {
-  //   path: '/settings',
-  //   name: 'settings',
-  //   component: SettingsView
-  // },
   {
     path: '/mypage',
     name: 'mypage',

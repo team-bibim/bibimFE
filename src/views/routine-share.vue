@@ -268,7 +268,6 @@ export default {
         // hotPostings가 업데이트될 때 실행되는 로직
       }
     );
-    await console.log(this.$store.state.userData.id);
   },
   computed: {
     // 두 개 함수는 일부로 분리해둠 => filteredHotPostings()만 따로 사용할 수 있도록

@@ -7,6 +7,11 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    /* --------------------- routine-share.vue ------------------------------- */
+    hotPostings: [],
+    newPostings: [],
+    followPostings: [],
+    
     // --------------------- routine-write.vue -------------------------------
     title: '', // 루틴 제목
     exp: '',   // 루틴 설명
@@ -16,18 +21,14 @@ export default createStore({
     exerciseData: {}, // 부위에 따른 데이터 저장
     usebodyData: [], // 서버에서 가져온 'usebody_name' 데이터 저장
 
-    userData: {
-      id : "로그인이 필요합니다"
-    }, // 유저데이터
-    token: null, // 토큰
-
     // --------------------- main.vue -------------------------------
     message: 'Hello Vue.js',
     routineData: null, // box/check
     routineId: null, // box/check{id}
     userData: {
-      id : "로그인이 필요합니다"
-    }, // 유저데이터 // 유저데이터
+      nickname: '로그인이 필요합니다',
+      email: '로그인이 필요합니다'
+    }, // 유저데이터
     token: null, // 토큰
     selectedRoutineId: null, // 선택한 루틴
   },
@@ -89,8 +90,19 @@ export default createStore({
     reverseMessage(state) {
       state.message = state.message.split('').reverse().join('');
     },
+
+    setChosenRoutineId(state, routineId) {
+      state.routineId = routineId;
+      console.log('루틴 아이디 저장 완료!!! : ', state.routineId);
+    },
+
+    LOGOUT(state) {
+      localStorage.removeItem('token');
+      location.reload();
+    },
   },
   actions: {
+    // --------------------- main.vue -------------------------------
     async loginUser({ commit }, credentials) {
       try {
         const response = await axios.post('/api/accounts/auth/', credentials, {
@@ -104,9 +116,6 @@ export default createStore({
         console.error('로그인 실패:', error);
         throw error;
       }
-    },
-    setSelectedRoutineId({ commit }, routineId) {
-      commit('setSelectedRoutineId', routineId);
     },
 
     async fetchRoutineData({ commit, state }) {
@@ -171,7 +180,12 @@ export default createStore({
     },
     deleteDayBox({ commit }) {
       commit('DELETE_DAY_BOX');
-    }
+    },
+
+    // 로그아웃 기능
+    logout({ commit }) {
+      commit('LOGOUT');
+    },
   },
   modules: {
   },
