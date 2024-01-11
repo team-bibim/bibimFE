@@ -22,8 +22,12 @@
         </div>
         <div v-if="!ISROUTINEID" style="height:5em;"></div>
         <div class="daily" v-if="ISROUTINEID">
-            <!-- 루틴 아이디에 따른 exercise detail 불러오기 작업 필요 -->
-            <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
+            <div class="routine-header">
+                <v-list-subheader class="routine-title">{{ selectedRoutineTitle }}</v-list-subheader>
+                <v-btn class="routineChangeBtn" block rounded="lg" variant="elevated" color="#616D78" min-width="10em"
+                    data-bs-toggle="modal" data-bs-target="#routinedatamodal" @click="onModalShow">다른 루틴으로 변경하기</v-btn>
+            </div>
+
             <div v-for="dayIndex in getUniqueDays(selectedRoutineData)" :key="dayIndex">
                 <div class="day-routine-box">
                     <div class="day-routine-box-title">Day {{ dayIndex }}</div>
@@ -32,8 +36,13 @@
                         <div v-for="(exercise, exindex) in selectedRoutineData.filter(ex => ex.day === dayIndex)"
                             :key="exindex">
                             <div class="day-routine-exercise-box-name">
+                                <div class="exercise-usebody-name"
+                                    :style="{ 'background-color': getBackgroundColor(exercise.usebody_name) }">
+                                    {{ exercise.usebody_name }}
+                                </div>
                                 {{ exercise.exercise_name }}
-                                <v-checkbox label="완료" color="success" value="success"></v-checkbox>
+                                <v-checkbox label="완료" color="success" value="success" class="v-checkbox"
+                                    density="compact"></v-checkbox>
                             </div>
                         </div>
                     </div>
@@ -151,6 +160,30 @@ const getExercisesByDay = (dayIndex) => {
     // Return only the exercise names
     return filteredExercises.map(exercise => exercise.exercise_name);
 };
+
+const getBackgroundColor = (usebodyName) => {
+    // usebody_name에 따른 색상 추가
+    switch (usebodyName) {
+        case 'neck':
+            return '#6C8495';
+        case 'lower arms':
+            return '#7F7B9B';
+        case 'cardio':
+            return '#8A7EAE';
+        case 'shoulders':
+            return '#9B718C';
+        case 'upper arms':
+            return '#A0878E';
+        case 'waist':
+            return '#6C7D83';
+        case 'legs':
+            return '#7D8B92';
+        case 'back':
+            return '#9D5478';
+        case 'chest':
+            return '#8E8495';
+    }
+}
 
 const fetchRoutineById = async () => {
     try {
@@ -354,15 +387,47 @@ const goBack = () => {
     padding: 35px 0;
 }
 
+.routineChangeBtn {
+    color: #181B21;
+    position: relative;
+    float: right;
+    margin-right: 5%;
+    margin-top: -5%;
+}
+
 .day-routine-box {
     margin: 35px;
     color: white;
 }
 
+.day-routine-exercise-box {
+    padding-left: 1em;
+    font-size: 130%;
+}
+
 .day-routine-exercise-box-name {
     display: flex;
     height: 40px;
-    line-height: 56px;
+    margin-top: 1em;
+    /* line-height: 56px; */
+}
+
+.v-checkbox {
+    margin-left: 1em;
+}
+
+.exercise-usebody-name {
+    /* background: #C36C82; */
+    padding: 0 0.6em;
+    border-radius: 10px;
+    margin-right: 0.5em;
+}
+
+.day-routine-box-title {
+    font-size: x-large;
+    background-color: #4B8AAF;
+    padding: 0.5em;
+    border-radius: 20px;
 }
 
 /* ------------------------------루틴 정보 불러오는 박스 ---------------------------*/
