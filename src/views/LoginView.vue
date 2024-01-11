@@ -11,6 +11,7 @@
         <input v-model="password" type="password" id="password" required />
       </div>
       <button type="submit">로그인</button>
+      <button type="submit" @click="logout" class="logout-btn">로그아웃</button>
     </form>
   </div>
 </template>
@@ -45,6 +46,18 @@ export default {
       } catch (error) {
         console.error('로그인 실패:', error);
         alert('로그인 실패');
+      }
+    },
+
+    async logout() {
+      try {
+      await axios.delete('/api/accounts/auth/');
+
+      this.$store.dispatch('logout');
+      this.$router.push('/login');
+    } catch (error) {
+      console.error('로그아웃 실패', error);
+      alert('로그아웃 실패');
       }
     }
   }
@@ -92,5 +105,9 @@ button {
 
 button:hover {
   background-color: #0056b3
+}
+
+.logout-btn {
+  margin-left: 10px;
 }
 </style>
