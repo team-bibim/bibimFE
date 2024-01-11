@@ -199,7 +199,6 @@ export default {
         // 희경 누나 코드
         this.fetchRoutineData();
     },
-
 }
 </script>
 
@@ -310,7 +309,6 @@ export default {
     background: #4B8AAF;
     margin: 30px;
 }
-
 
 /* 희경 누나 코드 */
 #back {
