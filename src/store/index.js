@@ -11,7 +11,7 @@ export default createStore({
     hotPostings: [],
     newPostings: [],
     followPostings: [],
-    
+
     // --------------------- routine-write.vue -------------------------------
     title: '', // 루틴 제목
     exp: '',   // 루틴 설명
@@ -33,7 +33,7 @@ export default createStore({
     selectedRoutineId: null, // 선택한 루틴
   },
   getters: {
-    // --------------------- routine-write.vue -------------------------------
+    getToken: state => state.token,
   },
   mutations: {
     // --------------------- routine-write.vue -------------------------------
