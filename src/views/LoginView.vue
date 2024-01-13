@@ -11,7 +11,7 @@
         <input v-model="password" type="password" id="password" required />
       </div>
       <button type="submit">로그인</button>
-      <button type="submit" @click="logout" class="logout-btn">로그아웃</button>
+      <!-- <button type="submit" @click="logout" class="logout-btn">로그아웃</button> -->
     </form>
   </div>
 </template>
@@ -51,13 +51,13 @@ export default {
 
     async logout() {
       try {
-      await axios.delete('/api/accounts/auth/');
+        await axios.delete('/api/accounts/auth/');
 
-      this.$store.dispatch('logout');
-      this.$router.push('/login');
-    } catch (error) {
-      console.error('로그아웃 실패', error);
-      alert('로그아웃 실패');
+        this.$store.dispatch('logout');
+        this.$router.push('/login');
+      } catch (error) {
+        console.error('로그아웃 실패', error);
+        alert('로그아웃 실패');
       }
     }
   }
